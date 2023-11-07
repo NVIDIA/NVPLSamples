@@ -1,0 +1,31 @@
+{
+  "version": 4,
+  "configurePresets":[
+    {
+      "name":"default",
+      "binaryDir":"${sourceDir}/build/${presetName}",
+      "installDir":"${sourceDir}/build/${presetName}/install",
+      "cacheVariables":{
+        "CMAKE_BUILD_TYPE":"Release"
+      }
+    }
+  ],
+  "buildPresets":[
+    {
+      "name":"default",
+      "configurePreset":"default",
+      "targets":"install",
+      "verbose":true
+    }
+  ],
+  "testPresets":[
+    {
+      "name":"default",
+      "configurePreset":"default",
+      "output":{
+        "outputOnFailure":true,
+        "outputLogFile":"$env{OUTPUT_DIR}/nvpl_fft-test-output.log"
+      }
+    }
+  ]
+}

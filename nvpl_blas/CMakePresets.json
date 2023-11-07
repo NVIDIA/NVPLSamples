@@ -1,0 +1,117 @@
+{
+  "version": 3,
+  "configurePresets":[
+    {
+      "name":"default",
+      "displayName":"Default build",
+      "binaryDir":"${sourceDir}/build/${presetName}",
+      "installDir":"${sourceDir}/build/${presetName}/install"
+    },
+    {
+      "name":"lp64_seq",
+      "displayName":"lp64_seq interface",
+      "inherits":"default",
+      "cacheVariables":{
+          "INT_TYPE":"lp64",
+          "THR_TYPE":"seq"
+      }
+    },
+    {
+      "name":"lp64_omp",
+      "displayName":"lp64_omp interface",
+      "inherits":"default",
+      "cacheVariables":{
+          "INT_TYPE":"lp64",
+          "THR_TYPE":"omp"
+      }
+    },
+    {
+      "name":"ilp64_seq",
+      "displayName":"ilp64_seq interface",
+      "inherits":"default",
+      "cacheVariables":{
+          "INT_TYPE":"ilp64",
+          "THR_TYPE":"seq"
+      }
+    },
+    {
+      "name":"ilp64_omp",
+      "displayName":"ilp64_omp interface",
+      "inherits":"default",
+      "cacheVariables":{
+          "INT_TYPE":"ilp64",
+          "THR_TYPE":"omp"
+      }
+    }
+  ],
+  "buildPresets":[
+    {
+      "name":"default",
+      "displayName":"Default build and install",
+      "configurePreset":"default",
+      "targets":["install"]
+    },
+    {
+      "name":"lp64_seq",
+      "displayName":"lp64_seq interface: build and install",
+      "inherits":"default",
+      "configurePreset":"lp64_seq"
+    },
+    {
+      "name":"lp64_omp",
+      "displayName":"lp64_omp interface: build and install",
+      "inherits":"default",
+      "configurePreset":"lp64_omp"
+    },
+    {
+      "name":"ilp64_seq",
+      "displayName":"ilp64_seq interface: build and install",
+      "inherits":"default",
+      "configurePreset":"ilp64_seq"
+    },
+    {
+      "name":"ilp64_omp",
+      "displayName":"ilp64_omp interface: build and install",
+      "inherits":"default",
+      "configurePreset":"ilp64_omp"
+    }
+  ],
+  "testPresets":[
+    {
+      "name":"default",
+      "displayName":"Run all tests",
+      "configurePreset":"default",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error",
+        "stopOnFailure": false
+      }
+    },
+    {
+      "name":"lp64_seq",
+      "displayName":"Run all lp64_seq interface tests",
+      "inherits":"default",
+      "configurePreset":"lp64_seq"
+    },
+    {
+      "name":"lp64_omp",
+      "displayName":"Run all lp64_omp interface tests",
+      "inherits":"default",
+      "configurePreset":"lp64_omp"
+    },
+    {
+      "name":"ilp64_seq",
+      "displayName":"Run all ilp64_seq interface tests",
+      "inherits":"default",
+      "configurePreset":"ilp64_seq"
+    },
+    {
+      "name":"ilp64_omp",
+      "displayName":"Run all ilp64_omp interface tests",
+      "inherits":"default",
+      "configurePreset":"ilp64_omp"
+    }
+  ]
+}

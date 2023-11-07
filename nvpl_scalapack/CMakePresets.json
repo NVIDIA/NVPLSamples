@@ -1,0 +1,388 @@
+{
+  "version": 4,
+  "configurePresets":[
+    {
+      "name":"default",
+      "displayName":"Default build",
+      "binaryDir":"${sourceDir}/build/${presetName}",
+      "installDir":"${sourceDir}/build/${presetName}/install",
+      "cacheVariables":{
+        "CMAKE_BUILD_TYPE":"RelWithDebInfo"
+      }
+    },
+    {
+      "name":"lp64_seq_openmpi3",
+      "displayName":"lp64_seq_openmpi3 interface",
+      "inherits":"default",
+      "cacheVariables":{
+          "INT_TYPE":"lp64",
+          "THR_TYPE":"seq",
+          "MPI_INTERFACE":"openmpi3"
+      }
+    },
+    {
+      "name":"lp64_omp_openmpi3",
+      "displayName":"lp64_omp_openmpi3 interface",
+      "inherits":"default",
+      "cacheVariables":{
+          "INT_TYPE":"lp64",
+          "THR_TYPE":"omp",
+          "MPI_INTERFACE":"openmpi3"
+      }
+    },
+    {
+      "name":"ilp64_seq_openmpi3",
+      "displayName":"ilp64_seq_openmpi3 interface",
+      "inherits":"default",
+      "cacheVariables":{
+          "INT_TYPE":"ilp64",
+          "THR_TYPE":"seq",
+          "MPI_INTERFACE":"openmpi3"
+      }
+    },
+    {
+      "name":"ilp64_omp_openmpi3",
+      "displayName":"ilp64_omp_openmpi3 interface",
+      "inherits":"default",
+      "cacheVariables":{
+          "INT_TYPE":"ilp64",
+          "THR_TYPE":"omp",
+          "MPI_INTERFACE":"openmpi3"
+      }
+    },
+    {
+      "name":"lp64_seq_openmpi4",
+      "displayName":"lp64_seq_openmpi4 interface",
+      "inherits":"default",
+      "cacheVariables":{
+          "INT_TYPE":"lp64",
+          "THR_TYPE":"seq",
+          "MPI_INTERFACE":"openmpi4"
+      }
+    },
+    {
+      "name":"lp64_omp_openmpi4",
+      "displayName":"lp64_omp_openmpi4 interface",
+      "inherits":"default",
+      "cacheVariables":{
+          "INT_TYPE":"lp64",
+          "THR_TYPE":"omp",
+          "MPI_INTERFACE":"openmpi4"
+      }
+    },
+    {
+      "name":"ilp64_seq_openmpi4",
+      "displayName":"ilp64_seq_openmpi4 interface",
+      "inherits":"default",
+      "cacheVariables":{
+          "INT_TYPE":"ilp64",
+          "THR_TYPE":"seq",
+          "MPI_INTERFACE":"openmpi4"
+      }
+    },
+    {
+      "name":"ilp64_omp_openmpi4",
+      "displayName":"ilp64_omp_openmpi4 interface",
+      "inherits":"default",
+      "cacheVariables":{
+          "INT_TYPE":"ilp64",
+          "THR_TYPE":"omp",
+          "MPI_INTERFACE":"openmpi4"
+      }
+    },
+    {
+      "name":"lp64_seq_openmpi5",
+      "displayName":"lp64_seq_openmpi5 interface",
+      "inherits":"default",
+      "cacheVariables":{
+          "INT_TYPE":"lp64",
+          "THR_TYPE":"seq",
+          "MPI_INTERFACE":"openmpi5"
+      }
+    },
+    {
+      "name":"lp64_omp_openmpi5",
+      "displayName":"lp64_omp_openmpi5 interface",
+      "inherits":"default",
+      "cacheVariables":{
+          "INT_TYPE":"lp64",
+          "THR_TYPE":"omp",
+          "MPI_INTERFACE":"openmpi5"
+      }
+    },
+    {
+      "name":"ilp64_seq_openmpi5",
+      "displayName":"ilp64_seq_openmpi5 interface",
+      "inherits":"default",
+      "cacheVariables":{
+          "INT_TYPE":"ilp64",
+          "THR_TYPE":"seq",
+          "MPI_INTERFACE":"openmpi5"
+      }
+    },
+    {
+      "name":"ilp64_omp_openmpi5",
+      "displayName":"ilp64_omp_openmpi5 interface",
+      "inherits":"default",
+      "cacheVariables":{
+          "INT_TYPE":"ilp64",
+          "THR_TYPE":"omp",
+          "MPI_INTERFACE":"openmpi5"
+      }
+    },
+    {
+      "name":"lp64_seq_mpich",
+      "displayName":"lp64_seq_mpich interface",
+      "inherits":"default",
+      "cacheVariables":{
+          "INT_TYPE":"lp64",
+          "THR_TYPE":"seq",
+          "MPI_INTERFACE":"mpich"
+      }
+    },
+    {
+      "name":"lp64_omp_mpich",
+      "displayName":"lp64_omp_mpich interface",
+      "inherits":"default",
+      "cacheVariables":{
+          "INT_TYPE":"lp64",
+          "THR_TYPE":"omp",
+          "MPI_INTERFACE":"mpich"
+      }
+    },
+    {
+      "name":"ilp64_seq_mpich",
+      "displayName":"ilp64_seq_mpich interface",
+      "inherits":"default",
+      "cacheVariables":{
+          "INT_TYPE":"ilp64",
+          "THR_TYPE":"seq",
+          "MPI_INTERFACE":"mpich"
+      }
+    },
+    {
+      "name":"ilp64_omp_mpich",
+      "displayName":"ilp64_omp_mpich interface",
+      "inherits":"default",
+      "cacheVariables":{
+          "INT_TYPE":"ilp64",
+          "THR_TYPE":"omp",
+          "MPI_INTERFACE":"mpich"
+      }
+    }
+  ],
+  "buildPresets":[
+    {
+      "name":"default",
+      "displayName":"Default build and install",
+      "configurePreset":"default"
+    },
+    {
+      "name":"lp64_seq_openmpi3",
+      "displayName":"lp64_seq_openmpi3 interface: build and install",
+      "inherits":"default",
+      "configurePreset":"lp64_seq_openmpi3"
+    },
+    {
+      "name":"lp64_omp_openmpi3",
+      "displayName":"lp64_omp_openmpi3 interface: build and install",
+      "inherits":"default",
+      "configurePreset":"lp64_omp_openmpi3"
+    },
+    {
+      "name":"ilp64_seq_openmpi3",
+      "displayName":"ilp64_seq_openmpi3 interface: build and install",
+      "inherits":"default",
+      "configurePreset":"ilp64_seq_openmpi3"
+    },
+    {
+      "name":"ilp64_omp_openmpi3",
+      "displayName":"ilp64_omp_openmpi3 interface: build and install",
+      "inherits":"default",
+      "configurePreset":"ilp64_omp_openmpi3"
+    },
+    {
+      "name":"lp64_seq_openmpi4",
+      "displayName":"lp64_seq_openmpi4 interface: build and install",
+      "inherits":"default",
+      "configurePreset":"lp64_seq_openmpi4"
+    },
+    {
+      "name":"lp64_omp_openmpi4",
+      "displayName":"lp64_omp_openmpi4 interface: build and install",
+      "inherits":"default",
+      "configurePreset":"lp64_omp_openmpi4"
+    },
+    {
+      "name":"ilp64_seq_openmpi4",
+      "displayName":"ilp64_seq_openmpi4 interface: build and install",
+      "inherits":"default",
+      "configurePreset":"ilp64_seq_openmpi4"
+    },
+    {
+      "name":"ilp64_omp_openmpi4",
+      "displayName":"ilp64_omp_openmpi4 interface: build and install",
+      "inherits":"default",
+      "configurePreset":"ilp64_omp_openmpi4"
+    },
+    {
+      "name":"lp64_seq_openmpi5",
+      "displayName":"lp64_seq_openmpi5 interface: build and install",
+      "inherits":"default",
+      "configurePreset":"lp64_seq_openmpi5"
+    },
+    {
+      "name":"lp64_omp_openmpi5",
+      "displayName":"lp64_omp_openmpi5 interface: build and install",
+      "inherits":"default",
+      "configurePreset":"lp64_omp_openmpi5"
+    },
+    {
+      "name":"ilp64_seq_openmpi5",
+      "displayName":"ilp64_seq_openmpi5 interface: build and install",
+      "inherits":"default",
+      "configurePreset":"ilp64_seq_openmpi5"
+    },
+    {
+      "name":"ilp64_omp_openmpi5",
+      "displayName":"ilp64_omp_openmpi5 interface: build and install",
+      "inherits":"default",
+      "configurePreset":"ilp64_omp_openmpi5"
+    },
+    {
+      "name":"lp64_seq_mpich",
+      "displayName":"lp64_seq_mpich interface: build and install",
+      "inherits":"default",
+      "configurePreset":"lp64_seq_mpich"
+    },
+    {
+      "name":"lp64_omp_mpich",
+      "displayName":"lp64_omp_mpich interface: build and install",
+      "inherits":"default",
+      "configurePreset":"lp64_omp_mpich"
+    },
+    {
+      "name":"ilp64_seq_mpich",
+      "displayName":"ilp64_seq_mpich interface: build and install",
+      "inherits":"default",
+      "configurePreset":"ilp64_seq_mpich"
+    },
+    {
+      "name":"ilp64_omp_mpich",
+      "displayName":"ilp64_omp_mpich interface: build and install",
+      "inherits":"default",
+      "configurePreset":"ilp64_omp_mpich"
+    }
+  ],
+  "testPresets":[
+    {
+      "name":"default",
+      "displayName":"Run all tests",
+      "configurePreset":"default",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error",
+        "stopOnFailure": false
+      }
+    },
+    {
+      "name":"lp64_seq_openmpi3",
+      "displayName":"Run all lp64_seq_openmpi3 interface tests",
+      "inherits":"default",
+      "configurePreset":"lp64_seq_openmpi3"
+    },
+    {
+      "name":"lp64_omp_openmpi3",
+      "displayName":"Run all lp64_omp_openmpi3 interface tests",
+      "inherits":"default",
+      "configurePreset":"lp64_omp_openmpi3"
+    },
+    {
+      "name":"ilp64_seq_openmpi3",
+      "displayName":"Run all ilp64_seq_openmpi3 interface tests",
+      "inherits":"default",
+      "configurePreset":"ilp64_seq_openmpi3"
+    },
+    {
+      "name":"ilp64_omp_openmpi3",
+      "displayName":"Run all ilp64_omp_openmpi3 interface tests",
+      "inherits":"default",
+      "configurePreset":"ilp64_omp_openmpi3"
+    },
+    {
+      "name":"lp64_seq_openmpi4",
+      "displayName":"Run all lp64_seq_openmpi4 interface tests",
+      "inherits":"default",
+      "configurePreset":"lp64_seq_openmpi4"
+    },
+    {
+      "name":"lp64_omp_openmpi4",
+      "displayName":"Run all lp64_omp_openmpi4 interface tests",
+      "inherits":"default",
+      "configurePreset":"lp64_omp_openmpi4"
+    },
+    {
+      "name":"ilp64_seq_openmpi4",
+      "displayName":"Run all ilp64_seq_openmpi4 interface tests",
+      "inherits":"default",
+      "configurePreset":"ilp64_seq_openmpi4"
+    },
+    {
+      "name":"ilp64_omp_openmpi4",
+      "displayName":"Run all ilp64_omp_openmpi4 interface tests",
+      "inherits":"default",
+      "configurePreset":"ilp64_omp_openmpi4"
+    },
+    {
+      "name":"lp64_seq_openmpi5",
+      "displayName":"Run all lp64_seq_openmpi5 interface tests",
+      "inherits":"default",
+      "configurePreset":"lp64_seq_openmpi5"
+    },
+    {
+      "name":"lp64_omp_openmpi5",
+      "displayName":"Run all lp64_omp_openmpi5 interface tests",
+      "inherits":"default",
+      "configurePreset":"lp64_omp_openmpi5"
+    },
+    {
+      "name":"ilp64_seq_openmpi5",
+      "displayName":"Run all ilp64_seq_openmpi5 interface tests",
+      "inherits":"default",
+      "configurePreset":"ilp64_seq_openmpi5"
+    },
+    {
+      "name":"ilp64_omp_openmpi5",
+      "displayName":"Run all ilp64_omp_openmpi5 interface tests",
+      "inherits":"default",
+      "configurePreset":"ilp64_omp_openmpi5"
+    },
+    {
+      "name":"lp64_seq_mpich",
+      "displayName":"Run all lp64_seq_mpich interface tests",
+      "inherits":"default",
+      "configurePreset":"lp64_seq_mpich"
+    },
+    {
+      "name":"lp64_omp_mpich",
+      "displayName":"Run all lp64_omp_mpich interface tests",
+      "inherits":"default",
+      "configurePreset":"lp64_omp_mpich"
+    },
+    {
+      "name":"ilp64_seq_mpich",
+      "displayName":"Run all ilp64_seq_mpich interface tests",
+      "inherits":"default",
+      "configurePreset":"ilp64_seq_mpich"
+    },
+    {
+      "name":"ilp64_omp_mpich",
+      "displayName":"Run all ilp64_omp_mpich interface tests",
+      "inherits":"default",
+      "configurePreset":"ilp64_omp_mpich"
+    }
+  ]
+}
+

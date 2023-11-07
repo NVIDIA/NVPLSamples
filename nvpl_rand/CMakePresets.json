@@ -1,0 +1,91 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 23,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "base",
+            "hidden": true,
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "installDir": "${sourceDir}/build/${presetName}/install",
+            "cacheVariables": {},
+            "environment": {}
+        },
+        {
+            "name": "debug",
+            "inherits": "base",
+            "displayName": "Debug Config",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": {
+                    "type": "String",
+                    "value": "Debug"
+                }
+            },
+            "environment": {}
+        },
+        {
+            "name": "release",
+            "inherits": "base",
+            "displayName": "Release Config",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": {
+                    "type": "String",
+                    "value": "Release"
+                }
+            },
+            "environment": {}
+        },
+        {
+            "name": "default",
+            "inherits": "release"
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "debug",
+            "displayName": "Debug build",
+            "configurePreset": "debug"
+        },
+        {
+            "name": "release",
+            "displayName": "Release build",
+            "configurePreset": "release"
+        },
+        {
+            "name": "default",
+            "inherits": "release",
+            "configurePreset": "default"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "base",
+            "hidden": true,
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "noTestsAction": "error",
+                "stopOnFailure": false
+            }
+        },
+        {
+            "name": "debug",
+            "configurePreset": "debug",
+            "inherits": "base"
+        },
+        {
+            "name": "release",
+            "configurePreset": "release",
+            "inherits": "base"
+        },
+        {
+            "name": "default",
+            "inherits": "release",
+            "configurePreset": "default"
+        }
+    ]
+}
