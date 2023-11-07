@@ -9,7 +9,6 @@ set(NVPL_FFTW_EXAMPLES
     c2c_double_many
     r2c_c2r_single_many
     r2c_c2r_double_many
-    c2c_many_bench
     c2c_c2r_r2c_single_apis
     auxiliary_apis
 )
