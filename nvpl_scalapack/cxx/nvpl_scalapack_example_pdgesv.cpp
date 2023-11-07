@@ -26,13 +26,13 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
   opts.set_option<int>("npcol", "number of processors in grid (nprow x npcol)", &arg_npcol);
   opts.set_option<int>("m", "number of rows of a square matrix A", &arg_m);
   opts.set_option<int>("nrhs", "number of right hand side of B", &arg_nrhs);
-  opts.set_option<int>("mb", "blocksize used for array distribution", &arg_mb);
+  opts.set_option<int>("mb", "blocksize used to distribution", &arg_mb);
 
   ///
   /// BLACS initialization
   ///
-  constexpr nvpl_int_t keep_mpi{0};
-  nvpl_int_t mpi_rank{0}, mpi_size{0};
+  constexpr nvpl_int keep_mpi{0};
+  nvpl_int mpi_rank{0}, mpi_size{0};
   Cblacs_pinfo(&mpi_rank, &mpi_size); /// mpi init, rank/size
 
   const bool r_parse = opts.parse(argc, argv, mpi_rank == 0);
@@ -44,7 +44,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     return 0; /// print help from root and return
   }
 
-  nvpl_int_t nprow{arg_nprow}, npcol{arg_npcol};
+  nvpl_int nprow{arg_nprow}, npcol{arg_npcol};
   if (mpi_size < (nprow * npcol)) {
     if (mpi_rank == 0)
       std::cout << "Error: mpi_size (" << mpi_size << ") is smaller than the requested grid size (" << nprow << " x "
@@ -53,11 +53,11 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     return -1;
   }
 
-  nvpl_int_t ic{-1}, what{0}, icontxt{0};
+  nvpl_int ic{-1}, what{0}, icontxt{0};
   Cblacs_get(ic, what,
              &icontxt); /// get a value for nvpl_internal default, ic{-1} is not used, what{0} is system default context
 
-  nvpl_int_t myrow{0}, mycol{0};
+  nvpl_int myrow{0}, mycol{0};
   char grid_layout('C');
   Cblacs_gridinit(&icontxt, &grid_layout, nprow, npcol);    /// create process grid
   Cblacs_gridinfo(icontxt, &nprow, &npcol, &myrow, &mycol); /// set process grid with input icontxt
@@ -69,11 +69,11 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
       ///
       /// Problem setup
       ///
-      nvpl_int_t izero{0}, ione{1};
-      nvpl_int_t m{arg_m}, nrhs{arg_nrhs}, mb{arg_mb};
+      nvpl_int izero{0}, ione{1};
+      nvpl_int m{arg_m}, nrhs{arg_nrhs}, mb{arg_mb};
 
       /// Solve AX = B
-      nvpl_int_t mA{0}, nA{0}, mB{0}, nB{0};
+      nvpl_int mA{0}, nA{0}, mB{0}, nB{0};
 
       mA = numroc_(&m, &mb, &myrow, &izero, &nprow);
       nA = numroc_(&m, &mb, &mycol, &izero, &npcol);
@@ -91,7 +91,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
       std::generate(A.begin(), A.end(), [&]() { return distribution(generator); });
       std::generate(B.begin(), B.end(), [&]() { return distribution(generator); });
 
-      std::vector<nvpl_int_t> ipiv(mA + mb);
+      std::vector<nvpl_int> ipiv(mA + mb);
 
       ///
       /// Copy A and B
@@ -102,11 +102,11 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
       ///
       /// Initialize matrix descriptor
       ///
-      constexpr nvpl_int_t dlen{9};
-      nvpl_int_t info{0}, descA[dlen], descB[dlen];
+      constexpr nvpl_int dlen{9};
+      nvpl_int info{0}, descA[dlen], descB[dlen];
 
-      nvpl_int_t lddA = std::max<nvpl_int_t>(1, mA);
-      nvpl_int_t lddB = std::max<nvpl_int_t>(1, mB);
+      nvpl_int lddA = std::max<nvpl_int>(1, mA);
+      nvpl_int lddB = std::max<nvpl_int>(1, mB);
 
       descinit_(descA, &m, &m, &mb, &mb, &izero, &izero, &icontxt, &lddA, &info);
       if (info) {
@@ -145,7 +145,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
       {
         /// workspace to compute norm 'I', see pdlange api reference
         /// https://www.netlib.org/scalapack/explore-html/db/dd0/pdlange_8f_source.html
-        nvpl_int_t wlen = numroc_(&m, &mb, &myrow, &izero, &nprow);
+        nvpl_int wlen = numroc_(&m, &mb, &myrow, &izero, &nprow);
         std::vector<double> w(wlen);
 
         const double epsilon = pdlamch_(&icontxt, "E");                                         // Epsilon
@@ -160,6 +160,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
         const double residual = Rnorm / (Anorm * Xnorm * epsilon * double(m)); /// ||AX-B|| / ( ||X|| ||A|| eps N || )
 
         const double threshold(10);
+        r_val = residual >= threshold;
         if (mpi_rank == 0) {
           std::cout << "test threshold = " << threshold << std::endl;
           std::cout << "||A * X  - B|| / ( ||X|| * ||A|| * eps * N ) = " << residual << std::endl;
@@ -168,9 +169,6 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
           } else {
             std::cout << "The answer is suspicious." << std::endl;
           }
-        }
-        if (residual >= threshold) {
-          throw std::runtime_error("Error: residual is greater or equal to the test threshold");
         }
       }
     } catch (const std::exception &e) {
