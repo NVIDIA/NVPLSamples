@@ -77,5 +77,3 @@ endforeach()
 # API test
 add_test(NAME "nvpl_fft.test.auxiliary_apis_example" COMMAND auxiliary_apis_example)
 
-# 1D/2D/3D Benchark
-add_test(NAME "nvpl_fft.test.c2c_many_bench_example" COMMAND c2c_many_bench_example)
