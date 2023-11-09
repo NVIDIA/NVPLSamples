@@ -9,6 +9,7 @@ set(NVPL_FFTW_EXAMPLES
     c2c_double_many
     r2c_c2r_single_many
     r2c_c2r_double_many
+    c2c_many_bench
     c2c_c2r_r2c_single_apis
     auxiliary_apis
 )
@@ -76,3 +77,5 @@ endforeach()
 # API test
 add_test(NAME "nvpl_fft.test.auxiliary_apis_example" COMMAND auxiliary_apis_example)
 
+# 1D/2D/3D Benchark
+add_test(NAME "nvpl_fft.test.c2c_many_bench_example" COMMAND c2c_many_bench_example)

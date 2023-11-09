@@ -24,13 +24,13 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
   opts.set_option<int>("m", "gemm input argument m", &arg_m);
   opts.set_option<int>("n", "gemm input argument m", &arg_n);
   opts.set_option<int>("k", "gemm input argument k", &arg_k);
-  opts.set_option<int>("mb", "blocksize used to distribution", &arg_mb);
+  opts.set_option<int>("mb", "blocksize used for array distribution", &arg_mb);
 
   ///
   /// BLACS initialization
   ///
-  constexpr nvpl_int keep_mpi{0};
-  nvpl_int mpi_rank{0}, mpi_size{0};
+  constexpr nvpl_int_t keep_mpi{0};
+  nvpl_int_t mpi_rank{0}, mpi_size{0};
   Cblacs_pinfo(&mpi_rank, &mpi_size); /// mpi init, rank/size
 
   const bool r_parse = opts.parse(argc, argv, mpi_rank == 0);
@@ -42,7 +42,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     return 0; /// print help from root and return
   }
 
-  nvpl_int nprow{2}, npcol{2};
+  nvpl_int_t nprow{2}, npcol{2};
   if (mpi_size < (nprow * npcol)) {
     if (mpi_rank == 0)
       std::cout << "Error: mpi_size (" << mpi_size << ") is smaller than the requested grid size (" << nprow << " x "
@@ -51,11 +51,11 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     return -1;
   }
 
-  nvpl_int ic{-1}, what{0}, icontxt{0};
+  nvpl_int_t ic{-1}, what{0}, icontxt{0};
   Cblacs_get(ic, what,
              &icontxt); /// get a value for nvpl_internal default, ic{-1} is not used, what{0} is system default context
 
-  nvpl_int myrow{0}, mycol{0};
+  nvpl_int_t myrow{0}, mycol{0};
   char grid_layout('C');
   Cblacs_gridinit(&icontxt, &grid_layout, nprow, npcol);    /// create process grid
   Cblacs_gridinfo(icontxt, &nprow, &npcol, &myrow, &mycol); /// set process grid with input icontxt
@@ -67,11 +67,11 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
       ///
       /// Problem setup
       ///
-      nvpl_int izero{0}, ione{1};
-      nvpl_int m{1000}, n{1000}, k{1000}, mb{128};
+      nvpl_int_t izero{0}, ione{1};
+      nvpl_int_t m{1000}, n{1000}, k{1000}, mb{128};
       char transA = 'N', transB = 'N';
 
-      nvpl_int mA{0}, nA{0}, mB{0}, nB{0}, mC{0}, nC{0};
+      nvpl_int_t mA{0}, nA{0}, mB{0}, nB{0}, mC{0}, nC{0};
       if (transA == 'N') { /// A = m x k
         mA = numroc_(&m, &mb, &myrow, &izero, &nprow);
         nA = numroc_(&k, &mb, &mycol, &izero, &npcol);
@@ -107,12 +107,12 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
       ///
       /// Initialize matrix descriptor
       ///
-      constexpr nvpl_int dlen{9};
-      nvpl_int info{0}, descA[dlen], descB[dlen], descC[dlen];
+      constexpr nvpl_int_t dlen{9};
+      nvpl_int_t info{0}, descA[dlen], descB[dlen], descC[dlen];
 
-      nvpl_int lddA = std::max<nvpl_int>(1, mA);
-      nvpl_int lddB = std::max<nvpl_int>(1, mB);
-      nvpl_int lddC = std::max<nvpl_int>(1, mC);
+      nvpl_int_t lddA = std::max<nvpl_int_t>(1, mA);
+      nvpl_int_t lddB = std::max<nvpl_int_t>(1, mB);
+      nvpl_int_t lddC = std::max<nvpl_int_t>(1, mC);
       descinit_(descA, &m, &k, &mb, &mb, &izero, &izero, &icontxt, &lddA, &info);
       if (info) {
         throw std::runtime_error("Error: failed to descinit on matrix A");
