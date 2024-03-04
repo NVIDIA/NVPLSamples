@@ -13,7 +13,7 @@ const int nthread_forward  = std::thread::hardware_concurrency();
 const int nthread_backward = std::thread::hardware_concurrency();
 
 int run_test(std::string& test_cmd, test_case_t tcase, const test_info_t& info) {
-    if(fftw_init_threads() == 0) {
+    if(fftwf_init_threads() == 0) {
         std::cout << "fftw_init_threads() failed" << std::endl;
         return 1;
     }
@@ -41,6 +41,11 @@ int run_test(std::string& test_cmd, test_case_t tcase, const test_info_t& info) 
             fftwf_plan_with_nthreads(nthread_backward);
             plan_backward = fftwf_plan_many_dft(info.n.size(), info.n.data(), info.howmany, out_data, info.onembed.data(), info.ostride, info.odist,
                                                                                             out_data, info.onembed.data(), info.ostride, info.odist, FFTW_BACKWARD, FFTW_ESTIMATE); // in-place
+            if((plan_forward == nullptr) || (plan_backward == nullptr)) {
+                std::cout << "fftwf_plan_many_dft (forward or backward) failed" << std::endl;
+                return 1;
+            }
+
             fftwf_execute_dft(plan_forward , in_data , out_data);
             fftwf_execute_dft(plan_backward, out_data, out_data);
             break;

@@ -37,6 +37,10 @@ int run_test(const std::string& test_cmd, test_case_t tcase, test_info_t& r2c, c
             fftwf_plan_with_nthreads(nthread_backward);
             plan_backward = fftwf_plan_many_dft_c2r(c2r.n.size(), c2r.n.data(), c2r.howmany, complex_inout_data, r2c.onembed.data(), r2c.ostride, r2c.odist,
                                                                                              real_out.data(),    c2r.onembed.data(), c2r.ostride, c2r.odist, FFTW_MEASURE); // out-of-place
+            if((plan_forward == nullptr) || (plan_backward == nullptr)) {
+                std::cout << "fftwf_plan_many_dft (forward or backward) failed" << std::endl;
+                return 1;
+            }
             fftwf_execute(plan_forward);
             fftwf_execute(plan_backward);
             break;

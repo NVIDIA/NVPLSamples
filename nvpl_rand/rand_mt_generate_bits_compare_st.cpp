@@ -24,7 +24,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) {
     NVPL_RAND_CHECK(nvplRandSetPseudoRandomGeneratorSeed(gen_mt, 123456ULL));
     NVPL_RAND_CHECK(nvplRandSetGeneratorOffset(gen_mt, 123456ULL));
 
-    // Set ordering to be STRICT (optional, as it is default for multi-threaded Philox generator)
+    // Set ordering to be STRICT
     NVPL_RAND_CHECK(nvplRandMTSetGeneratorOrdering(gen_mt, NVPL_RAND_ORDERING_STRICT));
 
     // Generate 32-bit random bits

@@ -36,7 +36,7 @@
 *     ..
 *     .. Local Arrays ..
       INTEGER            DESCA( DLEN_ ), DESCB( DLEN_ ), DESCX( DLEN_ )
-      COMPLEX*16         MEM( MEMSIZ )
+      COMPLEX*16, ALLOCATABLE :: MEM(:)
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           BLACS_EXIT, BLACS_GET, BLACS_GRIDEXIT,
@@ -57,6 +57,14 @@
 *     Get starting information
 *
       CALL BLACS_PINFO( IAM, NPROCS )
+*
+      INFO = 0
+      ALLOCATE ( MEM( MEMSIZ ), STAT = INFO )
+      IF( INFO.NE.0 ) THEN
+         WRITE(*,*) '% Could not allocate MEM. INFO = ', INFO
+         GO TO 20
+      END IF      
+*      
       CALL PDSCAEXINFO( OUTFILE, NOUT, N, NRHS, NB, NPROW, NPZOL, MEM,
      $                  IAM, NPROCS )
 *
@@ -200,6 +208,7 @@
 *
       CALL BLACS_GRIDEXIT( ICTXT )
 *
+      DEALLOCATE( MEM )      
    20 CONTINUE
 *
 *     Print ending messages and close output file

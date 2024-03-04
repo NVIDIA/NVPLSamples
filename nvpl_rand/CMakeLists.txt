@@ -31,7 +31,7 @@ endif()
 
 if(NVPL_RAND_EXAMPLES_PROJECT_IS_TOP_LEVEL)
     # Global CXX flags/options
-    set(CMAKE_CXX_STANDARD 20)
+    set(CMAKE_CXX_STANDARD 17)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
     set(CMAKE_CXX_EXTENSIONS OFF)
 endif()
@@ -65,6 +65,7 @@ function(add_rand_example2 GROUP_TARGET RAND_MT EXAMPLE_NAME EXAMPLE_TARGET EXAM
             PRIVATE
             nvpl_rand_cxx_warnings_flags
             nvpl_rand_cxx_arch_flags
+            $<$<BOOL:${NVPL_RAND_STATIC_LINK_CXX_RUNTIME}>:-static-libstdc++ -static-libgcc>
         )
     endif()
 
@@ -121,6 +122,7 @@ function(add_rand_mt_example_curand GROUP_TARGET EXAMPLE_NAME EXAMPLE_TARGET EXA
             PRIVATE
             nvpl_rand_cxx_warnings_flags
             nvpl_rand_cxx_arch_flags
+            $<$<BOOL:${NVPL_RAND_STATIC_LINK_CXX_RUNTIME}>:-static-libstdc++ -static-libgcc>
         )
     endif()
 

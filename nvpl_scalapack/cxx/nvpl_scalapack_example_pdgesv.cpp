@@ -20,7 +20,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
       "NVPL ScaLAPACK Example PDGESV; solves AX = B where A(m x m) and B(m x nrhs) are block-cyclicly distributed over "
       "processor grid (nprow x npcol) with a square blocksize mb");
   int arg_nprow{2}, arg_npcol{2};
-  int arg_m{1000}, arg_nrhs{1}, arg_mb{128};
+  int arg_m{200}, arg_nrhs{1}, arg_mb{32};
 
   opts.set_option<int>("nprow", "number of processors in grid (nprow x npcol)", &arg_nprow);
   opts.set_option<int>("npcol", "number of processors in grid (nprow x npcol)", &arg_npcol);

@@ -5,19 +5,19 @@
 set(NVPL_FFTW_EXAMPLES
     1d_c2c_single
     1d_c2c_double
-    c2c_single_many
-    c2c_double_many
-    r2c_c2r_single_many
-    r2c_c2r_double_many
-    c2c_many_bench
     c2c_c2r_r2c_single_apis
-    auxiliary_apis
 )
 
 # CXX FFTW API OMP examples
 set(NVPL_FFTW_EXAMPLES_OMP
+    c2c_single_many
+    c2c_double_many
+    r2c_c2r_single_many
+    r2c_c2r_double_many
     c2c_single_withomp
     r2c_c2r_single_withomp
+    auxiliary_apis
+    c2c_many_bench
 )
 
 ## Target executables

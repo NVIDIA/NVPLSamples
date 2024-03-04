@@ -32,12 +32,16 @@ int run_test(const std::string& test_cmd, test_case_t tcase, test_info_t& r2c, c
     fftw_complex *complex_inout_data = reinterpret_cast<fftw_complex*>(real_inout.data());
     switch(tcase) {
         case test_case_t::FFT_iFFT:
-            fftwf_plan_with_nthreads(nthread_forward);
+            fftw_plan_with_nthreads(nthread_forward);
             plan_forward  = fftw_plan_many_dft_r2c(r2c.n.size(), r2c.n.data(), r2c.howmany, real_inout.data(),  r2c.inembed.data(), r2c.istride, r2c.idist,
                                                                                             complex_inout_data, r2c.onembed.data(), r2c.ostride, r2c.odist, FFTW_MEASURE); // in-place
-            fftwf_plan_with_nthreads(nthread_backward);
+            fftw_plan_with_nthreads(nthread_backward);
             plan_backward = fftw_plan_many_dft_c2r(c2r.n.size(), c2r.n.data(), c2r.howmany, complex_inout_data, c2r.inembed.data(), c2r.istride, c2r.idist,
                                                                                             real_out.data(),    c2r.onembed.data(), c2r.ostride, c2r.odist, FFTW_MEASURE); // out-of-place
+            if((plan_forward == nullptr) || (plan_backward == nullptr)) {
+                std::cout << "fftw_plan_many_dft (forward or backward) failed" << std::endl;
+                return 1;
+            }
             fftw_execute(plan_forward);
             fftw_execute(plan_backward);
             break;

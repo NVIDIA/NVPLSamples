@@ -6,6 +6,9 @@
 #include <type_traits>
 #include <iostream>
 #include "utils.h"
+#include <algorithm>
+#include <numeric>
+#include <cassert>
 
 static constexpr int MAX_SIZE_B = 256 * 1024 * 1024;
 
@@ -62,7 +65,7 @@ void compute_reference(test_case_t tcase, std::vector<T>& in, std::vector<T>& re
         default:
             std::cout << "Invalid test case" << std::endl;
             break;
-    }        
+    }
 }
 
 template<typename T>
@@ -100,4 +103,35 @@ int set_howmany(int howmany, int maxdist){
     }
     return howmany_update;
 }
+
+template<typename T>
+struct statistics {
+    T average, median, stdev, stdev_rel, pctl10, pctl90;
+};
+
+template<typename T>
+statistics<T> compute_statistics(const std::vector<T>& v) {
+
+    assert(v.size() > 0);
+
+    std::vector<T> w = v;
+    std::sort(w.begin(), w.end());
+    statistics<T> stats;
+    
+    stats.median = w[w.size()/2];
+
+    T sum = std::accumulate(v.begin(), v.end(), 0.0);
+    stats.average = sum / v.size();
+
+    T sq_sum = std::inner_product(v.begin(), v.end(), v.begin(), 0.0);
+    stats.stdev = std::sqrt(sq_sum / v.size() - stats.average * stats.average);
+
+    stats.stdev_rel = stats.stdev / stats.average;
+
+    stats.pctl10 = w[std::floor(w.size()*0.1)];      // 10th percentile 
+    stats.pctl90 = w[std::ceil (w.size()*0.9) - 1];  // 90th percentile
+
+    return stats;
+}
+
 #endif // NVPLFFT_EXAMPLE_COMMON_H_
