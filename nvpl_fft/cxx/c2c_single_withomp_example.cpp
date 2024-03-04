@@ -4,7 +4,11 @@
 #include <omp.h>
 
 constexpr int batches_per_exec = 100;
+#if defined(__NVCOMPILER)
+constexpr int nthread_fftw = 1; // NVHPC OpenMP does not support nested parallel regions on CPU (see https://docs.nvidia.com/hpc-sdk//compilers/hpc-compilers-user-guide/index.html#openmp-subset)
+#else
 constexpr int nthread_fftw = 72;
+#endif
 constexpr int nthread_user = 2;
 
 // This example computes a forward and a backward 1D C2C FFT in single precision with contiguous data.
@@ -50,14 +54,15 @@ int run_test(const std::string &test_cmd, test_scenario_t tsce, const test_info_
 
                     plan_forward  = fftwf_plan_many_dft(info.n.size(), info.n.data(), batches_per_exec_,  &in_data[tid * batches_per_exec * info.fft_size], info.inembed.data(), info.istride, info.idist,
                                                                                                                                                 inout_data, info.onembed.data(), iostride    , iodist    ,  FFTW_FORWARD, FFTW_ESTIMATE);
-                    plan_backward = fftwf_plan_many_dft(info.n.size(), info.n.data(), batches_per_exec_,                                        inout_data, info.onembed.data(), iostride    , iodist    , 
+                    plan_backward = fftwf_plan_many_dft(info.n.size(), info.n.data(), batches_per_exec_,                                        inout_data, info.onembed.data(), iostride    , iodist    ,
                                                                                                          &out_data[tid * batches_per_exec * info.fft_size], info.onembed.data(), info.ostride, info.odist, FFTW_BACKWARD, FFTW_ESTIMATE);
+                    if((plan_forward != nullptr) && (plan_backward != nullptr)) {
+                        fftwf_execute(plan_forward);
+                        fftwf_execute(plan_backward);
 
-                    fftwf_execute(plan_forward);
-                    fftwf_execute(plan_backward);
-
-                    fftwf_destroy_plan(plan_forward);
-                    fftwf_destroy_plan(plan_backward);
+                        fftwf_destroy_plan(plan_forward);
+                        fftwf_destroy_plan(plan_backward);
+                    }
                 }
             }
             break;
@@ -65,6 +70,11 @@ int run_test(const std::string &test_cmd, test_scenario_t tsce, const test_info_
             fftwf_plan plan_forward, plan_backward;
             plan_forward  = fftwf_plan_many_dft(info.n.size(), info.n.data(), batches_per_exec, in_data, info.inembed.data(), info.istride, info.idist, out_data, info.onembed.data(), info.ostride, info.odist,  FFTW_FORWARD, FFTW_ESTIMATE); // in-place
             plan_backward = fftwf_plan_many_dft(info.n.size(), info.n.data(), batches_per_exec,out_data, info.onembed.data(), info.ostride, info.odist, out_data, info.onembed.data(), info.ostride, info.odist, FFTW_BACKWARD, FFTW_ESTIMATE); // in-place
+            if((plan_forward == nullptr) || (plan_backward == nullptr)) {
+                std::cout << "fftwf_plan_many_dft (forward or backward) failed" << std::endl;
+                return 1;
+            }
+
             #pragma omp parallel num_threads(nthread_user)
             {
                 const int tid = omp_get_thread_num();

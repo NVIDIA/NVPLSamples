@@ -1,0 +1,33 @@
+{
+  "version": 4,
+  "configurePresets":[
+    {
+      "name":"default",
+      "displayName":"Default build",
+      "binaryDir":"${sourceDir}/build/${presetName}",
+      "installDir":"${sourceDir}/build/${presetName}/install"
+    }
+  ],
+  "buildPresets":[
+    {
+        "name":"default",
+        "displayName":"Default build and install",
+        "configurePreset":"default",
+        "targets":["install"]
+    }
+  ],
+  "testPresets": [
+    {
+      "name":"default",
+      "displayName":"Run all tests",
+      "configurePreset":"default",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error",
+        "stopOnFailure": false
+      }
+    }
+  ]
+}

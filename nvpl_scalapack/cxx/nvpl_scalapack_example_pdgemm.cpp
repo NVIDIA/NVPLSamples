@@ -17,7 +17,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
       "NVPL ScaLAPACK Example PDGEMM; perform C = AB where C(m x n), A(m x k) and B(k x n) block-cyclicly distributed "
       "over processor grid (nprow x npcol) with a square blocksize mb");
   int arg_nprow{2}, arg_npcol{2};
-  int arg_m{1000}, arg_n{1000}, arg_k{1000}, arg_mb{128};
+  int arg_m{200}, arg_n{200}, arg_k{200}, arg_mb{32};
 
   opts.set_option<int>("nprow", "number of processors in grid (nprow x npcol)", &arg_nprow);
   opts.set_option<int>("npcol", "number of processors in grid (nprow x npcol)", &arg_npcol);

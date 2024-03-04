@@ -27,6 +27,10 @@ int run_test(const std::string &test_cmd, test_case_t tcase, const test_info_t& 
         case test_case_t::FFT_iFFT:
             plan_forward  = fftw_plan_dft_1d(info.fft_size, in_data , out_data, FFTW_FORWARD , FFTW_ESTIMATE); // out-of-place
             plan_backward = fftw_plan_dft_1d(info.fft_size, out_data, out_data, FFTW_BACKWARD, FFTW_ESTIMATE); // in-place
+            if((plan_forward == nullptr) || (plan_backward == nullptr)) {
+                std::cout << "fftw_plan_many_dft (forward or backward) failed" << std::endl;
+                return 1;
+            }
 
             for(int b = 0; b < info.howmany; b++) {
                 fftw_execute_dft(plan_forward , in_data +b*info.fft_size, out_data+b*info.fft_size); // FFT

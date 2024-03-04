@@ -19,6 +19,9 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) {
     const unsigned int nthreads = 4;
     NVPL_RAND_CHECK(nvplRandMTCreateGenerator(&gen_2, generator_type, nthreads));
     
+    NVPL_RAND_CHECK(nvplRandMTSetGeneratorOrdering(gen_1, NVPL_RAND_ORDERING_STRICT));
+    NVPL_RAND_CHECK(nvplRandMTSetGeneratorOrdering(gen_2, NVPL_RAND_ORDERING_STRICT));
+
     // Generate
     NVPL_RAND_CHECK(nvplRandGenerate(gen_1, array_1.data(), length));
     NVPL_RAND_CHECK(nvplRandGenerate(gen_2, array_2.data(), length));

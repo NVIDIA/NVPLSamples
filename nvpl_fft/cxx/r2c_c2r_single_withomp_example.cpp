@@ -5,7 +5,11 @@
 #include <omp.h>
 
 constexpr int batches_per_exec = 100;
+#if defined(__NVCOMPILER)
+constexpr int nthread_fftw = 1; // NVHPC OpenMP does not support nested parallel regions on CPU (see https://docs.nvidia.com/hpc-sdk//compilers/hpc-compilers-user-guide/index.html#openmp-subset)
+#else
 constexpr int nthread_fftw = 72;
+#endif
 constexpr int nthread_user = 4;
 
 // This example computes a forward R2C and a backward C2R 1D FFT in single precision with contiguous data.
@@ -54,11 +58,13 @@ int run_test(const std::string &test_cmd, test_scenario_t tsce, test_info_t& r2c
                                                                                                                                            complex_inout_data, r2c.onembed.data(), r2c_ostride, r2c_odist, FFTW_MEASURE); // in-place
                     plan_backward = fftwf_plan_many_dft_c2r(c2r.n.size(), c2r.n.data(), batches_per_exec_,                                 complex_inout_data, c2r.inembed.data(), r2c_ostride, r2c_odist,
                                                                                                            &real_out_data[tid * batches_per_exec * c2r.odist], c2r.onembed.data(), c2r.ostride, c2r.odist, FFTW_MEASURE); // out-of-place
-                    fftwf_execute(plan_forward);
-                    fftwf_execute(plan_backward);
+                    if((plan_forward != nullptr) && (plan_backward != nullptr)) {
+                        fftwf_execute(plan_forward);
+                        fftwf_execute(plan_backward);
 
-                    fftwf_destroy_plan(plan_forward);
-                    fftwf_destroy_plan(plan_backward);
+                        fftwf_destroy_plan(plan_forward);
+                        fftwf_destroy_plan(plan_backward);
+                    }
                 }
             }
             break;
@@ -71,6 +77,10 @@ int run_test(const std::string &test_cmd, test_scenario_t tsce, test_info_t& r2c
                                                                                                       complex_inout_data, r2c.onembed.data(), r2c.ostride, r2c.odist, FFTW_MEASURE); // in-place
                 plan_backward = fftwf_plan_many_dft_c2r(c2r.n.size(), c2r.n.data(), batches_per_exec, complex_inout_data, c2r.inembed.data(), c2r.istride, c2r.idist,
                                                                                                          real_out.data(), c2r.onembed.data(), c2r.ostride, c2r.odist, FFTW_MEASURE); // out-of-place
+                if((plan_forward == nullptr) || (plan_backward == nullptr)) {
+                    std::cout << "fftwf_plan_many_dft (forward or backward) failed" << std::endl;
+                    return 1;
+                }
 
                 #pragma omp parallel num_threads(nthread_user)
                 {
@@ -108,7 +118,7 @@ int main(int argc, char *argv[]) {
 
     std::vector<int> n = {std::stoi(argv[1])};
     if(argc > 2) { n.push_back(std::stoi(argv[2])); }
-    if(argc > 3) { n.push_back(std::stoi(argv[3])); }   
+    if(argc > 3) { n.push_back(std::stoi(argv[3])); }
 
     // For R2C/C2R transforms, the real    (R2C input , C2R output) array has n[0] x .. x n[rank-1] elems and
     //                         the complex (R2C output, C2R input ) array has n[1] x .. x (n[rank -1] / 2 + 1) elems
@@ -129,7 +139,7 @@ int main(int argc, char *argv[]) {
         std::cout << "Size of transform too large. Waive." << std::endl;
         return EXIT_SUCCESS;
     }
-    
+
     test_info_t r2cinfo(howmany, n, r2c_istride, r2c_ostride, r2c_idist, r2c_odist);
     test_info_t c2rinfo(howmany, n, c2r_istride, c2r_ostride, c2r_idist, c2r_odist);
     r2cinfo.onembed.back() = (r2cinfo.onembed.back() / 2 + 1);

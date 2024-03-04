@@ -30,9 +30,10 @@ The provided sample codes show how to call and link to NVPL Libraries in Fortran
    * Any CPU with Arm-v8.2a+ microarch
 * OS (Linux)
    * Ubuntu: 20.04, 22.04, 23.10
-   * RHEL: (RHEL8) 8.8, (RHEL9) 9.2
-   * Fedora: 35, 36, 37
-   * SLES: (SLES15) 15.4, 15.5
+   * RHEL: RHEL8, RHEL9
+   * Fedora: 37, 38, 39
+   * SLES: SLES15
+   * OpenSUSE/leap: 15.5
    * AmazonLinux: 2, 2023
    * Generally any Linux OS with support for aarch64
 
@@ -78,7 +79,7 @@ Download NVPL Libraries from [NVIDIA Developer](https://developer.nvidia.com/)
 1. If NVPL has not been installed by standard package manager to `/usr`, ensure `nvpl_ROOT` environment variable is set to the prefix root of NVPL installation.  e.g., `nvpl_ROOT=/opt/nvpl`.  NVPL installations under `/usr` should be automatically found by CMake.
 
 2. Use `find_package(nvpl REQUIRED COMPONENTS <lib...> )`
-    * Available libs: `blas`, `fft`, `lapack`, `rand`, `scalpack`, `sparse`
+    * Available libs: `blas`, `fft`, `lapack`, `rand`, `scalpack`, `sparse`, `tensor`
 
 3. Use `target_link_libraries(my_tgt PUBLIC nvpl::<lib>_<opts>)` to link to NVPL target libraries
     * `<lib>` - the component library name, all lowercase.
