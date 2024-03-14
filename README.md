@@ -4,16 +4,25 @@ The NVIDIA Performance Libraries (NVPL) are a collection of high performance mat
 
 These CPU-only libraries have no dependencies on CUDA or CTK, and are drop in replacements for standard C and Fortran mathematical APIs allowing HPC applications to achieve maximum performance on the Grace platform.
 
-The provided sample codes show how to call and link to NVPL Libraries in Fortran, C, and C++ applications and libraries.  Most examples use [CMake](https://cmake.org/cmake/help/latest/), but are easily modified for use in custom build environments.
+The provided sample codes show how to call and link to NVPL Libraries in Fortran, C, and C++ applications and libraries.  Most examples use [CMake](#cmake-usage), but are easily modified for use in custom build environments.
 
-## Library Documentation and Examples
+* [NVPL Documentation](https://docs.nvidia.com/nvpl/)
 
-* [NVPL BLAS](nvpl_blas/README.md)
-* [NVPL FFT](nvpl_fft/README.md)
-* [NVPL LAPACK](nvpl_lapack/README.md)
-* [NVPL RAND](nvpl_rand/README.md)
-* [NVPL ScaLAPACK](nvpl_scalapack/README.md)
-* [NVPL Sparse](nvpl_sparse/README.md)
+## Installation
+
+* [NVPL Downloads](https://developer.nvidia.com/nvpl-downloads/)
+* Latest release: **NVPL-24.03**
+## Library Samples
+
+Samples are compatible with the latest nvpl release.  Compatibility with older releases is not guaranteed.
+
+* [NVPL BLAS Samples](nvpl_blas/README.md)
+* [NVPL FFT Samples](nvpl_fft/README.md)
+* [NVPL LAPACK Samples](nvpl_lapack/README.md)
+* [NVPL RAND Samples](nvpl_rand/README.md)
+* [NVPL ScaLAPACK Samples](nvpl_scalapack/README.md)
+* [NVPL Sparse Samples](nvpl_sparse/README.md)
+* [NVPL Tensor Samples](nvpl_tensor/README.md)
 
 
 ## Support
@@ -62,30 +71,92 @@ All libraries support the following OpenMP runtime libraries. See individual lib
 
 ### MPI
 
-NVPL provides standard BLACS interfaces for the following MPI distributions.  See the NVPL ScaLAPACK documentation for details.
+NVPL provides standard BLACS interfaces for the following MPI distributions.  See the [NVPL ScaLAPACK Samples Documentation](nvpl_scalapack/README.md) for details.
 
-* `MPICH <https://www.mpich.org/>`_  : MPICH>=3.4 runtime supported
-* `OpenMPI-3.x <https://www.open-mpi.org/doc/v3.1/>`_
-* `OpenMPI-4.x <https://www-lb.open-mpi.org/doc/v4.1/>`_
-* `OpenMPI-5.x <https://docs.open-mpi.org/en/v5.0.x/>`_
-* `NVIDIA HPC-X <https://developer.nvidia.com/networking/hpc-x>`_ via OpenMPI-4 interface
+* [MPICH](https://www.mpich.org/): `>=mpich-3.4` runtime supported
+* [OpenMPI-3.x](https://www.open-mpi.org/doc/v3.1/)
+* [OpenMPI-4.x](https://www.open-mpi.org/doc/v4.1/)
+* [OpenMPI-5.x](https://docs.open-mpi.org/en/v5.0.x/)
+* [NVIDIA HPC-X](https://developer.nvidia.com/networking/hpc-x): Use `openmpi4` BLACS interface
 
-## Installation
+## CMake Usage
 
-Download NVPL Libraries from [NVIDIA Developer](https://developer.nvidia.com/)
+NVPL provides [CMake Package
+Config](https://cmake.org/cmake/help/latest/manual/cmake-packages.7.html)
+files for the each component library.
 
-### CMake Usage
+### Finding NVPL Packages
 
-1. If NVPL has not been installed by standard package manager to `/usr`, ensure `nvpl_ROOT` environment variable is set to the prefix root of NVPL installation.  e.g., `nvpl_ROOT=/opt/nvpl`.  NVPL installations under `/usr` should be automatically found by CMake.
+If NVPL was installed via the OS package manager under the `/usr`
+directory, the NVPL packages will already be on the default
+`CMAKE_PREFIX_PATH`. The `nvpl_ROOT` environment can be used to override
+the default search path and force finding nvpl under a specific prefix.
 
-2. Use `find_package(nvpl REQUIRED COMPONENTS <lib...> )`
-    * Available libs: `blas`, `fft`, `lapack`, `rand`, `scalpack`, `sparse`, `tensor`
+The
+[find_package()](https://cmake.org/cmake/help/latest/command/find_package.html)
+command is used to find nvpl and any component libraries:
 
-3. Use `target_link_libraries(my_tgt PUBLIC nvpl::<lib>_<opts>)` to link to NVPL target libraries
-    * `<lib>` - the component library name, all lowercase.
-    * `<opts>` - Options or variants.
-    * See individual library documentation for details specific to each library
+```cmake
+find_package(nvpl)
+```
+
+Each NVPL component library found will print a brief status message with
+important locations.
+
+-   Variable `nvpl_FOUND` will be true if nvpl is successfully found
+-   Variable `nvpl_VERSION` will contain the found version
+-   Pass the `REQUIRED` keyword to raise an error if `nvpl` package is
+    not found.
+-   Regardless of the `COMPONENTS` keyword, all available nvpl component
+    libraries installed in the same prefix will be found.
+-   To raise an error if a particular component is not found, use
+    `REQUIRED COMPONENTS ...`
+-   Set `QUIET` to avoid printing status messages, or reporting an error
+    if nvpl is not found
+-   `find_package(nvpl)` can safely be called multiple times from
+    different locations in a project.
+
+### Linking to NVPL Packages
+
+The NVPL component libraries provide [Imported Interface
+Targets](https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#imported-targets)
+under the common `nvpl::` namespace. To add all the necessary flags to
+compile and link against NVPL libraries, use the
+[target_link_libraries()](https://cmake.org/cmake/help/latest/command/target_link_libraries.html)
+command:
+
+```cmake
+target_link_libraries(my_target PUBLIC nvpl::<lib>_<opts>)
+```
+
+Here `<lib>` is the lowercase shorthand for the library and and `<opts>`
+are defined by the library.
+
+### NVPL Targets
+
+NVPL target names use all-lowercase naming schema. See individual
+libraries documentation for details on available options.
+
+| Component | Targets | Options / Notes  |
+| :--- | :--- | :--- |
+| blas | `nvpl::blas_<int>_<thr>` | `<int>`: `lp64`, `ilp64`<br>`<thr>`: `seq`, `omp` |
+| fft  | `nvpl::fftw` | FFTW API interface |
+| lapack | `nvpl::lapack_<int>_<thr>` | `<int>`: `lp64`, `ilp64`<br>`<thr>`: `seq`, `omp` |
+| rand | `nvpl::rand`<br>`nvpl::rand_mt` | Single-threaded<br>Multi-threaded (OpenMP) |
+| scalapack | `nvpl::blacs_<int>_<mpi>`<br>`nvpl::scalapack_<int>` | `<int>`: `lp64`, `ilp64`<br>`<mpi>`: `mpich`, `openmpi3`,`openmpi4`, `openmpi5` |
+| sparse | `nvpl::sparse` | |
+| tensor | `nvpl::tensor` | |
+
+### NVPL Variables
+
+Each nvpl component library also exports variables
+
+-   `nvpl_<comp>_VERSION` - Version of component library
+-   `nvpl_<comp>_INCLUDE_DIR` - Full path to component headers directory
+-   `nvpl_<comp>_LIBRARY_DIR` - Full path to component libraries
+    directory
+
 
 ## LICENSE
 
-These Sample codes are provided under the [NVIDIA Software licenese for NVPL SDK](./LICENSE).
+These Sample codes are provided under the [NVIDIA Software license for NVPL SDK](./LICENSE).
