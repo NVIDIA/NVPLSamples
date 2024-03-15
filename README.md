@@ -134,7 +134,7 @@ are defined by the library.
 
 ### NVPL Targets
 
-NVPL target names use all-lowercase naming schema. See individual
+NVPL component and target names use all-lowercase naming schema. See individual
 libraries documentation for details on available options.
 
 | Component | Targets | Options / Notes  |
