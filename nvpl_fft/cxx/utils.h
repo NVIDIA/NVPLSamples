@@ -19,7 +19,6 @@ struct tolerance<float>
     static constexpr double value = 1e-5;
 };
 
-
 template<typename T>
 struct type_util
 {

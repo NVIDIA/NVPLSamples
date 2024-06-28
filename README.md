@@ -11,7 +11,7 @@ The provided sample codes show how to call and link to NVPL Libraries in Fortran
 ## Installation
 
 * [NVPL Downloads](https://developer.nvidia.com/nvpl-downloads/)
-* Latest release: **NVPL-24.03**
+* Latest release: **NVPL-24.7**
 ## Library Samples
 
 Samples are compatible with the latest nvpl release.  Compatibility with older releases is not guaranteed.
@@ -38,9 +38,9 @@ Samples are compatible with the latest nvpl release.  Compatibility with older r
    * Ampere Altra (Arm-v8.2a Neoverse-N1)
    * Any CPU with Arm-v8.2a+ microarch
 * OS (Linux)
-   * Ubuntu: 20.04, 22.04, 23.10
+   * Ubuntu: 20.04, 22.04, 24.04
    * RHEL: RHEL8, RHEL9
-   * Fedora: 37, 38, 39
+   * Fedora: 37, 38, 39, 40
    * SLES: SLES15
    * OpenSUSE/leap: 15.5
    * AmazonLinux: 2, 2023
@@ -48,10 +48,10 @@ Samples are compatible with the latest nvpl release.  Compatibility with older r
 
 ### Compilers
 
-* GCC-8 - GCC-13+
+* GCC-8 - GCC-14+
 * Clang-14 - Clang-18+
-* [Clang for NVIDIA Grace](https://developer.nvidia.com/grace/clang/downloads)
-* [NVIDA HPC Compilers](https://developer.nvidia.com/hpc-compilers>): 23.9+
+* [Clang for NVIDIA Grace](https://developer.nvidia.com/grace/clang/downloads): 16.x, 17.x, 18.x
+* [NVIDA HPC Compilers](https://developer.nvidia.com/hpc-compilers>): 23.9 - 24.5
 
 ### Languages
 
@@ -73,7 +73,7 @@ All libraries support the following OpenMP runtime libraries. See individual lib
 
 NVPL provides standard BLACS interfaces for the following MPI distributions.  See the [NVPL ScaLAPACK Samples Documentation](nvpl_scalapack/README.md) for details.
 
-* [MPICH](https://www.mpich.org/): `>=mpich-3.4` runtime supported
+* [MPICH](https://www.mpich.org/): Runtime support for `>=mpich-3.4` and `<mpich-4.2`
 * [OpenMPI-3.x](https://www.open-mpi.org/doc/v3.1/)
 * [OpenMPI-4.x](https://www.open-mpi.org/doc/v4.1/)
 * [OpenMPI-5.x](https://docs.open-mpi.org/en/v5.0.x/)

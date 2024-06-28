@@ -15,6 +15,7 @@ const int nthread_backward = std::thread::hardware_concurrency();
 int run_test(const std::string& test_cmd, test_case_t tcase, test_info_t& r2c, const test_info_t& c2r) {
     const int total_size = r2c.howmany * r2c.fft_size;
     r2c.idist = std::max(r2c.idist, 2*r2c.odist); // For an in-place real-to-complex transform, the input size needs to be padded
+    r2c.inembed.back() = 2 * r2c.onembed.back();
 
     std::vector<float> real_inout(r2c.howmany * r2c.idist, -1);
     std::vector<float> real_out(c2r.howmany * c2r.odist, -1);
@@ -23,7 +24,9 @@ int run_test(const std::string& test_cmd, test_case_t tcase, test_info_t& r2c, c
     fftwf_plan plan_forward, plan_backward;
 
     for (int i = 0; i < total_size; i++) {
-        int idx = (i / r2c.fft_size) * r2c.idist + (i % r2c.fft_size) * r2c.istride;
+        int idx = (i / r2c.fft_size) * r2c.idist +
+                  ((i % r2c.fft_size) / r2c.n.back()) * r2c.inembed.back() * r2c.istride +
+                  ((i % r2c.fft_size) % r2c.n.back()) * r2c.istride;
         real_inout[idx] = i;
     }
     compute_reference(tcase, real_inout, real_ref, r2c);

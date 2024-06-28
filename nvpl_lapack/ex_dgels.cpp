@@ -1,36 +1,6 @@
 #include <stdio.h>
 #include <nvpl_lapack.h>
-
-/* Auxiliary routine: printing a matrix */
-void print_matrix_rowmajor( const char* desc, nvpl_int_t m, nvpl_int_t n, const double* mat, nvpl_int_t ldm ) {
-        nvpl_int_t i, j;
-        printf( "\n %s\n", desc );
- 
-        for( i = 0; i < m; i++ ) {
-                for( j = 0; j < n; j++ ) printf( " %6.2f", mat[i*ldm+j] );
-                printf( "\n" );
-        }
-}
- 
- 
-/* Auxiliary routine: printing a matrix */
-void print_matrix_colmajor( const char* desc, nvpl_int_t m, nvpl_int_t n, const double* mat, nvpl_int_t ldm ) {
-        nvpl_int_t i, j;
-        printf( "\n %s\n", desc );
- 
-        for( i = 0; i < m; i++ ) {
-                for( j = 0; j < n; j++ ) printf( " %6.2f", mat[i+j*ldm] );
-                printf( "\n" );
-        }
-}
- 
-/* Auxiliary routine: printing a vector of integers */
-void print_vector( const char* desc, nvpl_int_t n, const nvpl_int_t* vec ) {
-        nvpl_int_t j;
-        printf( "\n %s\n", desc );
-        for( j = 0; j < n; j++ ) printf( " %6" NVPL_LAPACK_IFMT, vec[j] );
-        printf( "\n" );
-}
+#include "utils.h"
 
 /* Main program */
 int main()
@@ -48,26 +18,29 @@ int main()
 
    printf("NVPL LAPACK version: %d\n", nvpl_lapack_get_version());
 
-   print_matrix_colmajor( "Entry Matrix *A", m, n, *A, lda );
-   print_matrix_colmajor( "Right Hand Side *b", m, nrhs, *b, ldb );
-   printf("sizeof(nvpl_int_t) = %d\n", (int) sizeof(nvpl_int_t));
+   print_dmatrix_colmajor( "Entry Matrix *A", m, n, *A, lda );
+   print_dmatrix_colmajor( "Right Hand Side *b", m, nrhs, *b, ldb );
    printf( "\n" );
  
    printf( "dgels (col-major, high-level) Example Program Results\n" );
    /* Solve least squares problem*/
    char t = 'N';
-   double* work;
+   double* work = NULL;
    double w;
    nvpl_int_t lwork = -1;
+   NVPL_LAPACK_dgels(&t,&m,&n,&nrhs,*A,&lda,*b,&ldb, &w, &lwork, &info);
    dgels_(&t,&m,&n,&nrhs,*A,&lda,*b,&ldb, &w, &lwork, &info);
-   printf("lwork = %f", w) ;
-   work = (double*) malloc(sizeof(double) * w);
-   lwork = static_cast<nvpl_int_t>(w);
-   dgels_(&t,&m,&n,&nrhs,*A,&lda,*b,&ldb, work, &lwork, &info);
-
+   lwork = (nvpl_int_t)w;
+   printf("lwork = %ld", (long int)lwork) ;
+   work = (double*) malloc(sizeof(double) * lwork);
+   if(!work) {
+           printf("insufficient memory");
+           exit(-1);
+   }
+   NVPL_LAPACK_dgels(&t,&m,&n,&nrhs,*A,&lda,*b,&ldb, work, &lwork, &info);
 
    /* Print Solution */
-   print_matrix_colmajor( "Solution", n, nrhs, *b, ldb );
+   print_dmatrix_colmajor( "Solution", n, nrhs, *b, ldb );
    printf( "\n" );
 
    free(work);
