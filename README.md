@@ -73,7 +73,7 @@ All libraries support the following OpenMP runtime libraries. See individual lib
 
 NVPL provides standard BLACS interfaces for the following MPI distributions.  See the [NVPL ScaLAPACK Samples Documentation](nvpl_scalapack/README.md) for details.
 
-* [MPICH](https://www.mpich.org/): Runtime support for `>=mpich-3.4` and `<mpich-4.2`
+* [MPICH](https://www.mpich.org/): Runtime support for `>=mpich-4.0 && <mpich-4.2`
 * [OpenMPI-3.x](https://www.open-mpi.org/doc/v3.1/)
 * [OpenMPI-4.x](https://www.open-mpi.org/doc/v4.1/)
 * [OpenMPI-5.x](https://docs.open-mpi.org/en/v5.0.x/)
