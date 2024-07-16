@@ -51,7 +51,7 @@ Samples are compatible with the latest nvpl release.  Compatibility with older r
 * GCC-8 - GCC-14+
 * Clang-14 - Clang-18+
 * [Clang for NVIDIA Grace](https://developer.nvidia.com/grace/clang/downloads): 16.x, 17.x, 18.x
-* [NVIDA HPC Compilers](https://developer.nvidia.com/hpc-compilers>): 23.9 - 24.5
+* [NVIDA HPC Compilers](https://developer.nvidia.com/hpc-compilers): 23.9 - 24.5
 
 ### Languages
 
