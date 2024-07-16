@@ -56,7 +56,9 @@ void compute_reference(test_case_t tcase, std::vector<T>& in, std::vector<T>& re
         case test_case_t::FFT_iFFT:
             for (int b = 0; b < info.howmany; b++) {
                 for (int i = 0; i < info.fft_size; i++) {
-                    int input_idx = b * info.idist  + i * info.istride;
+                    int input_idx = b * info.idist +
+                                    (i / info.n.back()) * info.inembed.back() * info.istride +
+                                    (i % info.n.back()) * info.istride;
                     int   ref_idx = b * info.fft_size + i;
                     ref[ref_idx] = in[input_idx] * (scalar_type_t) info.fft_size;
                 }
@@ -74,7 +76,9 @@ double compute_error(T& ref, T& out, test_info_t info){
     double squared_norm = 0;
     for (int b = 0; b < info.howmany; b++) {
         for (int i = 0; i < info.fft_size; i++) {
-            int output_idx = b * info.odist + i * info.ostride;
+            int output_idx = b * info.odist +
+                            (i / info.n.back()) * info.onembed.back() * info.ostride +
+                            (i % info.n.back()) * info.ostride;
             int    ref_idx = b * info.fft_size + i;
             squared_diff += std::norm(ref[ref_idx] - out[output_idx]); // Note that std::norm(z) = z * conj(z), not the usual sqrt(z * conj(z))
             squared_norm += std::norm(ref[ref_idx]);
@@ -117,21 +121,45 @@ statistics<T> compute_statistics(const std::vector<T>& v) {
     std::vector<T> w = v;
     std::sort(w.begin(), w.end());
     statistics<T> stats;
-    
+
     stats.median = w[w.size()/2];
 
     T sum = std::accumulate(v.begin(), v.end(), 0.0);
     stats.average = sum / v.size();
 
     T sq_sum = std::inner_product(v.begin(), v.end(), v.begin(), 0.0);
-    stats.stdev = std::sqrt(sq_sum / v.size() - stats.average * stats.average);
+    stats.stdev = sq_sum / v.size() - stats.average * stats.average;
+    stats.stdev = stats.stdev > 0 ? std::sqrt(stats.stdev) : stats.stdev;
 
     stats.stdev_rel = stats.stdev / stats.average;
 
-    stats.pctl10 = w[std::floor(w.size()*0.1)];      // 10th percentile 
+    stats.pctl10 = w[std::floor(w.size()*0.1)];      // 10th percentile
     stats.pctl90 = w[std::ceil (w.size()*0.9) - 1];  // 90th percentile
 
     return stats;
 }
+
+enum class fft_prec_t {
+    SINGLE,
+    DOUBLE
+};
+
+enum class fft_type_t {
+    C2C,
+    C2R,
+    R2C
+};
+
+std::string to_string(fft_prec_t prec) {
+    switch (prec)
+    {
+    case fft_prec_t::SINGLE:
+        return "fp32";
+    case fft_prec_t::DOUBLE:
+        return "fp64";
+    default:
+        return "<invalid>";
+    }
+};
 
 #endif // NVPLFFT_EXAMPLE_COMMON_H_

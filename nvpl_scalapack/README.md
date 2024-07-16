@@ -24,7 +24,7 @@ The examples use `FindMPI.cmake` to find MPI.
  * [MPICH-4.x](https://www.mpich.org/downloads/)
  * And any [MPICH ABI compatible distributions](https://www.mpich.org/abi/).
 
-**NOTE:**  Application using NVHPC-23.9 compilers together with NVPL ScaLAPACK should use
+**NOTE:**  Application using NVHPC compilers together with NVPL ScaLAPACK should use
 the `nvhpc-hpcx-cuda12` modules from the [NVIDIA HPC SDK](https://developer.nvidia.com/hpc-sdk).
 These communication libraries currently provide better performance even when
 CUDA-12 is not used by the application.
@@ -51,18 +51,18 @@ First [install the NVIDIA HPC SDK](https://developer.nvidia.com/hpc-sdk-download
 For NVHPC compilers and HPC-X communication libraries, use environment modules, and
 select the `openmpi4` NVPL BLACS interface.
 ```sh
-$ sudo apt install nvhpc-23-9 environment-modules
+$ sudo apt install nvhpc-24-5 environment-modules
 $ . /etc/profile
 $ module use /opt/nvidia/hpc_sdk/modulefiles/
 $ module purge
 $ module load nvhpc-hpcx-cuda12
-$ . /opt/nvidia/hpc_sdk/Linux_aarch64/2023/comm_libs/12.2/hpcx/latest/hpcx-init.sh
+$ . /opt/nvidia/hpc_sdk/Linux_aarch64/24.5/comm_libs/12.4/hpcx/latest/hpcx-init.sh
 $ hpcx_load
 ```
 
 ### RHEL/Fedora/AmazonLinux
 
-Redhat, Fedora and AmazonLinux primarily use environment modules to swtich between multiple MPI distributions.
+Redhat, Fedora and AmazonLinux primarily use environment modules to switch between multiple MPI distributions.
 
 #### OpenMPI-4
 Use the `openmpi4` BLACS interface with GCC or CLANG compilers and the `openmpi-devel` package.
@@ -86,12 +86,12 @@ amazonliunx, users should upgrade to `amazonlinux-2023`.
 First [install the NVIDIA HPC SDK](https://developer.nvidia.com/hpc-sdk-downloads).
 Use the `openmpi4` BLACS interface with NVHPC compilers and HPC-X communication libraries.
 ```
-$ sudo yum install nvhpc-23-9 environment-modules
+$ sudo yum install nvhpc-24-5 environment-modules
 $ . /etc/profile
 $ module use /opt/nvidia/hpc_sdk/modulefiles/
 $ module purge
 $ module load nvhpc-hpcx-cuda12
-$ . /opt/nvidia/hpc_sdk/Linux_aarch64/2023/comm_libs/12.2/hpcx/latest/hpcx-init.sh
+$ . /opt/nvidia/hpc_sdk/Linux_aarch64/24.5/comm_libs/12.4/hpcx/latest/hpcx-init.sh
 $ hpcx_load
 ```
 
@@ -128,12 +128,12 @@ $  . /etc/profile.d/mpi-selector.sh
 First [install the NVIDIA HPC SDK](https://developer.nvidia.com/hpc-sdk-downloads).
 Then use the `openmpi4` BLACS interface with NVHPC compilers and HPC-X communication libraries.
 ```sh
-$ sudo zypper install nvhpc-23-9 environment-modules
+$ sudo zypper install nvhpc-24-5 environment-modules
 $ . /etc/profile
 $ module use /opt/nvidia/hpc_sdk/modulefiles/
 $ module purge
 $ module load nvhpc-hpcx-cuda12
-$ . /opt/nvidia/hpc_sdk/Linux_aarch64/2023/comm_libs/12.2/hpcx/latest/hpcx-init.sh
+$ . /opt/nvidia/hpc_sdk/Linux_aarch64/24.5/comm_libs/12.4/hpcx/latest/hpcx-init.sh
 $ hpcx_load
 ```
 

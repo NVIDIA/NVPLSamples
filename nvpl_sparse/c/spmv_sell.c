@@ -99,7 +99,7 @@ int main(void) {
     CHECK_SPARSE( nvpl_sparse_create_dn_vec(&vecX, A_num_cols, X, NVPL_SPARSE_R_32F) );
     // Create dense vector y
     CHECK_SPARSE( nvpl_sparse_create_dn_vec(&vecY, A_num_rows, Y, NVPL_SPARSE_R_32F) );
-    // Create dense vector Z, the underlying array can be Y or differnt buffer
+    // Create dense vector Z, the underlying array can be Y or different buffer
     CHECK_SPARSE( nvpl_sparse_create_dn_vec(&vecZ, A_num_rows, Y, NVPL_SPARSE_R_32F) );
 
     // allocate an external buffer if needed

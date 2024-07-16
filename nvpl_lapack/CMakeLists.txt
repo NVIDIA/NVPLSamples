@@ -3,7 +3,6 @@
 cmake_minimum_required(VERSION 3.12)
 project(
   nvpl_lapack_examples
-  VERSION 0.0.1
   LANGUAGES Fortran C CXX
 )
 
@@ -54,20 +53,20 @@ endmacro(addFortranExample)
 
 # CXX build macro
 macro(addCXXExample name)
-  add_executable(ex_${name}_ilp64_seq ex_${name}.cpp)
+  add_executable(ex_${name}_ilp64_seq ex_${name}.cpp utils.cpp)
   target_link_libraries(ex_${name}_ilp64_seq PUBLIC nvpl::lapack_ilp64_seq)
 
-  add_executable(ex_${name}_lp64_seq ex_${name}.cpp)
+  add_executable(ex_${name}_lp64_seq ex_${name}.cpp utils.cpp)
   target_link_libraries(ex_${name}_lp64_seq PUBLIC nvpl::lapack_lp64_seq)
 
-  add_executable(ex_${name}_ilp64_omp ex_${name}.cpp)
+  add_executable(ex_${name}_ilp64_omp ex_${name}.cpp utils.cpp)
   target_link_libraries(ex_${name}_ilp64_omp PUBLIC nvpl::lapack_ilp64_omp)
   # Enable OpenMP in example source
   target_compile_options(ex_${name}_ilp64_omp PRIVATE ${OPENMP_COMPILE_FLAG})
   target_link_libraries(ex_${name}_ilp64_omp PRIVATE OpenMP::OpenMP_CXX)
   target_link_libraries(ex_${name}_ilp64_omp PRIVATE ${OPENMP_COMPILE_FLAG})
 
-  add_executable(ex_${name}_lp64_omp ex_${name}.cpp)
+  add_executable(ex_${name}_lp64_omp ex_${name}.cpp utils.cpp)
   target_link_libraries(ex_${name}_lp64_omp PUBLIC nvpl::lapack_lp64_omp)
   # Enable OpenMP in example source
   target_compile_options(ex_${name}_lp64_omp PRIVATE ${OPENMP_COMPILE_FLAG})
@@ -105,6 +104,9 @@ addfortranexample(potrf)
 
 # NVPL LAPACK: CXX Examples
 addcxxexample(dgels)
+addcxxexample(sgels)
+addcxxexample(cgels)
+addcxxexample(zgels)
 addcxxompexample(thread_control)
 addcxxompexample(thread_control_for_library_developers)
 

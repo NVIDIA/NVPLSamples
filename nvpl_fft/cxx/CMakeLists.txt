@@ -17,7 +17,7 @@ set(NVPL_FFTW_EXAMPLES_OMP
     c2c_single_withomp
     r2c_c2r_single_withomp
     auxiliary_apis
-    c2c_many_bench
+    c2c_r2c_c2r_many_bench
 )
 
 ## Target executables
@@ -78,4 +78,5 @@ endforeach()
 add_test(NAME "nvpl_fft.test.auxiliary_apis_example" COMMAND auxiliary_apis_example)
 
 # 1D/2D/3D Benchark
-add_test(NAME "nvpl_fft.test.c2c_many_bench_example" COMMAND c2c_many_bench_example)
+add_test(NAME "nvpl_fft.test.c2c_r2c_c2r_many_bench_example.fp32.c2c.p_2357" COMMAND c2c_r2c_c2r_many_bench_example fp32 c2c p_2357)
+add_test(NAME "nvpl_fft.test.c2c_r2c_c2r_many_bench_example.fp64.c2c.p_2357" COMMAND c2c_r2c_c2r_many_bench_example fp64 c2c p_2357)

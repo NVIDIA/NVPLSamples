@@ -1,6 +1,6 @@
 # NVPL Samples
 
-The NVIDIA Performance Libraries (NVPL) are a collection of high performance mathematical libraries optimized for the [NVIDIA Grace](https://www.nvidia.com/en-us/data-center/grace-cpu/) Arm-v9.0a Neoverse-V2 architecture.
+The NVIDIA Performance Libraries (NVPL) are a collection of high performance mathematical libraries optimized for the [NVIDIA Grace](https://www.nvidia.com/en-us/data-center/grace-cpu/) Armv9.0-A Neoverse-V2 architecture.
 
 These CPU-only libraries have no dependencies on CUDA or CTK, and are drop in replacements for standard C and Fortran mathematical APIs allowing HPC applications to achieve maximum performance on the Grace platform.
 
@@ -11,7 +11,7 @@ The provided sample codes show how to call and link to NVPL Libraries in Fortran
 ## Installation
 
 * [NVPL Downloads](https://developer.nvidia.com/nvpl-downloads/)
-* Latest release: **NVPL-24.03**
+* Latest release: **NVPL-24.7**
 ## Library Samples
 
 Samples are compatible with the latest nvpl release.  Compatibility with older releases is not guaranteed.
@@ -32,15 +32,15 @@ Samples are compatible with the latest nvpl release.  Compatibility with older r
 * Architecture: aarch64-linux
 * Platform: Arm SBSA
 * CPUs Supported
-   * [NVIDIA Grace](https://www.nvidia.com/en-us/data-center/grace-cpu/) (Arm-v9.0a Neoverse-V2)
-   * AWS Graviton 3/3e (Arm-v8.4a Neoverse-V1)
-   * AWS Graviton 2 (Arm-v8.2a Neoverse-N1)
-   * Ampere Altra (Arm-v8.2a Neoverse-N1)
-   * Any CPU with Arm-v8.2a+ microarch
+   * [NVIDIA Grace](https://www.nvidia.com/en-us/data-center/grace-cpu/) (Armv9.0-A Neoverse-V2)
+   * AWS Graviton 3/3e (Armv8.4-A Neoverse-V1)
+   * AWS Graviton 2 (Arm-8.2-A Neoverse-N1)
+   * Ampere Altra (Armv8.2-A Neoverse-N1)
+   * Any CPU with Armv8.1-A or later micro Architecture
 * OS (Linux)
-   * Ubuntu: 20.04, 22.04, 23.10
+   * Ubuntu: 20.04, 22.04, 24.04
    * RHEL: RHEL8, RHEL9
-   * Fedora: 37, 38, 39
+   * Fedora: 37, 38, 39, 40
    * SLES: SLES15
    * OpenSUSE/leap: 15.5
    * AmazonLinux: 2, 2023
@@ -48,16 +48,16 @@ Samples are compatible with the latest nvpl release.  Compatibility with older r
 
 ### Compilers
 
-* GCC-8 - GCC-13+
+* GCC-8 - GCC-14+
 * Clang-14 - Clang-18+
-* [Clang for NVIDIA Grace](https://developer.nvidia.com/grace/clang/downloads)
-* [NVIDA HPC Compilers](https://developer.nvidia.com/hpc-compilers>): 23.9+
+* [Clang for NVIDIA Grace](https://developer.nvidia.com/grace/clang/downloads): 16.x, 17.x, 18.x
+* [NVIDA HPC Compilers](https://developer.nvidia.com/hpc-compilers>): 23.9 - 24.5
 
 ### Languages
 
 * C: All libraries
 * C++: All libraries via C interfaces
-* Fortran: GFortran ABI - Selected libraries
+* Fortran: Selected libraries
    * GFortran ABI
    * NVPL BLAS, LAPACK, and ScaLAPACK provide `lp64` and `ilp64` integer ABIs
    * See individual libraries samples documentation for further details
@@ -73,7 +73,7 @@ All libraries support the following OpenMP runtime libraries. See individual lib
 
 NVPL provides standard BLACS interfaces for the following MPI distributions.  See the [NVPL ScaLAPACK Samples Documentation](nvpl_scalapack/README.md) for details.
 
-* [MPICH](https://www.mpich.org/): `>=mpich-3.4` runtime supported
+* [MPICH](https://www.mpich.org/): Runtime support for `>=mpich-4.0 && <mpich-4.2`
 * [OpenMPI-3.x](https://www.open-mpi.org/doc/v3.1/)
 * [OpenMPI-4.x](https://www.open-mpi.org/doc/v4.1/)
 * [OpenMPI-5.x](https://docs.open-mpi.org/en/v5.0.x/)
