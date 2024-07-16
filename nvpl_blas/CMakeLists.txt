@@ -20,7 +20,7 @@ project(nvpl_blas_examples LANGUAGES Fortran C)
 set(CMAKE_C_STANDARD 99)
 
 ## Configuration options
-# Set to control wich NVPL BLAS library variant to link against
+# Set to control which NVPL BLAS library variant to link against
 set(INT_TYPE "lp64" CACHE STRING
     "NVPL BLAS integer type. Valid options: lp64, ilp64")
 set(THR_TYPE "omp" CACHE STRING

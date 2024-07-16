@@ -1,6 +1,6 @@
 /******************************************************************************
  * Content: 
- *     This example demondtrates use of API as below:
+ *     This example demonstrates use of API as below:
  *     cblas_dtrsv
  *
  ******************************************************************************/

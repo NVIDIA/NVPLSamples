@@ -61,7 +61,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
   Cblacs_gridinfo(icontxt, &nprow, &npcol, &myrow, &mycol); /// set process grid with input icontxt
 
   if (icontxt < 0) {
-    /// do nothing: this process does not partipate in computation
+    /// do nothing: this process does not participate in computation
   } else {
     try {
       ///

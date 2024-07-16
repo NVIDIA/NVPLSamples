@@ -3,7 +3,6 @@
 cmake_minimum_required(VERSION 3.12)
 project(
   nvpl_lapack_examples
-  VERSION 0.0.1
   LANGUAGES Fortran C CXX
 )
 
