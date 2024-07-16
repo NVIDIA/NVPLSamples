@@ -18,7 +18,7 @@ enum FILL_MODE {Full=120, Upper=121, Lower=122};
  * \param      A        The pointer of the matrix
  * \param[in]  rows     The rows of the matrix
  * \param[in]  cols     The columns of the matrix
- * \param[in]  ld       The leading demension of the matrix
+ * \param[in]  ld       The leading dimension of the matrix
  * \param[in]  order    row-major or column-major matrix
  * \param[in]  fillMode Matrix lower or upper or all the part is stored
  * \param[in]  diag     Indicates if the elements on the main diagonal of matrix are unity and should not be accessed
@@ -74,7 +74,7 @@ static void fill_smatrix(float * A, nvpl_int_t rows, nvpl_int_t cols, nvpl_int_t
  * \param      A        The pointer of the matrix
  * \param[in]  rows     The rows of the matrix
  * \param[in]  cols     The columns of the matrix
- * \param[in]  ld       The leading demension of the matrix
+ * \param[in]  ld       The leading dimension of the matrix
  * \param[in]  order    row-major or column-major matrix
  * \param[in]  fillMode Matrix lower or upper or all the part is stored
  * \param[in]  diag     Indicates if the elements on the main diagonal of matrix are unity and should not be accessed
@@ -130,7 +130,7 @@ static void fill_dmatrix(double * A, nvpl_int_t rows, nvpl_int_t cols, nvpl_int_
  * \param      A        The pointer of the matrix
  * \param[in]  rows     The rows of the matrix
  * \param[in]  cols     The columns of the matrix
- * \param[in]  ld       The leading demension of the matrix
+ * \param[in]  ld       The leading dimension of the matrix
  * \param[in]  order    row-major or column-major matrix
  * \param[in]  fillMode Matrix lower or upper or all the part is stored
  * \param[in]  diag     Indicates if the elements on the main diagonal of matrix are unity and should not be accessed
@@ -190,7 +190,7 @@ static void fill_zmatrix(nvpl_dcomplex_t * A, nvpl_int_t rows, nvpl_int_t cols, 
  * \param      A        The pointer of the matrix
  * \param[in]  rows     The rows of the matrix
  * \param[in]  cols     The columns of the matrix
- * \param[in]  ld       The leading demension of the matrix
+ * \param[in]  ld       The leading dimension of the matrix
  * \param[in]  order    row-major or column-major matrix
  * \param[in]  fillMode Matrix lower or upper or all the part is stored
  * \param[in]  diag     Indicates if the elements on the main diagonal of matrix are unity and should not be accessed
@@ -308,7 +308,7 @@ static void fill_zvector(nvpl_dcomplex_t * A, nvpl_int_t n, nvpl_int_t inc) {
  * \param      A        The pointer of the matrix
  * \param[in]  rows     The rows of the matrix
  * \param[in]  cols     The columns of the matrix
- * \param[in]  ld       The leading demension of the matrix
+ * \param[in]  ld       The leading dimension of the matrix
  * \param[in]  order    row-major or column-major matrix
  */
 static void fill_sbandmatrix(float * A, nvpl_int_t kl, nvpl_int_t ku,
@@ -366,7 +366,7 @@ static void fill_sbandmatrix(float * A, nvpl_int_t kl, nvpl_int_t ku,
  * \param      A        The pointer of the matrix
  * \param[in]  rows     The rows of the matrix
  * \param[in]  cols     The columns of the matrix
- * \param[in]  ld       The leading demension of the matrix
+ * \param[in]  ld       The leading dimension of the matrix
  * \param[in]  order    row-major or column-major matrix
  */
 static void fill_dbandmatrix(double * A, nvpl_int_t kl, nvpl_int_t ku,
@@ -424,7 +424,7 @@ static void fill_dbandmatrix(double * A, nvpl_int_t kl, nvpl_int_t ku,
  * \param      A        The pointer of the matrix
  * \param[in]  rows     The rows of the matrix
  * \param[in]  cols     The columns of the matrix
- * \param[in]  ld       The leading demension of the matrix
+ * \param[in]  ld       The leading dimension of the matrix
  * \param[in]  order    row-major or column-major matrix
  */
 static void fill_cbandmatrix(nvpl_scomplex_t * A, nvpl_int_t kl, nvpl_int_t ku,
@@ -482,7 +482,7 @@ static void fill_cbandmatrix(nvpl_scomplex_t * A, nvpl_int_t kl, nvpl_int_t ku,
  * \param      A        The pointer of the matrix
  * \param[in]  rows     The rows of the matrix
  * \param[in]  cols     The columns of the matrix
- * \param[in]  ld       The leading demension of the matrix
+ * \param[in]  ld       The leading dimension of the matrix
  * \param[in]  order    row-major or column-major matrix
  */
 static void fill_zbandmatrix(nvpl_dcomplex_t * A, nvpl_int_t kl, nvpl_int_t ku,
@@ -540,7 +540,7 @@ static void fill_zbandmatrix(nvpl_dcomplex_t * A, nvpl_int_t kl, nvpl_int_t ku,
  * \param      A        The pointer of the vector
  * \param[in]  n        The number of elements in the vector A
  * \param[in]  inc      stride between consecutive elements of A
- * \param[in]  vec_name array'name
+ * \param[in]  vec_name array name
  */
 static void print_svector(float * A, nvpl_int_t n, nvpl_int_t inc, const char * vec_name) {
     printf("%s=", vec_name);
@@ -556,7 +556,7 @@ static void print_svector(float * A, nvpl_int_t n, nvpl_int_t inc, const char * 
  * \param      A        The pointer of the vector
  * \param[in]  n        The number of elements in the vector A
  * \param[in]  inc      stride between consecutive elements of A
- * \param[in]  vec_name array'name
+ * \param[in]  vec_name array name
  */
 static void print_dvector(double * A, nvpl_int_t n, nvpl_int_t inc, const char * vec_name) {
     printf("%s=", vec_name);
@@ -572,7 +572,7 @@ static void print_dvector(double * A, nvpl_int_t n, nvpl_int_t inc, const char *
  * \param      A        The pointer of the vector
  * \param[in]  n        The number of elements in the vector A
  * \param[in]  inc      stride between consecutive elements of A
- * \param[in]  vec_name array'name
+ * \param[in]  vec_name array name
  */
 static void print_cvector(nvpl_scomplex_t * A, nvpl_int_t n, nvpl_int_t inc, const char * vec_name) {
     printf("%s=", vec_name);
@@ -588,7 +588,7 @@ static void print_cvector(nvpl_scomplex_t * A, nvpl_int_t n, nvpl_int_t inc, con
  * \param      A        The pointer of the vector
  * \param[in]  n        The number of elements in the vector A
  * \param[in]  inc      stride between consecutive elements of A
- * \param[in]  vec_name array'name
+ * \param[in]  vec_name array name
  */
 static void print_zvector(nvpl_dcomplex_t * A, nvpl_int_t n, nvpl_int_t inc, const char * vec_name) {
     printf("%s=", vec_name);
@@ -605,8 +605,8 @@ static void print_zvector(nvpl_dcomplex_t * A, nvpl_int_t n, nvpl_int_t inc, con
  * \param      A           The pointer of the matrix
  * \param[in]  rows        The rows of the matrix
  * \param[in]  cols        The columns of the matrix
- * \param[in]  ld          The leading demension of the matrix
- * \param[in]  matrix_name matrix's name
+ * \param[in]  ld          The leading dimension of the matrix
+ * \param[in]  matrix_name matrix name
  * \param[in]  order       row-major or column-major matrix
  */
 
@@ -638,8 +638,8 @@ static void print_smatrix(float * A, nvpl_int_t rows, nvpl_int_t cols, nvpl_int_
  * \param      A           The pointer of the matrix
  * \param[in]  rows        The rows of the matrix
  * \param[in]  cols        The columns of the matrix
- * \param[in]  ld          The leading demension of the matrix
- * \param[in]  matrix_name matrix's name
+ * \param[in]  ld          The leading dimension of the matrix
+ * \param[in]  matrix_name matrix name
  * \param[in]  order       row-major or column-major matrix
  */
 
@@ -671,8 +671,8 @@ static void print_dmatrix(double * A, nvpl_int_t rows, nvpl_int_t cols, nvpl_int
  * \param      A           The pointer of the matrix
  * \param[in]  rows        The rows of the matrix
  * \param[in]  cols        The columns of the matrix
- * \param[in]  ld          The leading demension of the matrix
- * \param[in]  matrix_name matrix's name
+ * \param[in]  ld          The leading dimension of the matrix
+ * \param[in]  matrix_name matrix name
  * \param[in]  order       row-major or column-major matrix
  */
 
@@ -704,8 +704,8 @@ static void print_cmatrix(nvpl_scomplex_t * A, nvpl_int_t rows, nvpl_int_t cols,
  * \param      A           The pointer of the matrix
  * \param[in]  rows        The rows of the matrix
  * \param[in]  cols        The columns of the matrix
- * \param[in]  ld          The leading demension of the matrix
- * \param[in]  matrix_name matrix's name
+ * \param[in]  ld          The leading dimension of the matrix
+ * \param[in]  matrix_name matrix name
  * \param[in]  order       row-major or column-major matrix
  */
 
@@ -737,8 +737,8 @@ static void print_zmatrix(nvpl_dcomplex_t * A, nvpl_int_t rows, nvpl_int_t cols,
  * \param      A           The pointer of the matrix
  * \param[in]  rows        The rows of the matrix
  * \param[in]  cols        The columns of the matrix
- * \param[in]  ld          The leading demension of the matrix
- * \param[in]  matrix_name matrix's name
+ * \param[in]  ld          The leading dimension of the matrix
+ * \param[in]  matrix_name matrix name
  * \param[in]  order       row-major or column-major matrix
  */
 static void print_sbandmatrix(float * A, nvpl_int_t kl, nvpl_int_t ku,
@@ -825,8 +825,8 @@ static void print_sbandmatrix(float * A, nvpl_int_t kl, nvpl_int_t ku,
  * \param      A           The pointer of the matrix
  * \param[in]  rows        The rows of the matrix
  * \param[in]  cols        The columns of the matrix
- * \param[in]  ld          The leading demension of the matrix
- * \param[in]  matrix_name matrix's name
+ * \param[in]  ld          The leading dimension of the matrix
+ * \param[in]  matrix_name matrix name
  * \param[in]  order       row-major or column-major matrix
  */
 static void print_dbandmatrix(double * A, nvpl_int_t kl, nvpl_int_t ku,
@@ -913,8 +913,8 @@ static void print_dbandmatrix(double * A, nvpl_int_t kl, nvpl_int_t ku,
  * \param      A           The pointer of the matrix
  * \param[in]  rows        The rows of the matrix
  * \param[in]  cols        The columns of the matrix
- * \param[in]  ld          The leading demension of the matrix
- * \param[in]  matrix_name matrix's name
+ * \param[in]  ld          The leading dimension of the matrix
+ * \param[in]  matrix_name matrix name
  * \param[in]  order       row-major or column-major matrix
  */
 static void print_cbandmatrix(nvpl_scomplex_t * A, nvpl_int_t kl, nvpl_int_t ku,
@@ -1001,8 +1001,8 @@ static void print_cbandmatrix(nvpl_scomplex_t * A, nvpl_int_t kl, nvpl_int_t ku,
  * \param      A           The pointer of the matrix
  * \param[in]  rows        The rows of the matrix
  * \param[in]  cols        The columns of the matrix
- * \param[in]  ld          The leading demension of the matrix
- * \param[in]  matrix_name matrix's name
+ * \param[in]  ld          The leading dimension of the matrix
+ * \param[in]  matrix_name matrix name
  * \param[in]  order       row-major or column-major matrix
  */
 static void print_zbandmatrix(nvpl_dcomplex_t * A, nvpl_int_t kl, nvpl_int_t ku,

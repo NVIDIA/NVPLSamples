@@ -59,7 +59,7 @@ set(OMP_NUM_THREADS "4" CACHE STRING
     "OMP_NUM_THREADS to run examples with")
 
 ## Find MPI
-# To Find the correct MPI distribtion:
+# To Find the correct MPI distribution:
 # * Ensure that the correct "mpiexec" is on the PATH via OS MPI selection mechanism.
 # * If the system `mpiexec` has a different name set MPIEXEC_EXECUTABLE to the full path to executable
 # * Ensure CC, CXX, F77 and FC variables are unset or set to normal compilers,
@@ -75,7 +75,7 @@ if(NOT EXISTS ${MPIEXEC_EXECUTABLE})
 endif()
 find_package(MPI REQUIRED Fortran C)
 if(NOT MPIEXEC_EXECUTABLE)
-  set(MPIEXEC_EXECUTABLE "mpiexec" CACHE STRING "mpiexec excutable" FORCE)
+  set(MPIEXEC_EXECUTABLE "mpiexec" CACHE STRING "mpiexec executable" FORCE)
   message(STATUS "MPIEXEC_EXECUTABLE not set.  Default: MPIEXEC_EXECUTABLE=${MPIEXEC_EXECUTABLE}")
 else()
   message(STATUS "MPIEXEC_EXECUTABLE: ${MPIEXEC_EXECUTABLE}")

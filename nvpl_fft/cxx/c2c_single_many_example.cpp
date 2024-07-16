@@ -36,11 +36,12 @@ int run_test(std::string& test_cmd, test_case_t tcase, const test_info_t& info) 
     switch(tcase) {
         case test_case_t::FFT_iFFT:
             fftwf_plan_with_nthreads(nthread_forward);
-            plan_forward  = fftwf_plan_many_dft(info.n.size(), info.n.data(), info.howmany, in_data , info.inembed.data(), info.istride, info.idist,
-                                                                                            out_data, info.onembed.data(), info.ostride, info.odist, FFTW_FORWARD , FFTW_ESTIMATE); // out-of-place
+            // User could pass nullptr for input/output data pointers during plan stage if new array execution function is used https://www.fftw.org/fftw3_doc/New_002darray-Execute-Functions.html
+            plan_forward  = fftwf_plan_many_dft(info.n.size(), info.n.data(), info.howmany, nullptr, info.inembed.data(), info.istride, info.idist,
+                                                                                            nullptr, info.onembed.data(), info.ostride, info.odist, FFTW_FORWARD , FFTW_ESTIMATE); // out-of-place
             fftwf_plan_with_nthreads(nthread_backward);
-            plan_backward = fftwf_plan_many_dft(info.n.size(), info.n.data(), info.howmany, out_data, info.onembed.data(), info.ostride, info.odist,
-                                                                                            out_data, info.onembed.data(), info.ostride, info.odist, FFTW_BACKWARD, FFTW_ESTIMATE); // in-place
+            plan_backward = fftwf_plan_many_dft(info.n.size(), info.n.data(), info.howmany, nullptr, info.onembed.data(), info.ostride, info.odist,
+                                                                                            nullptr, info.onembed.data(), info.ostride, info.odist, FFTW_BACKWARD, FFTW_ESTIMATE); // in-place
             if((plan_forward == nullptr) || (plan_backward == nullptr)) {
                 std::cout << "fftwf_plan_many_dft (forward or backward) failed" << std::endl;
                 return 1;

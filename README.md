@@ -1,6 +1,6 @@
 # NVPL Samples
 
-The NVIDIA Performance Libraries (NVPL) are a collection of high performance mathematical libraries optimized for the [NVIDIA Grace](https://www.nvidia.com/en-us/data-center/grace-cpu/) Arm-v9.0a Neoverse-V2 architecture.
+The NVIDIA Performance Libraries (NVPL) are a collection of high performance mathematical libraries optimized for the [NVIDIA Grace](https://www.nvidia.com/en-us/data-center/grace-cpu/) Armv9.0-A Neoverse-V2 architecture.
 
 These CPU-only libraries have no dependencies on CUDA or CTK, and are drop in replacements for standard C and Fortran mathematical APIs allowing HPC applications to achieve maximum performance on the Grace platform.
 
@@ -32,11 +32,11 @@ Samples are compatible with the latest nvpl release.  Compatibility with older r
 * Architecture: aarch64-linux
 * Platform: Arm SBSA
 * CPUs Supported
-   * [NVIDIA Grace](https://www.nvidia.com/en-us/data-center/grace-cpu/) (Arm-v9.0a Neoverse-V2)
-   * AWS Graviton 3/3e (Arm-v8.4a Neoverse-V1)
-   * AWS Graviton 2 (Arm-v8.2a Neoverse-N1)
-   * Ampere Altra (Arm-v8.2a Neoverse-N1)
-   * Any CPU with Arm-v8.2a+ microarch
+   * [NVIDIA Grace](https://www.nvidia.com/en-us/data-center/grace-cpu/) (Armv9.0-A Neoverse-V2)
+   * AWS Graviton 3/3e (Armv8.4-A Neoverse-V1)
+   * AWS Graviton 2 (Arm-8.2-A Neoverse-N1)
+   * Ampere Altra (Armv8.2-A Neoverse-N1)
+   * Any CPU with Armv8.1-A or later micro Architecture
 * OS (Linux)
    * Ubuntu: 20.04, 22.04, 24.04
    * RHEL: RHEL8, RHEL9
@@ -57,7 +57,7 @@ Samples are compatible with the latest nvpl release.  Compatibility with older r
 
 * C: All libraries
 * C++: All libraries via C interfaces
-* Fortran: GFortran ABI - Selected libraries
+* Fortran: Selected libraries
    * GFortran ABI
    * NVPL BLAS, LAPACK, and ScaLAPACK provide `lp64` and `ilp64` integer ABIs
    * See individual libraries samples documentation for further details
