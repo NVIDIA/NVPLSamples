@@ -11,7 +11,8 @@ The provided sample codes show how to call and link to NVPL Libraries in Fortran
 ## Installation
 
 * [NVPL Downloads](https://developer.nvidia.com/nvpl-downloads/)
-* Latest release: **NVPL-24.7**
+* Latest release: **NVPL-25.1**
+
 ## Library Samples
 
 Samples are compatible with the latest nvpl release.  Compatibility with older releases is not guaranteed.
@@ -24,7 +25,6 @@ Samples are compatible with the latest nvpl release.  Compatibility with older r
 * [NVPL Sparse Samples](nvpl_sparse/README.md)
 * [NVPL Tensor Samples](nvpl_tensor/README.md)
 
-
 ## Support
 
 ### Systems
@@ -33,25 +33,27 @@ Samples are compatible with the latest nvpl release.  Compatibility with older r
 * Platform: Arm SBSA
 * CPUs Supported
    * [NVIDIA Grace](https://www.nvidia.com/en-us/data-center/grace-cpu/) (Armv9.0-A Neoverse-V2)
+   * AWS Graviton 4 (Armv9.00-A Neoverse-V2)
    * AWS Graviton 3/3e (Armv8.4-A Neoverse-V1)
    * AWS Graviton 2 (Arm-8.2-A Neoverse-N1)
    * Ampere Altra (Armv8.2-A Neoverse-N1)
    * Any CPU with Armv8.1-A or later micro Architecture
 * OS (Linux)
-   * Ubuntu: 20.04, 22.04, 24.04
+   * Ubuntu: 20.04, 22.04, 24.04, 24.10
+   * Debian: 12
    * RHEL: RHEL8, RHEL9
-   * Fedora: 37, 38, 39, 40
-   * SLES: SLES15
-   * OpenSUSE/leap: 15.5
+   * Fedora: 39, 40, 41
+   * SLES: SLES15 (15.6)
+   * OpenSUSE/leap: 15.6
    * AmazonLinux: 2, 2023
    * Generally any Linux OS with support for aarch64
 
 ### Compilers
 
 * GCC-8 - GCC-14+
-* Clang-14 - Clang-18+
-* [Clang for NVIDIA Grace](https://developer.nvidia.com/grace/clang/downloads): 16.x, 17.x, 18.x
-* [NVIDA HPC Compilers](https://developer.nvidia.com/hpc-compilers): 23.9 - 24.5
+* Clang-14 - Clang-19+
+* [Clang for NVIDIA Grace](https://developer.nvidia.com/grace/clang/downloads): 16.x, 17.x, 18.x, 19.x
+* [NVIDA HPC Compilers](https://developer.nvidia.com/hpc-compilers): 23.9 - 24.11
 
 ### Languages
 
@@ -60,6 +62,7 @@ Samples are compatible with the latest nvpl release.  Compatibility with older r
 * Fortran: Selected libraries
    * GFortran ABI
    * NVPL BLAS, LAPACK, and ScaLAPACK provide `lp64` and `ilp64` integer ABIs
+   * NVPL FFT provides FFTW Fortran '77 and '03 compatible interfaces
    * See individual libraries samples documentation for further details
 
 ### OpenMP
@@ -73,7 +76,7 @@ All libraries support the following OpenMP runtime libraries. See individual lib
 
 NVPL provides standard BLACS interfaces for the following MPI distributions.  See the [NVPL ScaLAPACK Samples Documentation](nvpl_scalapack/README.md) for details.
 
-* [MPICH](https://www.mpich.org/): Runtime support for `>=mpich-4.0 && <mpich-4.2`
+* [MPICH](https://www.mpich.org/): Runtime support for `>=mpich-4.0`
 * [OpenMPI-3.x](https://www.open-mpi.org/doc/v3.1/)
 * [OpenMPI-4.x](https://www.open-mpi.org/doc/v4.1/)
 * [OpenMPI-5.x](https://docs.open-mpi.org/en/v5.0.x/)
@@ -153,9 +156,7 @@ Each nvpl component library also exports variables
 
 -   `nvpl_<comp>_VERSION` - Version of component library
 -   `nvpl_<comp>_INCLUDE_DIR` - Full path to component headers directory
--   `nvpl_<comp>_LIBRARY_DIR` - Full path to component libraries
-    directory
-
+-   `nvpl_<comp>_LIBRARY_DIR` - Full path to component libraries directory
 
 ## LICENSE
 
