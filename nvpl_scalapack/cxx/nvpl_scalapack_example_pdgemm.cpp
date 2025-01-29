@@ -1,30 +1,15 @@
 #include <algorithm>
-#include <chrono>
 #include <cstdint>
+#include <ctime>
 #include <iostream>
 #include <random>
 #include <stdexcept>
 #include <vector>
 
 #include "nvpl_scalapack.h"
-#include "nvpl_scalapack_command_line_parser.hpp"
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
-  ///
-  /// Command line input parser
-  ///
-  command_line_parser_t opts(
-      "NVPL ScaLAPACK Example PDGEMM; perform C = AB where C(m x n), A(m x k) and B(k x n) block-cyclicly distributed "
-      "over processor grid (nprow x npcol) with a square blocksize mb");
-  int arg_nprow{2}, arg_npcol{2};
-  int arg_m{200}, arg_n{200}, arg_k{200}, arg_mb{32};
-
-  opts.set_option<int>("nprow", "number of processors in grid (nprow x npcol)", &arg_nprow);
-  opts.set_option<int>("npcol", "number of processors in grid (nprow x npcol)", &arg_npcol);
-  opts.set_option<int>("m", "gemm input argument m", &arg_m);
-  opts.set_option<int>("n", "gemm input argument m", &arg_n);
-  opts.set_option<int>("k", "gemm input argument k", &arg_k);
-  opts.set_option<int>("mb", "blocksize used for array distribution", &arg_mb);
+  int r_val(0);
 
   ///
   /// BLACS initialization
@@ -32,15 +17,6 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
   constexpr nvpl_int_t keep_mpi{0};
   nvpl_int_t mpi_rank{0}, mpi_size{0};
   Cblacs_pinfo(&mpi_rank, &mpi_size); /// mpi init, rank/size
-
-  const bool r_parse = opts.parse(argc, argv, mpi_rank == 0);
-
-  /// --help is found
-  if (r_parse) {
-    /// finalize MPI; if keep_mpi is true, Cblacs_exit does not invoke mpi_finalize
-    Cblacs_exit(keep_mpi);
-    return 0; /// print help from root and return
-  }
 
   nvpl_int_t nprow{2}, npcol{2};
   if (mpi_size < (nprow * npcol)) {
@@ -132,20 +108,26 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
       double t{0};
       char barrier_scope_all('A');
       {
+        constexpr double billion = 1e9;
+        struct timespec ts_beg {
+        }, ts_end{};
+
         double alpha{1}, beta{1};
         Cblacs_barrier(icontxt, &barrier_scope_all);
-        auto t_beg = std::chrono::high_resolution_clock::now();
+        clock_gettime(CLOCK_MONOTONIC, &ts_beg);
         pdgemm_(&transA, &transB, &m, &n, &k, &alpha, A.data(), &ione, &ione, descA, B.data(), &ione, &ione, descB,
                 &beta, C.data(), &ione, &ione, descC);
         Cblacs_barrier(icontxt, &barrier_scope_all);
-        auto fp_ms = std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now() - t_beg);
-        t = fp_ms.count() / 1000.0;
+        clock_gettime(CLOCK_MONOTONIC, &ts_end);
+        t = ((static_cast<double>(ts_end.tv_sec) - static_cast<double>(ts_beg.tv_sec)) +
+             (static_cast<double>(ts_end.tv_nsec) - static_cast<double>(ts_beg.tv_nsec)) / billion);
       }
       if (mpi_rank == 0) {
         std::cout << "time for pdgemm " << t << std::endl;
       }
     } catch (const std::exception &e) {
       std::cout << "Error: an exception is caught \n" << e.what() << "\n";
+      r_val = -1;
     }
     /// gridexit is called by participating procs.
     Cblacs_gridexit(icontxt);
@@ -154,5 +136,5 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
   /// if keep_mpi is true, Cblacs_exit does not invoke mpi_finalize
   Cblacs_exit(keep_mpi);
 
-  return 0;
+  return r_val;
 }

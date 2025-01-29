@@ -2,6 +2,7 @@
 #define NVPLFFT_EXAMPLE_COMMON_H_
 
 #include <stdio.h>
+#include <algorithm>
 #include <cmath>
 #include <type_traits>
 #include <iostream>
@@ -9,6 +10,8 @@
 #include <algorithm>
 #include <numeric>
 #include <cassert>
+#include <tuple>
+#include <vector>
 
 static constexpr int MAX_SIZE_B = 256 * 1024 * 1024;
 
@@ -32,7 +35,7 @@ struct test_info {
     std::vector<int> inembed;
     std::vector<int> onembed;
 
-    test_info(int howmany, std::vector<int> &n) : howmany(howmany), n(n), istride(1), ostride(1) {
+    test_info(int howmany, const std::vector<int> &n) : howmany(howmany), n(n), istride(1), ostride(1) {
         fft_size = get_product<int>(n.begin(), n.end());
         idist = fft_size;
         odist = fft_size;
@@ -40,7 +43,7 @@ struct test_info {
         onembed = n;
     }
 
-    test_info(int howmany, std::vector<int> &n, int istride, int ostride, int idist, int odist) : howmany(howmany), n(n), istride(istride), ostride(ostride), idist(idist), odist(odist) {
+    test_info(int howmany, const std::vector<int> &n, int istride, int ostride, int idist, int odist) : howmany(howmany), n(n), istride(istride), ostride(ostride), idist(idist), odist(odist) {
         fft_size = get_product<int>(n.begin(), n.end());
         inembed = n;
         onembed = n;
@@ -49,6 +52,101 @@ struct test_info {
 
 using test_info_t = test_info;
 
+template<typename precision>
+int set_howmany(int howmany, int maxdist);
+
+/**
+ * @brief Returns a pair of test setups for r2c -> c2r transforms
+ * First transpose meets the requirements of in-place transform.
+ *
+ * @tparam T underlying data type
+ * @param n Shape of the transpose
+ * @param howmany_default the suggested batch size
+ * @param r2c_inplace_strides stride between elements of the first transpose (istride, ostride)
+ * @param r2c_sample_step additional step to increase idist and odist of first transpose
+ * @param c2r_output_stride stride between the outputs elements of second transpose
+ */
+template <typename T>
+std::tuple<test_info_t, test_info_t> get_r2c_c2r_setups(const std::vector<int> &n, int howmany_default, int r2c_inplace_strides, int r2c_sample_step, int c2r_output_stride) {
+    // For R2C/C2R transforms, the real    (R2C input , C2R output) array has n[0] x .. x n[rank-1] elems and
+    //                         the complex (R2C output, C2R input ) array has n[1] x .. x (n[rank -1] / 2 + 1) elems
+    // See https://docs.nvidia.com/cuda/cufft/index.html#data-layout for more details.
+    const int real_elems    = get_product<int>(n.begin(),   n.end());
+    const int complex_elems = get_product<int>(n.begin(), --n.end()) * (n.back() / 2 + 1);
+    // For an in-place real-to-complex transform, the input size needs to be padded
+    const int padded_real_elems = 2 * complex_elems;
+
+    // For 2D in-place R2C transform we need to have equal input and output stride
+    // otherwise we can overwrite some input locations with the output.
+    // TODO: Relax this test if this limitation is lifted
+    const int r2c_istride = r2c_inplace_strides,  r2c_ostride = r2c_inplace_strides;
+    const int r2c_idist   = padded_real_elems * r2c_istride * r2c_sample_step;
+    const int r2c_odist   =     complex_elems * r2c_ostride * r2c_sample_step;
+
+    const int c2r_istride = r2c_ostride, c2r_idist = r2c_odist;
+    const int c2r_ostride = c2r_output_stride;
+    const int c2r_odist   = real_elems * c2r_ostride;
+
+    int dists[] = {r2c_idist, r2c_odist, c2r_idist, c2r_odist};
+    int max_dist = *std::max_element(std::begin(dists), std::end(dists));
+
+    int howmany = set_howmany<T>(howmany_default, max_dist);
+
+    test_info_t r2cinfo(howmany, n, r2c_istride, r2c_ostride, r2c_idist, r2c_odist);
+    test_info_t c2rinfo(howmany, n, c2r_istride, c2r_ostride, c2r_idist, c2r_odist);
+    r2cinfo.onembed.back() = (r2cinfo.onembed.back() / 2 + 1);
+    c2rinfo.inembed.back() = (c2rinfo.inembed.back() / 2 + 1);
+    return {r2cinfo, c2rinfo};
+}
+
+/**
+ * @brief Calculate the strides of consecutive elements of each dimension for given shape.
+ */
+std::vector<int> get_strides(const std::vector<int> &shape) {
+    std::vector<int> strides(shape.size());
+    strides[shape.size() - 1] = 1;
+    for (int i = shape.size() - 1; i > 0; i--) {
+        strides[i - 1] = strides[i] * shape[i];
+    }
+    return strides;
+}
+
+/**
+ * @brief Convert between flattened element offset that uses the original FFT shape without any padding
+ * to a flat offset that includes the stride and inembed or onembed coordinates.
+ */
+int pad_offset(int element_offset, const std::vector<int> &shape, const std::vector<int> &embed, int stride) {
+    auto strides_regular = get_strides(shape);
+    auto strides_padded  = get_strides(embed);
+    int result = 0;
+    for (size_t r = 0; r < shape.size(); r++) {
+        int coord = element_offset / strides_regular[r];
+        element_offset -= coord * strides_regular[r];
+        result += coord * strides_padded[r];
+    }
+    return result * stride;
+}
+
+/**
+ * @brief Fill vector of batches of real data according to input layout specification passed
+ * in info.
+ */
+template<typename T>
+void fill_real_input_data(test_case_t tcase, std::vector<T> &target, const test_info_t &info) {
+    if (tcase != test_case_t::FFT_iFFT) {
+        std::cout << "Invalid test case" << std::endl;
+        return;
+    }
+    target.resize(info.howmany * info.idist, -1);
+
+    for (int sample_idx = 0; sample_idx < info.howmany; sample_idx++) {
+        for (int i = 0; i < info.fft_size; i++) {
+            int padded_offset = pad_offset(i, info.n, info.inembed, info.istride);
+            target[sample_idx * info.idist + padded_offset] = sample_idx * info.fft_size + i;
+        }
+    }
+}
+
 template<typename T>
 void compute_reference(test_case_t tcase, std::vector<T>& in, std::vector<T>& ref, test_info_t info){
     using scalar_type_t = typename type_util<T>::scalar_type;
@@ -56,11 +154,9 @@ void compute_reference(test_case_t tcase, std::vector<T>& in, std::vector<T>& re
         case test_case_t::FFT_iFFT:
             for (int b = 0; b < info.howmany; b++) {
                 for (int i = 0; i < info.fft_size; i++) {
-                    int input_idx = b * info.idist +
-                                    (i / info.n.back()) * info.inembed.back() * info.istride +
-                                    (i % info.n.back()) * info.istride;
-                    int   ref_idx = b * info.fft_size + i;
-                    ref[ref_idx] = in[input_idx] * (scalar_type_t) info.fft_size;
+                    int padded_offset = pad_offset(i, info.n, info.inembed, info.istride);
+                    int ref_idx = b * info.fft_size + i;
+                    ref[ref_idx] = in[b * info.idist + padded_offset] * (scalar_type_t) info.fft_size;
                 }
             }
             break;
@@ -76,11 +172,10 @@ double compute_error(T& ref, T& out, test_info_t info){
     double squared_norm = 0;
     for (int b = 0; b < info.howmany; b++) {
         for (int i = 0; i < info.fft_size; i++) {
-            int output_idx = b * info.odist +
-                            (i / info.n.back()) * info.onembed.back() * info.ostride +
-                            (i % info.n.back()) * info.ostride;
-            int    ref_idx = b * info.fft_size + i;
-            squared_diff += std::norm(ref[ref_idx] - out[output_idx]); // Note that std::norm(z) = z * conj(z), not the usual sqrt(z * conj(z))
+            int padded_offset = pad_offset(i, info.n, info.onembed, info.ostride);
+            int ref_idx = b * info.fft_size + i;
+            // Note that std::norm(z) = z * conj(z), not the usual sqrt(z * conj(z))
+            squared_diff += std::norm(ref[ref_idx] - out[b * info.odist + padded_offset]);
             squared_norm += std::norm(ref[ref_idx]);
         }
     }
@@ -148,6 +243,11 @@ enum class fft_type_t {
     C2C,
     C2R,
     R2C
+};
+
+enum class fft_mode_t {
+    IP,
+    OOP,
 };
 
 std::string to_string(fft_prec_t prec) {

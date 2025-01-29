@@ -20,7 +20,7 @@ $ cmake --build build/default
 
 ### CMake Presets
 
-Alterntively use CMake presets which require `>=CMake-3.23`. See:
+Alternatively use CMake presets which require `>=CMake-3.23`. See:
 * [CMake Presets](https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html).
 * [Installing CMake](https://cmake.org/install/).
 

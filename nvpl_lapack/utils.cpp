@@ -24,6 +24,11 @@ void print_element<nvpl_dcomplex_t>(const nvpl_dcomplex_t* mat, nvpl_int_t index
     printf(" %6.2f + %6.2fj", nvpl_dcomplex_t_real(mat[index]), nvpl_dcomplex_t_imag(mat[index]));
 }
 
+template<>
+void print_element<nvpl_int_t>(const nvpl_int_t* mat, nvpl_int_t index) {
+    printf( " %6" NVPL_LAPACK_IFMT, mat[index] );
+}
+
 
 /* Auxiliary routine: printing a matrix */
 template<typename T>
@@ -50,11 +55,12 @@ void print_matrix_colmajor_impl( const char* desc, nvpl_int_t m, nvpl_int_t n, c
     }
 }
 
-/* Auxiliary routine: printing a vector of integers */
-void print_vector( const char* desc, nvpl_int_t n, const nvpl_int_t* vec ) {
+/* Auxiliary routine: printing a vector */
+template<typename T>
+void print_vector_impl( const char* desc, nvpl_int_t n, const T* vec ) {
     nvpl_int_t j;
     printf( "\n %s\n", desc );
-    for( j = 0; j < n; j++ ) printf( " %6" NVPL_LAPACK_IFMT, vec[j] );
+    for( j = 0; j < n; j++ ) print_element(vec, j);
     printf( "\n" );
 }
 
@@ -89,5 +95,25 @@ extern "C" {
 
     void print_zmatrix_colmajor( const char* desc, nvpl_int_t m, nvpl_int_t n, const nvpl_dcomplex_t* mat, nvpl_int_t ldm ) {
         print_matrix_colmajor_impl(desc, m, n, mat, ldm);
+    }
+
+    void print_svector( const char* desc, nvpl_int_t n, const float* vec ) {
+        print_vector_impl(desc, n, vec);
+    }
+
+    void print_dvector( const char* desc, nvpl_int_t n, const double* vec ) {
+        print_vector_impl(desc, n, vec);
+    }
+
+    void print_cvector( const char* desc, nvpl_int_t n, const nvpl_scomplex_t* vec ) {
+        print_vector_impl(desc, n, vec);
+    }
+
+    void print_zvector( const char* desc, nvpl_int_t n, const nvpl_dcomplex_t* vec ) {
+        print_vector_impl(desc, n, vec);
+    }
+
+    void print_vector( const char* desc, nvpl_int_t n, const nvpl_int_t* vec) {
+        print_vector_impl(desc, n, vec);
     }
 }
