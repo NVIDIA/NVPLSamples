@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <cmath>
+#include <cstdlib>
 #include <vector>
 #include <array>
 #include <thread>
@@ -17,21 +18,45 @@ constexpr int  stride_one = 1;
 constexpr int* ionembed_nullptr = nullptr;
 
 
+const char *get_preload_str() {
+    static const char *str = []() {
+        const char *ld_preload = std::getenv("LD_PRELOAD");
+        if (!ld_preload) {
+            return "none";
+        } else if (strstr(ld_preload, "fftw-sve")) {
+            return "fftw-sve";
+        } else if (strstr(ld_preload, "fftw")) {
+            return "fftw";
+        } else if (strstr(ld_preload, "armpl")) {
+            return "armpl";
+        }
+        return "none";
+    }();
+    return str;
+}
+
 struct data_size_desc {
   int count = MAX_SIZE_B;
   // true if count represents number of samples, false if count is data size in bytes
   bool is_batch = false;
 };
 
-enum class bench_category_t { p_2357, f_2357_l_512_r_1, f_2357_l_512_r_2, varargs_r_1 };
+enum class bench_category_t { p_2357, p_2357_r_1, f_2357_l_512_r_1, f_2357_l_512_r_2, varargs_r_1 };
 struct bench_fft_config {
     bench_category_t bc = bench_category_t::p_2357;
     fft_type_t type = fft_type_t::C2C;
+    fft_mode_t mode = fft_mode_t::OOP;
+    std::string config_name_str;
     std::string bench_case_str;
     std::string type_str;
-    bench_fft_config(std::string bench_case_str, std::string fft_type_str, char **fft_sizes = nullptr, int size_count = 0) : bench_case_str(bench_case_str), type_str(fft_type_str) {
+    std::string mode_str;
+    bench_fft_config(std::string config_name_str, std::string bench_case_str, std::string fft_type_str, std::string mode_str, char **fft_sizes = nullptr, int size_count = 0) :
+            config_name_str(config_name_str), bench_case_str(bench_case_str), type_str(fft_type_str), mode_str(mode_str) {
+
         if (bench_case_str.compare("p_2357") == 0) {
             bc = bench_category_t::p_2357;
+        } else if (bench_case_str.compare("p_2357_r_1") == 0) {
+            bc = bench_category_t::p_2357_r_1;
         } else if (bench_case_str.compare("f_2357_l_512_r_1") == 0){
             bc = bench_category_t::f_2357_l_512_r_1;
         } else if (bench_case_str.compare("f_2357_l_512_r_2") == 0){
@@ -68,10 +93,20 @@ struct bench_fft_config {
                 sizes.push_back(std::stoi(fft_sizes[i]));
             }
         }
+        if (mode_str.compare("ip") == 0) {
+            mode = fft_mode_t::IP;
+        } else if (mode_str.compare("oop") == 0) {
+            mode = fft_mode_t::OOP;
+        } else {
+            mode = fft_mode_t::OOP;
+            mode_str = "oop";
+            std::cout << "Invalid transform mode " << mode_str <<". Fall back to default (oop)" << std::endl;
+        }
     }
     std::array<int, 3> fft_rank_to_test() {
         switch (bc)
         {
+        case bench_category_t::p_2357_r_1:
         case bench_category_t::varargs_r_1:
         case bench_category_t::f_2357_l_512_r_1:
             return {1};
@@ -119,11 +154,11 @@ struct fftw<fft_prec_t::SINGLE> {
         switch (type)
         {
         case fft_type_t::C2C:
-            return fftwf_plan_many_dft(rank, n, howmany, reinterpret_cast<complex_t*>(in), ionembed_nullptr, stride_one, complex_elems, reinterpret_cast<complex_t*>(out), ionembed_nullptr, stride_one, complex_elems, FFTW_FORWARD, FFTW_PATIENT);
+            return fftwf_plan_many_dft(rank, n, howmany, reinterpret_cast<complex_t*>(in), ionembed_nullptr, stride_one, complex_elems, reinterpret_cast<complex_t*>(out), ionembed_nullptr, stride_one, complex_elems, FFTW_FORWARD, FFTW_MEASURE);
         case fft_type_t::C2R:
-            return fftwf_plan_many_dft_c2r(rank, n, howmany, reinterpret_cast<complex_t*>(in), ionembed_nullptr, stride_one, complex_elems, reinterpret_cast<real_t*>(out), ionembed_nullptr, stride_one, 2*complex_elems, FFTW_PATIENT);
+            return fftwf_plan_many_dft_c2r(rank, n, howmany, reinterpret_cast<complex_t*>(in), ionembed_nullptr, stride_one, complex_elems, reinterpret_cast<real_t*>(out), ionembed_nullptr, stride_one, 2*complex_elems, FFTW_MEASURE);
         case fft_type_t::R2C:
-            return fftwf_plan_many_dft_r2c(rank, n, howmany, reinterpret_cast<real_t*>(in), ionembed_nullptr, stride_one, 2*complex_elems, reinterpret_cast<complex_t*>(out), ionembed_nullptr, stride_one, complex_elems, FFTW_PATIENT);
+            return fftwf_plan_many_dft_r2c(rank, n, howmany, reinterpret_cast<real_t*>(in), ionembed_nullptr, stride_one, 2*complex_elems, reinterpret_cast<complex_t*>(out), ionembed_nullptr, stride_one, complex_elems, FFTW_MEASURE);
         default:
             return nullptr;
         }
@@ -148,11 +183,11 @@ struct fftw<fft_prec_t::DOUBLE> {
         switch (type)
         {
         case fft_type_t::C2C:
-            return fftw_plan_many_dft(rank, n, howmany, reinterpret_cast<complex_t*>(in), ionembed_nullptr, stride_one, complex_elems, reinterpret_cast<complex_t*>(out), ionembed_nullptr, stride_one, complex_elems, FFTW_FORWARD, FFTW_PATIENT);
+            return fftw_plan_many_dft(rank, n, howmany, reinterpret_cast<complex_t*>(in), ionembed_nullptr, stride_one, complex_elems, reinterpret_cast<complex_t*>(out), ionembed_nullptr, stride_one, complex_elems, FFTW_FORWARD, FFTW_MEASURE);
         case fft_type_t::C2R:
-            return fftw_plan_many_dft_c2r(rank, n, howmany, reinterpret_cast<complex_t*>(in), ionembed_nullptr, stride_one, complex_elems, reinterpret_cast<real_t*>(out), ionembed_nullptr, stride_one, 2*complex_elems, FFTW_PATIENT);
+            return fftw_plan_many_dft_c2r(rank, n, howmany, reinterpret_cast<complex_t*>(in), ionembed_nullptr, stride_one, complex_elems, reinterpret_cast<real_t*>(out), ionembed_nullptr, stride_one, 2*complex_elems, FFTW_MEASURE);
         case fft_type_t::R2C:
-            return fftw_plan_many_dft_r2c(rank, n, howmany, reinterpret_cast<real_t*>(in), ionembed_nullptr, stride_one, 2*complex_elems, reinterpret_cast<complex_t*>(out), ionembed_nullptr, stride_one, complex_elems, FFTW_PATIENT);
+            return fftw_plan_many_dft_r2c(rank, n, howmany, reinterpret_cast<real_t*>(in), ionembed_nullptr, stride_one, 2*complex_elems, reinterpret_cast<complex_t*>(out), ionembed_nullptr, stride_one, complex_elems, FFTW_MEASURE);
         default:
             return nullptr;
         }
@@ -207,6 +242,7 @@ std::string get_test_case_string(const bench_fft_config& config, fft_prec_t prec
     str.append(config.bench_case_str); str.append("_");
     str.append(config.type_str); str.append("_");
     str.append(to_string(prec)); str.append("_");
+    str.append(config.mode_str); str.append("_");
     str.append(std::to_string(omp_get_proc_bind())); str.append("_");
     str.append(std::to_string(nth)); str.append("_");
     str.append(std::to_string(rank)); str.append("_");
@@ -242,11 +278,12 @@ void test_performance(bench_fft_config config, int rank, int fft_size_per_dim, d
     }
 
     const int complex_elems = (config.type == fft_type_t::C2C) ? get_product<int>(n.begin(), n.end()) : get_product<int>(n.begin(), --n.end()) * (n.back() / 2 + 1);
-    std::vector<std::complex<real_t>> inout(howmany * complex_elems);
+    std::vector<std::complex<real_t>>  in(howmany * complex_elems);
+    std::vector<std::complex<real_t>> out(howmany * complex_elems);
 
     fftw<prec>::plan_with_nthreads(omp_get_max_threads());
 
-    auto plan = fftw<prec>::plan_many(config.type, n.size(), n.data(), howmany, inout.data(), inout.data(), complex_elems);
+    auto plan = fftw<prec>::plan_many(config.type, n.size(), n.data(), howmany, in.data(), (config.mode == fft_mode_t::IP) ? in.data() : out.data(), complex_elems);
     if(plan == nullptr) {
         std::cout << "fftw(f)_plan_many_dft failed" << std::endl;
         return;
@@ -254,7 +291,7 @@ void test_performance(bench_fft_config config, int rank, int fft_size_per_dim, d
 
     // FFTW requries creating plan before initializing the input (see https://www.fftw.org/fftw3_doc/Complex-One_002dDimensional-DFTs.html).
     for (int i = 0; i < howmany * complex_elems; i++) {
-        inout[i] = {(float) i, (float) -i};
+        in[i] = {(float) i, (float) -i};
     }
 
     // Warm up runs
@@ -275,9 +312,11 @@ void test_performance(bench_fft_config config, int rank, int fft_size_per_dim, d
     double average_perf_GFlops   = get_perf_GFlops(config.type, get_product<int>(n.begin(), n.end()), howmany, average_time_ms);
     double average_bandwidth_GBs = get_bandwidth_GBs<prec>(config.type, n, howmany, average_time_ms);
 
-    printf("++++CSV-Header, s_test_case, l_omp_proc_bind, l_nthreads, s_fft_type, s_fft_precision, l_rank, l_nx, l_ny, l_nz, l_batch, l_cycles, l_warmup_cycles, d_time_average_ms, d_time_median_ms, d_time_stddev_ms, d_time_10pctl_ms, d_time_90pctl_ms, d_perf_GFlops, d_bandwidth_GBs\n");
-    printf("++++CSV-Data, %s, %d, %d, %s, %s, %ld, %d, %d, %d, %d, %d, %d, %e, %e, %e, %e, %e, %e, %e\n",
-        get_test_case_string(config, prec, fftw<prec>::planner_nthreads(), rank, fft_size_per_dim).c_str(), omp_get_proc_bind(), fftw<prec>::planner_nthreads(), config.type_str.c_str(), to_string(prec).c_str(),
+    printf("++++CSV-Data, %s, %s, %s, %d, %d, %s, %s, %s, %ld, %d, %d, %d, %d, %d, %d, %e, %e, %e, %e, %e, %e, %e\n",
+        get_test_case_string(config, prec, fftw<prec>::planner_nthreads(), rank, fft_size_per_dim).c_str(),
+        config.config_name_str.c_str(), get_preload_str(),
+        omp_get_proc_bind(), fftw<prec>::planner_nthreads(),
+        config.type_str.c_str(), to_string(prec).c_str(), config.mode_str.c_str(),
         n.size(), n[0], n.size() > 1 ? n[1] : 0, n.size() > 2 ? n[2] : 0, howmany, cycles, warmup_runs, stats.average, stats.median, stats.stdev, stats.pctl10, stats.pctl90, average_perf_GFlops, average_bandwidth_GBs);
 
     /* Free resources */
@@ -305,19 +344,21 @@ data_size_desc parse_data_size(char *data_size) {
 }
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) {
-    if(argc < 3) {
-        std::cout<<"Usage: ./c2c_r2c_c2r_many_bench_example prec fft_type bench_category data_size cycles warmup_runs <fft_sizes>*\n"
+    if(argc == 1) {
+        std::cout<<"Usage: ./c2c_c2r_r2c_many_bench_example\n"
                  <<"Arguments:\n"
-                 <<"\tprecision:      The precision of the transform fp32 or fp64.\n"
-                 <<"\tfft_type:       The type of the transform c2c, r2c or c2r.\n"
-                 <<"\tbench_category: (optional) The case to benchmark p_2357, f_2357_l_512_r_1, f_2357_l_512_r_2, varargs_r_1 (default: p_2357).\n"
-                 <<"\tdata_size:      (optional) Transform data size. Supported options: \n"
+                 <<"\t--prec precision:          The precision of the transform fp32 or fp64.\n"
+                 <<"\t--fft_type fft_type:       The type of the transform c2c, r2c or c2r.\n"
+                 <<"\t--mode mode:               (optional) The mode of the transform ip or oop (default: ip).\n"
+                 <<"\t--config config_name:      (optional) Name of the config to be logged (default: no_config).\n"
+                 <<"\t--cat bench_category:      (optional) The case to benchmark p_2357, f_2357_l_512_r_1, f_2357_l_512_r_2, varargs_r_1 (default: p_2357).\n"
+                 <<"\t--size data_size:          (optional) Transform data size. Supported options: \n"
                  <<"\t                           * 0 - default, total data size is 256 MB.\n"
                  <<"\t                           * <number> - number of batches to process for each FFT size.\n"
                  <<"\t                           * <number>k or <number>m - for example 64m - the size of data in KB or MB to process.\n"
-                 <<"\tcycles:         (optional) The number of cycles (default: 100).\n"
-                 <<"\twarmup_runs:    (optional) The number of warm-up runs (default: 10).\n"
-                 <<"\tfft_sizes:      (optional) If `varargs_r_1` is selected, fft sizes can be listed manually (for rank 1).\n"
+                 <<"\t--cycles cycles:           (optional) The number of cycles (default: 100).\n"
+                 <<"\t--warmup warmup_runs:      (optional) The number of warm-up runs (default: 10).\n"
+                 <<"\t--fft_sizes *fft_sizes:    (optional) If `varargs_r_1` is selected, fft sizes can be listed manually (for rank 1). This must be the last argument!\n"
                  <<std::endl;
         return EXIT_SUCCESS;
     }
@@ -327,15 +368,44 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) {
     char **fft_sizes = nullptr;
     std::string bench_cat_str = "p_2357";
 
-    std::string prec_str = argv[1];
-    std::string type_str = argv[2];
-    if(argc > 3) bench_cat_str = argv[3];
-    if(argc > 4) data_size = parse_data_size(argv[4]);
-    if(argc > 5) cycles  = std::stoi(argv[5]);
-    if(argc > 6) warmup_runs = std::stoi(argv[6]);
-    if(argc > 7) fft_sizes = &argv[7];
+    int arg_pointer = 1;
+    std::string prec_str, type_str, mode_str = "ip", config_name_str = "no_config";
 
-    bench_fft_config config(bench_cat_str, type_str, fft_sizes, argc > 7 ? argc - 7 : 0);
+    while (arg_pointer < argc) {
+        if (strcmp(argv[arg_pointer], "--prec") == 0) {
+            prec_str = argv[arg_pointer + 1];
+        } else if (strcmp(argv[arg_pointer], "--fft_type") == 0) {
+            type_str = argv[arg_pointer + 1];
+        } else if (strcmp(argv[arg_pointer], "--mode") == 0) {
+            mode_str = argv[arg_pointer + 1];
+        } else if (strcmp(argv[arg_pointer], "--config") == 0) {
+            config_name_str = argv[arg_pointer + 1];
+        } else if (strcmp(argv[arg_pointer], "--cat") == 0) {
+            bench_cat_str = argv[arg_pointer + 1];
+        } else if (strcmp(argv[arg_pointer], "--size") == 0) {
+            data_size = parse_data_size(argv[arg_pointer + 1]);
+        } else if (strcmp(argv[arg_pointer], "--cycles") == 0) {
+            cycles = std::stoi(argv[arg_pointer + 1]);
+        } else if (strcmp(argv[arg_pointer], "--warmup") == 0) {
+            warmup_runs = std::stoi(argv[arg_pointer + 1]);
+        } else if (strcmp(argv[arg_pointer], "--fft_sizes") == 0) {
+            fft_sizes = &argv[arg_pointer + 1];
+            break;
+        }
+        arg_pointer += 2;
+    }
+    if (prec_str.empty() || type_str.empty()) {
+        fprintf(stderr, "Mandatory --prec or --fft_type were not provided\n");
+        return EXIT_FAILURE;
+    }
+
+    bench_fft_config config(config_name_str, bench_cat_str, type_str, mode_str, fft_sizes, argc > arg_pointer + 1 ? argc - arg_pointer - 1: 0);
+
+    printf("++++CSV-Header, s_test_case, s_config_name, s_preload, l_omp_proc_bind, l_nthreads,"
+           " s_fft_type, s_fft_precision, s_fft_mode,"
+           " l_rank, l_nx, l_ny, l_nz, l_batch, l_cycles, l_warmup_cycles,"
+           " d_time_average_ms, d_time_median_ms, d_time_stddev_ms, d_time_10pctl_ms,"
+           " d_time_90pctl_ms, d_perf_GFlops, d_bandwidth_GBs\n");
 
     for(int rank : config.fft_rank_to_test()) {
         for (int fft_size_per_dim : config.fft_size_per_dim_to_test()) {

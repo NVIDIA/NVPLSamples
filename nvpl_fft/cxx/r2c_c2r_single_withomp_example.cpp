@@ -19,16 +19,13 @@ int run_test(const std::string &test_cmd, test_scenario_t tsce, test_info_t& r2c
         std::cout << "test_scenario_t::ONE_PLAN_PER_PROCESS: howmany must equal to nthread_user x batches_per_exec -- skipped" << std::endl;
         return 0;
     }
-    int total_size = r2c.howmany * r2c.fft_size;
 
     std::vector<float>   real_in(r2c.howmany * r2c.idist, -1);
     std::vector<float>  real_out(c2r.howmany * c2r.odist, -1);
     std::vector<float>  real_ref(r2c.howmany * r2c.fft_size);
 
-    for (int i = 0; i < total_size; i++) {
-        int idx = (i / r2c.fft_size) * r2c.idist + (i % r2c.fft_size) * r2c.istride;
-        real_in[idx] = i;
-    }
+    fill_real_input_data(test_case_t::FFT_iFFT, real_in, r2c);
+
     compute_reference(test_case_t::FFT_iFFT, real_in, real_ref, r2c);
 
     float *real_in_data  = real_in.data();

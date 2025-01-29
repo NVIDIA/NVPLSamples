@@ -1,5 +1,4 @@
 #include <algorithm>
-#include <chrono>
 #include <cstdint>
 #include <iostream>
 #include <random>
@@ -8,25 +7,9 @@
 #include <vector>
 
 #include "nvpl_scalapack.h"
-#include "nvpl_scalapack_command_line_parser.hpp"
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
   int r_val(0);
-
-  ///
-  /// Command line input parser
-  ///
-  command_line_parser_t opts(
-      "NVPL ScaLAPACK Example PDGESV; solves AX = B where A(m x m) and B(m x nrhs) are block-cyclicly distributed over "
-      "processor grid (nprow x npcol) with a square blocksize mb");
-  int arg_nprow{2}, arg_npcol{2};
-  int arg_m{200}, arg_nrhs{1}, arg_mb{32};
-
-  opts.set_option<int>("nprow", "number of processors in grid (nprow x npcol)", &arg_nprow);
-  opts.set_option<int>("npcol", "number of processors in grid (nprow x npcol)", &arg_npcol);
-  opts.set_option<int>("m", "number of rows of a square matrix A", &arg_m);
-  opts.set_option<int>("nrhs", "number of right hand side of B", &arg_nrhs);
-  opts.set_option<int>("mb", "blocksize used for array distribution", &arg_mb);
 
   ///
   /// BLACS initialization
@@ -35,16 +18,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
   nvpl_int_t mpi_rank{0}, mpi_size{0};
   Cblacs_pinfo(&mpi_rank, &mpi_size); /// mpi init, rank/size
 
-  const bool r_parse = opts.parse(argc, argv, mpi_rank == 0);
-
-  /// --help is found
-  if (r_parse) {
-    /// finalize MPI; if keep_mpi is true, Cblacs_exit does not invoke mpi_finalize
-    Cblacs_exit(keep_mpi);
-    return 0; /// print help from root and return
-  }
-
-  nvpl_int_t nprow{arg_nprow}, npcol{arg_npcol};
+  nvpl_int_t nprow{2}, npcol{2};
   if (mpi_size < (nprow * npcol)) {
     if (mpi_rank == 0)
       std::cout << "Error: mpi_size (" << mpi_size << ") is smaller than the requested grid size (" << nprow << " x "
@@ -70,7 +44,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
       /// Problem setup
       ///
       nvpl_int_t izero{0}, ione{1};
-      nvpl_int_t m{arg_m}, nrhs{arg_nrhs}, mb{arg_mb};
+      nvpl_int_t m{1000}, nrhs{1}, mb{128};
 
       /// Solve AX = B
       nvpl_int_t mA{0}, nA{0}, mB{0}, nB{0};
@@ -123,12 +97,17 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
       double t{0};
       char barrier_scope_all('A');
       {
+        constexpr double billion = 1e9;
+        struct timespec ts_beg {
+        }, ts_end{};
+
         Cblacs_barrier(icontxt, &barrier_scope_all);
-        auto t_beg = std::chrono::high_resolution_clock::now();
+        clock_gettime(CLOCK_MONOTONIC, &ts_beg);
         pdgesv_(&m, &nrhs, A.data(), &ione, &ione, descA, ipiv.data(), X.data(), &ione, &ione, descB, &info);
         Cblacs_barrier(icontxt, &barrier_scope_all);
-        auto fp_ms = std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now() - t_beg);
-        t = fp_ms.count() / 1000.0;
+        clock_gettime(CLOCK_MONOTONIC, &ts_end);
+        t = ((static_cast<double>(ts_end.tv_sec) - static_cast<double>(ts_beg.tv_sec)) +
+             (static_cast<double>(ts_end.tv_nsec) - static_cast<double>(ts_beg.tv_nsec)) / billion);
       }
       if (info) {
         std::stringstream ss;

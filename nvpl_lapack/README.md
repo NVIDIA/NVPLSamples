@@ -1,23 +1,47 @@
-# NVPL LAPACK Usage Example
+# NVPL LAPACK Examples
 
-## Languages
+The examples demonstrate how to call NVPL LAPACK from C++ and Fortran
+languages.
 
-Fortran and C++ examples are provided
+## Build
 
-## How to Build
+The examples use CMake to build. Set `PATH_TO_NVPL_INSTALLATION` to your NVPL
+installation (e.g., `~/install/nvpl`) and execute in the directory of the
+NVPL LAPACK examples:
 
-Set `PATH_TO_NVPL_INSTALLATION` to your NVPL installation (e.g., `~/install/nvpl`) and execute in the directory of the samples:
-
-```
-CMAKE_PREFIX_PATH=$PATH_TO_NVPL_INSTALLATION cmake --preset default -Dnvpl_ROOT=$PATH_TO_NVPL_INSTALLATION
+```sh
+cmake --preset default -Dnvpl_ROOT=$PATH_TO_NVPL_INSTALLATION
 cmake --build --preset default -j
 ```
 
-Or build without CMake Presets:
+Or optionally, to build without CMake Presets:
 
-```
-mkdir -p build/release
-cd build/release
-CMAKE_PREFIX_PATH=$PATH_TO_NVPL_INSTALLATION cmake -DCMAKE_BUILD_TYPE=Release -Dnvpl_ROOT=$PATH_TO_NVPL_INSTALLATION ../..
+```sh
+mkdir -p build/default
+cd build/default
+cmake -Dnvpl_ROOT=$PATH_TO_NVPL_INSTALLATION ../..
 make -j
+```
+
+The built examples will be located in `build/default` directory.
+
+## Run
+
+To run all examples at once use `ctest` command:
+
+```sh
+cd build/default
+ctest
+```
+
+The examples can be run manually as well, for instance:
+
+```sh
+# 64-bit integer, sequential.
+./build/default/ex_lapacke_dgels_colmajor_ilp64_seq
+```
+
+```sh
+# 32-bit integer, multithread using at most 8 threads.
+OMP_NUM_THREADS=8 ./build/default/ex_lapacke_dgels_colmajor_lp64_omp
 ```
