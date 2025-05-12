@@ -6,7 +6,7 @@
 * `cxx/c2c_<single/double>_many_example` computes batched forward and backward 1D/2D/3D C2C FFTs in single/double precision with strided data.
 * `cxx/r2c_c2r_<single/double>_many_example` computes batched forward R2C and backward C2R 1D/2D/3D FFTs in single/double precision with strided data.
 * `cxx/<r2c_c2r/c2c>_single_withomp_example` computes batched forward and backward 1D FFTs in single precision with contiguous data. Plan creation and execution are called inside an omp parallel region.
-* `cxx/c2c_c2r_r2c_many_bench_example` measures performance of  1D/2D/3D C2C/C2R/R2C FFTs with single and double precision.
+* `cxx/plan_many_dft_benchmark_example` measures performance of 1D/2D/3D C2C/C2R/R2C FFTs with single and double precision and arbitrary strides for batched calls.
 * `cxx/c2c_c2r_r2c_single_apis_example` demonstrates usage of simple and advanced FFTW APIs for computing C2C / R2C / C2R FFTs with inplace / out-of-place data.
 * `cxx/auxiliary_apis_example` demonstrates usage of few auxiliary APIs.
 * `cxx/include_header_example` demonstrates inclusion of `fftw3.h` (as opposed to using `nvpl_fftw3.h`).
@@ -43,20 +43,27 @@ make
 ./fortran/c2c_c2r_r2c_single_apis_example.f90
 
 ```
-### c2c_c2r_r2c_many_bench_example
+### plan_many_dft_benchmark_example
+It's recommended to use the `./scripts/nvpl/nvplbench_generic.py` script to run the `plan_many_dft_benchmark_example`
+allowing to test multiple configurations grouped into one use-case.
 ```
-Usage: ./c2c_r2c_c2r_many_bench_example
+Usage: ./plan_many_dft_benchmark_example
 Arguments:
-	--prec precision:          The precision of the transform fp32 or fp64.
-	--fft_type fft_type:       The type of the transform c2c, r2c or c2r.
-	--mode mode:               (optional) The mode of the transform ip or oop (default: ip).
-	--config config_name:      (optional) Name of the config to be logged (default: no_config).
-	--cat bench_category:      (optional) The case to benchmark p_2357, f_2357_l_512_r_1, f_2357_l_512_r_2, varargs_r_1 (default: p_2357).
-	--size data_size:          (optional) Transform data size. Supported options:
-	                           * 0 - default, total data size is 256 MB.
-	                           * <number> - number of batches to process for each FFT size.
-	                           * <number>k or <number>m - for example 64m - the size of data in KB or MB to process.
-	--cycles cycles:           (optional) The number of cycles (default: 100).
-	--warmup warmup_runs:      (optional) The number of warm-up runs (default: 10).
-	--fft_sizes *fft_sizes:    (optional) If `varargs_r_1` is selected, fft sizes can be listed manually (for rank 1). This must be the last argument!
+        --prec precision:          The precision of the transform fp32 or fp64.
+        --fft_type fft_type:       (optional) The type of the transform c2c, r2c or c2r (default: c2c).
+        --mode mode:               (optional) The mode of the transform ip or oop (default: ip).
+        --rank rank:               (optional) Rank of the transform (default: 1).
+        --size data_size:          (optional) Transform data size. Supported options:
+                                   * 0 - default, total data size is 256 MB.
+                                   * <number> - number of batches to process for each FFT size.
+                                   * <number>k or <number>m - for example 64m - the size of data in KB or MB to process.
+        --cycles cycles:           (optional) The number of cycles (default: 100).
+        --warmup warmup_runs:      (optional) The number of warm-up runs (default: 10).
+        --fft_sizes *fft_sizes:    (optional) Size of the fft transform. If the rank != 1, it must be specified earlier!
+        --istride istride:         (optional) Input stride - distance between elements of the sample (default: 1)
+        --idist idist:             (optional) Distance between start of each input sample (~ number of transformed elements)
+        --ostride ostride:         (optional) Output stride - distance between elements of the sample (default: 1)
+        --odist odist:             (optional) Distance between start of each output sample (~ number of transformed elements)
 ```
+
+
