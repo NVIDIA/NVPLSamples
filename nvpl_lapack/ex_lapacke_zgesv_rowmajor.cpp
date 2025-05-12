@@ -3,12 +3,11 @@
 
 #include "utils.h"
 
-int main()
-{
+int main() {
     // Initialization.
-    const nvpl_int_t n = 4; // Number of rows of A and b matrices.
-    const nvpl_int_t nrhs = 2; // Number of columns of b.
-    const nvpl_int_t lda = n; // Leading dimension of A.
+    const nvpl_int_t n = 4;      // Number of rows of A and b matrices.
+    const nvpl_int_t nrhs = 2;   // Number of columns of b.
+    const nvpl_int_t lda = n;    // Leading dimension of A.
     const nvpl_int_t ldb = nrhs; // Leading dimension of b.
 
     // Matrix A has n x n dimensions with lda = n for row-major ordering.
@@ -16,7 +15,8 @@ int main()
     //      0   1   2   1
     //     -1   2   0   1
     //      3  -1   2   2
-    nvpl_dcomplex_t A[lda * n] = {1, 2, 2, -3, 0, 1, 2, 1, -1, 2, 0, 1, 3, -1, 2, 2};
+    nvpl_dcomplex_t A[lda * n]
+            = {1, 2, 2, -3, 0, 1, 2, 1, -1, 2, 0, 1, 3, -1, 2, 2};
 
     // Matrix b has n x nrhs dimensions with ldb = nrhs for row-major ordering.
     // b = 13    1
@@ -36,8 +36,8 @@ int main()
     printf("LAPACKE_zgesv (row-major, high-level) Example Program Results\n");
 
     // Solve A * x = b.
-    nvpl_int_t info = LAPACKE_zgesv(LAPACK_ROW_MAJOR, n, nrhs, A, lda, ipiv,
-            b, ldb);
+    nvpl_int_t info
+            = LAPACKE_zgesv(LAPACK_ROW_MAJOR, n, nrhs, A, lda, ipiv, b, ldb);
 
     // Any errors?
     if (info == LAPACK_WORK_MEMORY_ERROR)

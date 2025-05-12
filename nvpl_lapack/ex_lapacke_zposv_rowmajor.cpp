@@ -3,12 +3,11 @@
 
 #include "utils.h"
 
-int main()
-{
+int main() {
     // Initialization.
-    const nvpl_int_t n = 4; // Number of rows of A and b matrices.
-    const nvpl_int_t nrhs = 2; // Number of columns of b.
-    const nvpl_int_t lda = n; // Leading dimension of A.
+    const nvpl_int_t n = 4;      // Number of rows of A and b matrices.
+    const nvpl_int_t nrhs = 2;   // Number of columns of b.
+    const nvpl_int_t lda = n;    // Leading dimension of A.
     const nvpl_int_t ldb = nrhs; // Leading dimension of b.
 
     // Matrix A has n x n dimensions with lda = n for row-major ordering.
@@ -16,7 +15,8 @@ int main()
     //      5   16    0   17
     //     -3    0   15   -8
     //      7   17   -8   23
-    nvpl_dcomplex_t A[lda * n] = {4, 5, -3, 7, 5, 16, 0, 17, -3, 0, 15, -8, 7, 17, -8, 23};
+    nvpl_dcomplex_t A[lda * n]
+            = {4, 5, -3, 7, 5, 16, 0, 17, -3, 0, 15, -8, 7, 17, -8, 23};
 
     // Matrix b has n x nrhs dimensions with ldb = n for row-major ordering.
     // b =  -3   17
@@ -35,8 +35,8 @@ int main()
 
     // Solve A * x = b using Cholesky decomposition.
     char lower = 'L';
-    nvpl_int_t info = LAPACKE_zposv(LAPACK_ROW_MAJOR, lower, n, nrhs, A, lda,
-            b, ldb);
+    nvpl_int_t info
+            = LAPACKE_zposv(LAPACK_ROW_MAJOR, lower, n, nrhs, A, lda, b, ldb);
 
     // Any errors?
     if (info == LAPACK_WORK_MEMORY_ERROR)

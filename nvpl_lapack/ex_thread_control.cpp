@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 /* Auxiliary routine: printing a vector of floats */
-void print_svector(const char* desc, nvpl_int_t n, const float* vec) {
+void print_svector(const char *desc, nvpl_int_t n, const float *vec) {
     nvpl_int_t j;
     printf("\n %s\n", desc);
     for (j = 0; j < n; j++)
@@ -12,8 +12,8 @@ void print_svector(const char* desc, nvpl_int_t n, const float* vec) {
 }
 
 /* Workaround for NVHPC compiler bug */
-void __attribute__((noinline)) slarfg(nvpl_int_t * n, float* alpha,
-                                    float* X, nvpl_int_t * incx, float* tau) {
+void __attribute__((noinline))
+slarfg(nvpl_int_t *n, float *alpha, float *X, nvpl_int_t *incx, float *tau) {
     slarfg_(n, alpha, X, incx, tau);
 }
 
@@ -36,7 +36,7 @@ int main() {
     tau1 = 4.0;
 
     printf("NVPL LAPACK version: %d \n", nvpl_lapack_get_version());
-    printf("sizeof(nvpl_int_t) = %d \n", (int) sizeof(nvpl_int_t));
+    printf("sizeof(nvpl_int_t) = %d \n", (int)sizeof(nvpl_int_t));
 
     print_svector("Initial vector #0", n0 - 1, x0);
     print_svector("Initial vector #1", n1 - 1, x1);
@@ -45,41 +45,39 @@ int main() {
     printf("OpenMP max number of threads = %d \n", omp_get_max_threads());
 
     /* Expected: same value as omp_get_max_threads() as no other settings applied */
-    printf(
-        "(before any threading control APIs are called) LAPACK setting for "
-        "nthreads = %d \n",
-        nvpl_lapack_get_max_threads());
+    printf("(before any threading control APIs are called) LAPACK setting for "
+           "nthreads = %d \n",
+            nvpl_lapack_get_max_threads());
 
     /* Setting the global upper limit on the number of threads
        which can be used by NVPL LAPACK. */
     nvpl_lapack_set_num_threads(7);
 
     /* Expected: 7 as the minimum of OpenMP and global NVPL LAPACK settings */
-    printf(
-        "(after setting the global limit) LAPACK setting for nthreads = %d \n",
-        nvpl_lapack_get_max_threads());
+    printf("(after setting the global limit) LAPACK setting for nthreads = %d "
+           "\n",
+            nvpl_lapack_get_max_threads());
 
     omp_set_max_active_levels(2); /* could be (deprecated) omp_set_nested(1) */
 
     /* Expected: 7 as the local setting takes the highest precedence */
     printf("(before the parallel region) LAPACK setting for nthreads = %d \n",
-        nvpl_lapack_get_max_threads());
+            nvpl_lapack_get_max_threads());
 
-    /* This parallel section demonstrates that without any local settings,
+/* This parallel section demonstrates that without any local settings,
        NVPL LAPACK would use a single thread in case of nested parallelism */
-    #pragma omp parallel num_threads(2)
+#pragma omp parallel num_threads(2)
     {
         int tid = omp_get_thread_num();
         /* Expected: 1 as the call happens inside a parallel region and no local
            settings for LAPACK have been set */
-        printf(
-            "tid %d: (inside a dummy parallel region) LAPACK setting for "
-            "nthreads = %d \n",
-            tid, nvpl_lapack_get_max_threads());
+        printf("tid %d: (inside a dummy parallel region) LAPACK setting for "
+               "nthreads = %d \n",
+                tid, nvpl_lapack_get_max_threads());
     }
 
-    /* This parallel section demonstrates the effects of having local settings */
-    #pragma omp parallel num_threads(3)
+/* This parallel section demonstrates the effects of having local settings */
+#pragma omp parallel num_threads(3)
     {
         int tid = omp_get_thread_num();
 
@@ -98,7 +96,7 @@ int main() {
             int nthreads_prev = nvpl_lapack_set_num_threads_local(4);
             /* Expected: 4 as the new local settings are applied */
             printf("tid %d: (locally) LAPACK setting for nthreads = %d \n", tid,
-                nvpl_lapack_get_max_threads());
+                    nvpl_lapack_get_max_threads());
             slarfg(&n0, &alpha0, x0, &incx0, &tau0);
             /* Restoring the number of threads set for LAPACK locally*/
             nvpl_lapack_set_num_threads_local(nthreads_prev);
@@ -108,39 +106,38 @@ int main() {
         if (tid == 1) {
             nvpl_lapack_set_num_threads_local(2);
             printf("tid %d: (locally) LAPACK setting for nthreads = %d \n", tid,
-                nvpl_lapack_get_max_threads());
+                    nvpl_lapack_get_max_threads());
             slarfg(&n1, &alpha1, x1, &incx1, &tau1);
         }
 
-        #pragma omp barrier
+#pragma omp barrier
         /* Demonstrating the difference between following and not-following
            the recommended practice */
         if (tid == 0 || tid == 1) {
             /* Expected: 3 for Thread 0 (with save/restore),
         but 2 for Thread 1 (just overwrote the previous local setting) */
             printf("tid %d: (aftermath) LAPACK setting for nthreads = %d \n",
-                tid, nvpl_lapack_get_max_threads());
+                    tid, nvpl_lapack_get_max_threads());
         }
 
-        #pragma omp barrier
+#pragma omp barrier
         /* Thread 2 does not use apply any local settings and thus uses the
            global limit */
         if (tid == 2) {
             /* Expected: 7 */
             printf("tid %d: (locally) LAPACK setting for nthreads = %d \n", tid,
-                nvpl_lapack_get_max_threads());
+                    nvpl_lapack_get_max_threads());
         }
 
-        #pragma omp barrier
+#pragma omp barrier
         /* Demonstrating the effect of calling with argument equal to 0:
            this disables any local settings applied previously */
         if (tid == 0) {
             nvpl_lapack_set_num_threads_local(0);
             /* Expected: 7 as the  */
-            printf(
-                "tid %d: (after disabling previous local settings) "
-                "LAPACK setting for nthreads = %d \n",
-                tid, nvpl_lapack_get_max_threads());
+            printf("tid %d: (after disabling previous local settings) "
+                   "LAPACK setting for nthreads = %d \n",
+                    tid, nvpl_lapack_get_max_threads());
         }
     }
 
@@ -149,7 +146,7 @@ int main() {
        assumed that Thread 0 inside the parallel region is the same as the main
        thread outside the parallel region. */
     printf("(after the parallel region) LAPACK setting for nthreads = %d \n",
-        nvpl_lapack_get_max_threads());
+            nvpl_lapack_get_max_threads());
 
     /* Print generated reflectors (one for seq, two for omp) */
     print_svector("Householder reflector #0", n0 - 1, x0);
