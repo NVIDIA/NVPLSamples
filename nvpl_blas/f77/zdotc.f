@@ -46,5 +46,5 @@
  99   format('Example: ZDOTC for computing the dot product '
      &       'of vectors X and Y')
  100  format('#### args: n=',i1,', incx=',i1,', incy=',i1)
- 101  format('The dot product of vectors X and Y:(',f5.2,', ',f5.2')')
+ 101  format('The dot product of vectors X and Y:(',f5.2,', ',f5.2,')')
       end
