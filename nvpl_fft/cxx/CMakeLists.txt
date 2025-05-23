@@ -35,9 +35,17 @@ foreach(name IN LISTS NVPL_FFTW_EXAMPLES NVPL_FFTW_EXAMPLES_OMP)
     endif()
 endforeach()
 
+# Get the number of logical cores
+cmake_host_system_information(RESULT NCORES QUERY NUMBER_OF_LOGICAL_CORES)
+message(STATUS "Logical CPU cores: ${NCORES}")
+
 ## CTests
 foreach(PREC single double)
     foreach (THREAD 1 2 3 4 5 6 7 8 16 32 64 72 144)
+        if (${THREAD} GREATER ${NCORES})
+            message(STATUS "${THREAD} threads > ${NCORES} cores. Skipping tests.")
+            continue()
+        endif()
         if (${THREAD} EQUAL 1)
             # 1D tests
             foreach(SIZE 1 2 3 10 12 34 123 1234 12345 123456)
