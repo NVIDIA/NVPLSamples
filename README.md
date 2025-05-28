@@ -4,14 +4,14 @@ The NVIDIA Performance Libraries (NVPL) are a collection of high performance mat
 
 These CPU-only libraries have no dependencies on CUDA or CTK, and are drop in replacements for standard C and Fortran mathematical APIs allowing HPC applications to achieve maximum performance on the Grace platform.
 
-The provided sample codes show how to call and link to NVPL Libraries in Fortran, C, and C++ applications and libraries.  Most examples use [CMake](#cmake-usage), but are easily modified for use in custom build environments.
+The provided sample codes show how to call and link to NVPL Libraries in Fortran, C, and C++ applications and libraries.  Examples use [CMake](#cmake-usage), but are easily modified for use in custom build environments.
 
 * [NVPL Documentation](https://docs.nvidia.com/nvpl/)
 
 ## Installation
 
 * [NVPL Downloads](https://developer.nvidia.com/nvpl-downloads/)
-* Latest release: **NVPL-25.1**
+* Latest release: **NVPL-25.5**
 
 ## Library Samples
 
@@ -33,16 +33,16 @@ Samples are compatible with the latest nvpl release.  Compatibility with older r
 * Platform: Arm SBSA
 * CPUs Supported
    * [NVIDIA Grace](https://www.nvidia.com/en-us/data-center/grace-cpu/) (Armv9.0-A Neoverse-V2)
-   * AWS Graviton 4 (Armv9.00-A Neoverse-V2)
+   * AWS Graviton 4 (Armv9.0-A Neoverse-V2)
    * AWS Graviton 3/3e (Armv8.4-A Neoverse-V1)
    * AWS Graviton 2 (Arm-8.2-A Neoverse-N1)
    * Ampere Altra (Armv8.2-A Neoverse-N1)
    * Any CPU with Armv8.1-A or later micro Architecture
 * OS (Linux)
-   * Ubuntu: 20.04, 22.04, 24.04, 24.10
+   * Ubuntu: 20.04, 22.04, 24.04, 25.04
    * Debian: 12
    * RHEL: RHEL8, RHEL9
-   * Fedora: 39, 40, 41
+   * Fedora: 40, 41, 42
    * SLES: SLES15 (15.6)
    * OpenSUSE/leap: 15.6
    * AmazonLinux: 2, 2023
@@ -50,10 +50,10 @@ Samples are compatible with the latest nvpl release.  Compatibility with older r
 
 ### Compilers
 
-* GCC-8 - GCC-14+
-* Clang-14 - Clang-19+
+* GCC-8 - GCC-15+
+* Clang-14 - Clang-21+
 * [Clang for NVIDIA Grace](https://developer.nvidia.com/grace/clang/downloads): 16.x, 17.x, 18.x, 19.x
-* [NVIDA HPC Compilers](https://developer.nvidia.com/hpc-compilers): 23.9 - 24.11
+* [NVIDA HPC Compilers](https://developer.nvidia.com/hpc-compilers): 23.9 - 25.3+
 
 ### Languages
 

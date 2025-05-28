@@ -262,4 +262,30 @@ std::string to_string(fft_prec_t prec) {
     }
 };
 
+std::string to_string(fft_type_t type) {
+    switch (type)
+    {
+    case fft_type_t::C2C:
+        return "c2c";
+    case fft_type_t::C2R:
+        return "c2r";
+    case fft_type_t::R2C:
+        return "r2c";
+    default:
+        return "<invalid>";
+    }
+};
+
+std::string to_string(fft_mode_t mode) {
+    switch (mode)
+    {
+    case fft_mode_t::IP:
+        return "ip";
+    case fft_mode_t::OOP:
+        return "oop";
+    default:
+        return "<invalid>";
+    }
+};
+
 #endif // NVPLFFT_EXAMPLE_COMMON_H_

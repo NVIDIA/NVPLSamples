@@ -18,12 +18,12 @@ int main() {
     std::uniform_real_distribution<double> dist(min, max);
     size_t seed = 1;
     std::default_random_engine rng(seed);
-    for (auto& e : matrices) {
+    for (auto &e : matrices) {
         e = dist(rng);
     }
 
     std::cout << "  - begin parallel section..." << std::endl;
-    #pragma omp parallel for
+#pragma omp parallel for
     for (nvpl_int_t batch_id = 0; batch_id < num_batches; ++batch_id) {
         // Within a parallel section the number of internal threads is limited to one.
         dgetrf_(&m, &n, matrices.data() + batch_id * m * n, &m,
@@ -33,7 +33,7 @@ int main() {
     for (nvpl_int_t batch_id = 0; batch_id < num_batches; ++batch_id) {
         if (infos[batch_id] != 0) {
             std::cout << "  - info[" << batch_id << "] = " << infos[batch_id]
-                    << std::endl;
+                      << std::endl;
         }
     }
 }

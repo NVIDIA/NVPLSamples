@@ -45,7 +45,7 @@
       stop
  99   format('Example: ZTPSV for solving a system of linear equations'
      &       ' whose coefficients are in a triangular packed matrix.')
- 100  format('#### args: n=',i1,', incx=',i1
+ 100  format('#### args: n=',i1,', incx=',i1,
      &       ', uplo=',a1,', transa=',a1,', diag=',a1)
  102  format(A)
       end

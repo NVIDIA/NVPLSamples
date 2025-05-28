@@ -3,13 +3,12 @@
 
 #include "utils.h"
 
-int main()
-{
+int main() {
     // Initialization.
-    const nvpl_int_t m = 5; // Number of rows of A and b matrices.
-    const nvpl_int_t n = 3; // Number of columns of A.
-    const nvpl_int_t nrhs = 2; // Number of columns of b.
-    const nvpl_int_t lda = n; // Leading dimension of A.
+    const nvpl_int_t m = 5;      // Number of rows of A and b matrices.
+    const nvpl_int_t n = 3;      // Number of columns of A.
+    const nvpl_int_t nrhs = 2;   // Number of columns of b.
+    const nvpl_int_t lda = n;    // Leading dimension of A.
     const nvpl_int_t ldb = nrhs; // Leading dimension of b.
 
     // Matrix A has m x n dimensions with lda = m for row-major ordering.
@@ -38,8 +37,8 @@ int main()
 
     // Solve least square problem: min_x || A * x - b ||.
     char no_transpose = 'N';
-    nvpl_int_t info = LAPACKE_zgels(LAPACK_ROW_MAJOR, no_transpose, m, n, nrhs,
-            A, lda, b, ldb);
+    nvpl_int_t info = LAPACKE_zgels(
+            LAPACK_ROW_MAJOR, no_transpose, m, n, nrhs, A, lda, b, ldb);
 
     // Any errors?
     if (info == LAPACK_WORK_MEMORY_ERROR)

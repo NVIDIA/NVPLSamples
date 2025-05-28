@@ -3,10 +3,9 @@
 
 #include "utils.h"
 
-int main()
-{
+int main() {
     // Initialization.
-    const nvpl_int_t n = 4; // Number of rows and columns of A.
+    const nvpl_int_t n = 4;   // Number of rows and columns of A.
     const nvpl_int_t lda = n; // Leading dimension of A.
 
     // Matrix A has n x n dimensions with lda = n for row-major ordering.
@@ -14,7 +13,8 @@ int main()
     //      3   13   -6   -5
     //     -6   -6   31    7
     //     -5   -5    7   23
-    nvpl_dcomplex_t A[lda * n] = {13, 3, -6, -5, 3, 13, -6, -5, -6, -6, 31, 7, -5, -5, 7, 23};
+    nvpl_dcomplex_t A[lda * n]
+            = {13, 3, -6, -5, 3, 13, -6, -5, -6, -6, 31, 7, -5, -5, 7, 23};
 
     // Eigenvalues of A.
     double w[n] = {0};
@@ -29,8 +29,8 @@ int main()
     // Compute eigenvalue decomposition.
     char eigen_vectors = 'V';
     char lower = 'L';
-    nvpl_int_t info = LAPACKE_zheev(LAPACK_ROW_MAJOR, eigen_vectors, lower,
-            n, A, lda, w);
+    nvpl_int_t info = LAPACKE_zheev(
+            LAPACK_ROW_MAJOR, eigen_vectors, lower, n, A, lda, w);
 
     // Any errors?
     if (info == LAPACK_WORK_MEMORY_ERROR)
