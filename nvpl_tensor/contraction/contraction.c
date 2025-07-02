@@ -67,17 +67,17 @@ int main()
     int64_t elementsA = 1;
     for (int i = 0; i < nmodeA; ++i)
     {
-        elementsA *= extent[i];
+        elementsA *= extentA[i];
     }
     int64_t elementsB = 1;
     for (int i = 0; i < nmodeB; ++i)
     {
-        elementsB *= extent[i];
+        elementsB *= extentB[i];
     }
     int64_t elementsC = 1;
     for (int i = 0; i < nmodeC; ++i)
     {
-        elementsC *= extent[i];
+        elementsC *= extentC[i];
     }
 
     int64_t sizeA = sizeof(floatTypeA) * elementsA;
