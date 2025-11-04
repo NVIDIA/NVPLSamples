@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     CGEMM3M 
+!     CGEMM3M
 !
 !******************************************************************************
       program   CGEMM3M_MAIN
@@ -53,7 +53,7 @@
  99   format(A)
  100  format('#### args: m=',i1,', n=',i1,', k=',i1,', lda=',i1,
      &       ', ldb=',i1,', ldc=',i1,', transA=',a1,', transB=',a1)
- 101  format(11x,'alpha=(',f3.1,', ',f3.1,'),'
-     &       ' beta=(',f3.1,', ',f3.1,')')
- 102  format(A)     
+ 101  format(11x,'alpha=(',f3.1,', ',f3.1,')',
+     &       ', beta=(',f3.1,', ',f3.1,')')
+ 102  format(A)
       end

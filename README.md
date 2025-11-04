@@ -1,8 +1,8 @@
 # NVPL Samples
 
-The NVIDIA Performance Libraries (NVPL) are a collection of high performance mathematical libraries optimized for the [NVIDIA Grace](https://www.nvidia.com/en-us/data-center/grace-cpu/) Armv9.0-A Neoverse-V2 architecture.
+The NVIDIA Performance Libraries (NVPL) are a collection of high performance mathematical libraries optimized for the [NVIDIA Grace](https://www.nvidia.com/en-us/data-center/grace-cpu/) Armv9.0-A Neoverse-V2 architecture and future NVIDA aarch64 CPUs.
 
-These CPU-only libraries have no dependencies on CUDA or CTK, and are drop in replacements for standard C and Fortran mathematical APIs allowing HPC applications to achieve maximum performance on the Grace platform.
+These CPU-only libraries have no dependencies on CUDA or CTK, and are drop in replacements for standard C and Fortran mathematical APIs allowing HPC applications to achieve maximum performance on the NVIDIA CPU platforms.
 
 The provided sample codes show how to call and link to NVPL Libraries in Fortran, C, and C++ applications and libraries.  Examples use [CMake](#cmake-usage), but are easily modified for use in custom build environments.
 
@@ -11,7 +11,7 @@ The provided sample codes show how to call and link to NVPL Libraries in Fortran
 ## Installation
 
 * [NVPL Downloads](https://developer.nvidia.com/nvpl-downloads/)
-* Latest release: **NVPL-25.5**
+* Latest release: **NVPL-25.11**
 
 ## Library Samples
 
@@ -32,28 +32,30 @@ Samples are compatible with the latest nvpl release.  Compatibility with older r
 * Architecture: aarch64-linux
 * Platform: Arm SBSA
 * CPUs Supported
-   * [NVIDIA Grace](https://www.nvidia.com/en-us/data-center/grace-cpu/) (Armv9.0-A Neoverse-V2)
-   * AWS Graviton 4 (Armv9.0-A Neoverse-V2)
-   * AWS Graviton 3/3e (Armv8.4-A Neoverse-V1)
-   * AWS Graviton 2 (Arm-8.2-A Neoverse-N1)
-   * Ampere Altra (Armv8.2-A Neoverse-N1)
-   * Any CPU with Armv8.1-A or later micro Architecture
+  * [NVIDIA Grace](https://www.nvidia.com/en-us/data-center/grace-cpu/>) (Armv9.0-A Neoverse-V2)
+  * [NVIDIA DGX Spark / GB10](https://www.nvidia.com/en-us/products/workstations/dgx-spark/) (Armv9.2-A Cortex-X925/A725)
+  * AWS Graviton 4 (Armv9.0-A Neoverse-V2)
+  * AWS Graviton 3/3e (Armv8.4-A Neoverse-V1)
+  * AWS Graviton 2 (Armv8.2-A Neoverse-N1)
+  * Ampere Altra (Armv8.2-A Neoverse-N1)
+  * Any CPU with [Armv8.1-A or later architecture](https://developer.arm.com/documentation/109697/0100/Feature-descriptions/The-Armv8-1-architecture-extension)
+
 * OS (Linux)
-   * Ubuntu: 20.04, 22.04, 24.04, 25.04
-   * Debian: 12
-   * RHEL: RHEL8, RHEL9
-   * Fedora: 40, 41, 42
-   * SLES: SLES15 (15.6)
-   * OpenSUSE/leap: 15.6
-   * AmazonLinux: 2, 2023
-   * Generally any Linux OS with support for aarch64
+  * AmazonLinux: 2, 2023
+  * Debian: 12, 13
+  * Fedora: 41, 42
+  * RHEL: RHEL8 (8.10), RHEL9 (9.6), RHEL10 (10.0)
+  * openSUSE/Leap: 15.6, 16.0
+  * SLES: SLES15 (15.6), SLES16 (16.0)
+  * Ubuntu: 20.04, 22.04, 24.04, 25.10
+  * Generally any Linux OS with support for aarch64
 
 ### Compilers
 
 * GCC-8 - GCC-15+
 * Clang-14 - Clang-21+
-* [Clang for NVIDIA Grace](https://developer.nvidia.com/grace/clang/downloads): 16.x, 17.x, 18.x, 19.x
-* [NVIDA HPC Compilers](https://developer.nvidia.com/hpc-compilers): 23.9 - 25.3+
+* [Clang for NVIDIA Grace](https://developer.nvidia.com/grace/clang/downloads): 16.x -- 20.x
+* [NVIDA HPC Compilers](https://developer.nvidia.com/hpc-compilers): 23.9 - 25.9+
 
 ### Languages
 

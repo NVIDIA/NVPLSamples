@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     STBSV 
+!     STBSV
 !
 !******************************************************************************
       program   STBSV_MAIN
@@ -57,7 +57,7 @@
       call print_svector(x,n,incx,'X')
 
       stop
- 99   format('Example: STBSV for solving the triangular banded linear '
+ 99   format('Example: STBSV for solving the triangular banded linear ',
      &       'system with a single right-hand-side')
  100  format('#### args: n=',i1,', k=',i1,', lda=',i1,', incx=',i1,
      &       ', uplo=',a1,', transa=',a1,', diag=',a1)

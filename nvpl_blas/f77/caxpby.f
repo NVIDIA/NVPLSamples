@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     CAXPBY 
+!     CAXPBY
 !
 !******************************************************************************
       program   CAXPBY_MAIN
@@ -25,7 +25,7 @@
      &                (y(i), i=1,ysize)/ysize*2.0/
 
 *       External Subroutines
-      external        print_cvector 
+      external        print_cvector
 *
 *      Executable Statements
 *
@@ -47,10 +47,10 @@
 
       stop
 
- 99   format('Example: CAXPBY scales vector X and vector Y by two'
-     &       ' scalars, adds them to one another, and stores in the'
+ 99   format('Example: CAXPBY scales vector X and vector Y by two',
+     &       ' scalars, adds them to one another, and stores in the',
      &       ' vector Y')
- 100  format('#### args: n=',i1,', incx=',i1,', incy=',i1,', '
-     &       'alpha=(',f3.1,', ',f3.1,'), beta=(',f3.1,', ',f3.1,')')
+ 100  format('#### args: n=',i1,', incx=',i1,', incy=',i1,
+     &       ', alpha=(',f3.1,', ',f3.1,'), beta=(',f3.1,', ',f3.1,')')
  101  format('The result of CAXPBY: ')
       end

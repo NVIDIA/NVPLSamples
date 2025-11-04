@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     STPMV 
+!     STPMV
 !
 !******************************************************************************
       program   STPMV_MAIN
@@ -46,9 +46,9 @@
       call print_svector(x,n,incx,'X')
 
       stop
- 99   format('Example: STPMV for a matrix-vector product using a'
+ 99   format('Example: STPMV for a matrix-vector product using a',
      &       ' triangular packed matrix')
- 100  format('#### args: n=',i1,'uplo=',a1,', trans=',a1,
+ 100  format('#### args: n=',i1,', uplo=',a1,', trans=',a1,
      &       ', diag=',a1,', incx=',i1)
  102  format('The result of STPMV: ')
       end

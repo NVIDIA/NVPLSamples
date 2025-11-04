@@ -26,9 +26,10 @@ add_subdirectory(cxx)
 
 ## Fortran examples
 check_language(Fortran)
-if ("${CMAKE_Fortran_COMPILER_ID}" STREQUAL "GNU")
+if ("${CMAKE_Fortran_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_Fortran_COMPILER_ID}" STREQUAL "NVHPC")
     enable_language(Fortran)
     add_subdirectory(fortran)
 else()
-  message(STATUS "GNU Fortran compiler could not be found")
+    message(STATUS "Supported Fortran compiler could not be found. GNU Fortran and NVIDIA HPC Fortran are supported.")
+    message(STATUS "Skipping Fortran examples.")
 endif()

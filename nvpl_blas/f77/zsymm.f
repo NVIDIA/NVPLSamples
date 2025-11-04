@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     ZSYMM 
+!     ZSYMM
 !
 !******************************************************************************
       program   ZSYMM_MAIN
@@ -49,11 +49,11 @@
       call print_zmatrix(c,m,n,ldc,'C')
 
       stop
- 99   format('Example: ZSYMM for symmetric matrix-matrix'
+ 99   format('Example: ZSYMM for symmetric matrix-matrix',
      &       ' multiplication')
  100  format('#### args: m=',i1,', n=',i1,', lda=',i1,
      &       ', ldb=',i1,', ldc=',i1,', side=',a1,', uplo=',a1)
- 101  format(11x,'alpha=(',f4.2,', ',f4.2,'),'
-     &       ' beta=(',f4.2,', ',f4.2,')')
+ 101  format(11x,'alpha=(',f4.2,', ',f4.2,')',
+     &       ', beta=(',f4.2,', ',f4.2,')')
  102  format(A)
       end

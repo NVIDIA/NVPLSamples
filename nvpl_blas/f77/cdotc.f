@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     CDOTC 
+!     CDOTC
 !
 !******************************************************************************
       program   CDOTC_MAIN
@@ -23,7 +23,7 @@
      &                (y(i), i=1,ysize)/ysize*2.0/
 
 *       External Subroutines
-      external        print_cvector 
+      external        print_cvector
 *
 *      Executable Statements
 *
@@ -40,11 +40,11 @@
       result = CDOTC(n,x,incx,y,incy)
 *
       print*
-      print 101, result 
+      print 101, result
 
       stop
- 99   format('Example: CDOTC for computing the dot product '
-     &       'of vectors X and Y')
+ 99   format('Example: CDOTC for computing the dot product',
+     &       ' of vectors X and Y')
  100  format('#### args: n=',i1,', incx=',i1,', incy=',i1)
  101  format('The dot product of vectors X and Y:(',f5.2,', ',f5.2,')')
       end

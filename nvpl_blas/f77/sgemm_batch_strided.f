@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     SGEMM_BATCH_STRIDED 
+!     SGEMM_BATCH_STRIDED
 !
 !******************************************************************************
       program   SGEMM_BATCH_STRIDED_MAIN
@@ -56,7 +56,7 @@
       end do
 
       stop
- 99   format('Example: SGEMM_BATCH_STRIDED for the matrix-matrix'
+ 99   format('Example: SGEMM_BATCH_STRIDED for the matrix-matrix',
      &       ' multiplication of a batch of matrices')
  100  format('#### args: m=',i1,', n=',i1,', k=',i1,', lda=',i1,
      &       ', ldb=',i1,', ldc=',i1,', transA=',a1,', transB=',a1)

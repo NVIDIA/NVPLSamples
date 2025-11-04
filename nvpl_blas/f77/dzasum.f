@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     DZASUM 
+!     DZASUM
 !
 !******************************************************************************
       program   DZASUM_MAIN
@@ -22,7 +22,7 @@
       data             (x(i), i=1,xsize)/1.0,-3.7,4.3,0.0,5.0/
 
 *       External Subroutines
-      external         print_zvector 
+      external         print_zvector
 *
 *      Executable Statements
 *
@@ -38,12 +38,12 @@
       result = DZASUM(n,x,incx)
 *
       print*
-      print 101, result 
+      print 101, result
 
       stop
- 99   format('Example: DZASUM for computing the sum of the absolute'
+ 99   format('Example: DZASUM for computing the sum of the absolute',
      &       ' values of the elements of vector')
  100  format('#### args: n=',i1,', incx=',i1)
- 101  format('The sum of the absolute values of the elements of'
+ 101  format('The sum of the absolute values of the elements of',
      &       ' vector: ', f6.2)
       end

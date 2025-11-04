@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     ZGEMMT 
+!     ZGEMMT
 !
 !******************************************************************************
       program   ZGEMMT_MAIN
@@ -35,10 +35,10 @@
       print 100, n, k, lda, ldb, ldc, transa, transb, uplo
       print 101, alpha, beta
       call fill_zmatrix(a,n,k,lda,'F',transa)
-      call fill_zmatrix(b,n,k,ldb,'F',transa)
+      call fill_zmatrix(b,k,n,ldb,'F',transb)
       call fill_zmatrix(c,n,n,ldc,uplo,'N')
       call print_zmatrix(a,n,k,lda,'A')
-      call print_zmatrix(b,n,k,ldb,'B')
+      call print_zmatrix(b,k,n,ldb,'B')
       call print_zmatrix(c,n,n,ldc,'C')
 *
 *      Call ZGEMMT subroutine
@@ -53,7 +53,7 @@
  100  format('#### args: n=',i1,', k=',i1,', lda=',i1,
      &       ', ldb=',i1,', ldc=',i1,', transa=',a1,', transb=',a1,
      &       ', uplo=',a1)
- 101  format(11x,'alpha=(',f4.2,', ',f4.2,'),'
-     &       ' beta=(',f4.2,', ',f4.2,')')
+ 101  format(11x,'alpha=(',f4.2,', ',f4.2,')',
+     &       ', beta=(',f4.2,', ',f4.2,')')
  102  format(A)
       end

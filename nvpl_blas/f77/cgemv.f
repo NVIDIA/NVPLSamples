@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     CGEMV 
+!     CGEMV
 !
 !******************************************************************************
       program   CGEMV_MAIN
@@ -64,9 +64,9 @@
 
       stop
  99   format(A)
- 100  format('#### args: m=',i1,', n=',i1,', lda=',i1,', incx=',i1,', '
-     &       'incy=',i1,', transA=',a1)
- 101  format(11x,'alpha=(',f3.1,', ',f3.1,'),'
+ 100  format('#### args: m=',i1,', n=',i1,', lda=',i1,', incx=',i1,
+     &       ', incy=',i1,', transA=',a1)
+ 101  format(11x,'alpha=(',f3.1,', ',f3.1,'),',
      &       ' beta=(',f3.1,', ',f3.1,')')
  102  format(A)
       end

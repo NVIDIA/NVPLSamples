@@ -1,5 +1,7 @@
 #ifndef NVPL_LAPACK_EXAMPLE_UTILS_H
 #define NVPL_LAPACK_EXAMPLE_UTILS_H
+#include <nvpl_lapack.h>
+
 // C interface functions
 extern "C" {
 void print_smatrix_rowmajor(const char *desc, nvpl_int_t m, nvpl_int_t n,

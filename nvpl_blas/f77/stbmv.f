@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     STBMV 
+!     STBMV
 !
 !******************************************************************************
       program   STBMV_MAIN
@@ -57,7 +57,7 @@
       call print_svector(x,n,incx,'X')
 
       stop
- 99   format('Example: STBMV for matrix-vector product using a '
+ 99   format('Example: STBMV for matrix-vector product using a ',
      &       'triangular band matrix')
  100  format('#### args: n=',i1,', k=',i1,', lda=',i1,', incx=',i1,
      &       ', uplo=',a1,', transa=',a1,', diag=',a1)

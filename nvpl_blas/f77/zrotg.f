@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     ZROTG 
+!     ZROTG
 !
 !******************************************************************************
       program   ZROTG_MAIN
@@ -13,7 +13,7 @@
       double precision c
       double complex   a, b, s
       data             a /2.3/, b /4.6/, c /0.0/, s /0.0/
-      
+
 
 *
 *      Executable Statements
@@ -33,11 +33,11 @@
       print 102, a, b, c, s
 
       stop
- 99   format('Example: ZROTG for computing the parameters for a Givens'
-     & ' rotation')
- 100  format('#### args: a=(',f5.3,', ',f5.3,'), b=(',f5.3,', ',f5.3,')'
-     &       ', c=',f5.3,', s=(',f5.3,', ',f5.3,')')
+ 99   format('Example: ZROTG for computing the parameters for a Givens',
+     &       ' rotation')
+ 100  format('#### args: a=(',f5.3,', ',f5.3,'), b=(',f5.3,', ',f5.3,
+     &       '), c=',f5.3,', s=(',f5.3,', ',f5.3,')')
  101  format('The result of ZROTG: ')
  102  format('a=(',f5.3,', ',f5.3,'), b=(',f5.3,', ',f5.3,'), c=',f5.3,
-     $       ', s=(',f5.3,', ',f5.3,')')
+     &       ', s=(',f5.3,', ',f5.3,')')
       end

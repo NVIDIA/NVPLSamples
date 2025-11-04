@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     ZTRSM 
+!     ZTRSM
 !
 !******************************************************************************
       program   ZTRSM_MAIN
@@ -45,7 +45,7 @@
       call print_zmatrix(b,m,n,ldb,'B')
 
       stop
- 99   format('Example: ZTRSM for solving the triangular linear system'
+ 99   format('Example: ZTRSM for solving the triangular linear system',
      &       ' with multiple right-hand-sides')
  100  format('#### args: m=',i1,', n=',i1,', lda=',i1,', ldb=',i1,
      &       ', side=',a1,', uplo=',a1,', transa=',a1,', diag=',a1)

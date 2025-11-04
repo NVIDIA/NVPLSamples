@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     DDOT 
+!     DDOT
 !
 !******************************************************************************
       program   DDOT_MAIN
@@ -24,7 +24,7 @@
      &                 (y(i), i=1,ysize)/ysize*2.0/
 
 *       External Subroutines
-      external         print_dvector 
+      external         print_dvector
 *
 *      Executable Statements
 *
@@ -41,10 +41,10 @@
       result = DDOT(n,x,incx,y,incy)
 *
       print*
-      print 101, result 
+      print 101, result
 
       stop
- 99   format('Example: DDOT for computing the dot product '
+ 99   format('Example: DDOT for computing the dot product ',
      &       'of vectors X and Y')
  100  format('#### args: n=',i1,', incx=',i1,', incy=',i1)
  101  format('The dot product of vectors X and Y:', f8.2)

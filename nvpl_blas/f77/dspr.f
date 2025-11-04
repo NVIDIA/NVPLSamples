@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     DSPR 
+!     DSPR
 !
 !******************************************************************************
       program   DSPR_MAIN
@@ -49,7 +49,7 @@
       call print_dvector(ap,apsize,1,'AP')
 
       stop
- 99   format('Example: DSPR for a rank-1 update of a'
+ 99   format('Example: DSPR for a rank-1 update of a',
      &       'symmetric packed matrix')
  100  format('#### args: n=',i1,', incx=',i1)
  101  format(11x,'alpha=',f4.2)

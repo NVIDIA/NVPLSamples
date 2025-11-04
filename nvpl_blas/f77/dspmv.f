@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     DSPMV 
+!     DSPMV
 !
 !******************************************************************************
       program   DSPMV_MAIN
@@ -52,7 +52,7 @@
       call print_dvector(y,n,incy,'Y')
 
       stop
- 99   format('Example: DSPMV for a matrix-vector product'
+ 99   format('Example: DSPMV for a matrix-vector product',
      &       ' with a symmetric packed matrix')
  100  format('#### args: n=',i1,', incx=',i1,', incy=',i1,
      &       ', uplo=',a1)

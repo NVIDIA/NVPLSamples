@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     CHER2K 
+!     CHER2K
 !
 !******************************************************************************
       program   CHER2K_MAIN
@@ -50,7 +50,7 @@
  99   format(A)
  100  format('#### args: n=',i1,', k=',i1,', lda=',i1,
      &       ', ldb=',i1,', ldc=',i1,', trans=',a1,', uplo=',a1)
- 101  format(11x,'alpha=(',f3.1,', ',f3.1,'),'
+ 101  format(11x,'alpha=(',f3.1,', ',f3.1,'),',
      &       ' beta=',f3.1)
  102  format(A)
       end

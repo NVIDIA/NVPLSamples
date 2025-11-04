@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     DTRMV 
+!     DTRMV
 !
 !******************************************************************************
       program   DTRMV_MAIN
@@ -47,7 +47,7 @@
       call print_dvector(x,n,incx,'X')
 
       stop
- 99   format('Example: DTRMV for the triangular matrix-vector '
+ 99   format('Example: DTRMV for the triangular matrix-vector ',
      &       'multiplication')
  100  format('#### args: n=',i1,', lda=',i1,', incx=',i1,', uplo=',a1,
      &       ', transa=',a1,', diag=',a1)

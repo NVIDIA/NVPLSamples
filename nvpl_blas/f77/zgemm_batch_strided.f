@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     ZGEMM_BATCH_STRIDED 
+!     ZGEMM_BATCH_STRIDED
 !
 !******************************************************************************
       program   ZGEMM_BATCH_STRIDED_MAIN
@@ -56,12 +56,12 @@
       end do
 
       stop
- 99   format('Example: ZGEMM_BATCH_STRIDED for the matrix-matrix'
+ 99   format('Example: ZGEMM_BATCH_STRIDED for the matrix-matrix',
      &       ' multiplication of a batch of matrices')
  100  format('#### args: m=',i1,', n=',i1,', k=',i1,', lda=',i1,
      &       ', ldb=',i1,', ldc=',i1,', transA=',a1,', transB=',a1)
- 101  format(11x,'alpha=(',f4.2,', ',f4.2,'),'
-     &       ' beta=(',f4.2,', ',f4.2,')')
+ 101  format(11x,'alpha=(',f4.2,', ',f4.2,')',
+     &       ', beta=(',f4.2,', ',f4.2,')')
  102  format(A)
  103  format(11x,'stridea=',i1,', strideb=',i1,', stridec=',i1,
      &       ', batch_size=',i1)

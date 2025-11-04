@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     SSWAP 
+!     SSWAP
 !
 !******************************************************************************
       program   SSWAP_MAIN
@@ -22,7 +22,7 @@
      &                (y(i), i=1,ysize)/ysize*2.0/
 
 *       External Subroutines
-      external        print_svector 
+      external        print_svector
 *
 *      Executable Statements
 *
@@ -44,9 +44,9 @@
       call print_svector(y,n,incy,'Y')
 
       stop
- 99   format('Example: SSWAP for interchanging the elements '
+ 99   format('Example: SSWAP for interchanging the elements ',
      &       'of vectors X and Y')
  100  format('#### args: n=',i1,', incx=',i1,', incy=',i1)
- 101  format('The result of interchanging the elements of vector '
+ 101  format('The result of interchanging the elements of vector ',
      &       'x and y:')
       end

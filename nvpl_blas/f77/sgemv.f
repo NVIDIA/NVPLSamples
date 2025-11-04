@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     SGEMV 
+!     SGEMV
 !
 !******************************************************************************
       program   SGEMV_MAIN
@@ -64,8 +64,8 @@
 
       stop
  99   format(A)
- 100  format('#### args: m=',i1,', n=',i1,', lda=',i1,', incx=',i1,', '
-     &       'incy=',i1,', transA=',a1)
+ 100  format('#### args: m=',i1,', n=',i1,', lda=',i1,', incx=',i1,
+     &       ', incy=',i1,', transA=',a1)
  101  format(11x,'alpha=',f4.1,'  beta=',f4.1)
  102  format(A)
       end

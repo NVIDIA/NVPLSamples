@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     CSSCAL 
+!     CSSCAL
 !
 !******************************************************************************
       program   CSSCAL_MAIN
@@ -23,7 +23,7 @@
       data            (x(i), i=1,xsize)/1.0,-3.7,4.3,0.0,5.0/
 
 *       External Subroutines
-      external        print_cvector 
+      external        print_cvector
 *
 *      Executable Statements
 *
@@ -43,7 +43,7 @@
       call print_cvector(x,n,incx,'X')
 
       stop
- 99   format('Example: CSSCAL for multiplying the vector x by the'
+ 99   format('Example: CSSCAL for multiplying the vector x by the',
      &       ' scalar')
  100  format('#### args: n=',i1,', incx=',i1,', alpha=',f3.1)
  101  format('The result of CSSCAL: ')

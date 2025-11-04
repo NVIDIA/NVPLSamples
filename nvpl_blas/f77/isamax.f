@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     ISAMAX 
+!     ISAMAX
 !
 !******************************************************************************
       program   ISAMAX_MAIN
@@ -22,7 +22,7 @@
 
 
 *       External Subroutines
-      external        print_svector 
+      external        print_svector
 *
 *      Executable Statements
 *
@@ -38,12 +38,12 @@
       index = isamax(n,x,incx)
 *
       print*
-      print 101, index 
+      print 101, index
 
       stop
- 99   format('Example: ISAMAX for finding the (smallest) index of '
+ 99   format('Example: ISAMAX for finding the (smallest) index of ',
      &       'the element of the maximum magnitude')
  100  format('#### args: n=',i1,', incx=',i1)
- 101  format('The (smallest) index of the element of the maximum '
+ 101  format('The (smallest) index of the element of the maximum ',
      &       'magnitude:', i1)
       end
