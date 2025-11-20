@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     CHPMV 
+!     CHPMV
 !
 !******************************************************************************
       program   CHPMV_MAIN
@@ -52,11 +52,11 @@
       call print_cvector(y,n,incy,'Y')
 
       stop
- 99   format('Example: CHPMV for a matrix-vector product using a'
+ 99   format('Example: CHPMV for a matrix-vector product using a',
      &       ' Hermitian packed matrix')
  100  format('#### args: n=',i1,', incx=',i1,', incy=',i1,
      &       ', uplo=',a1)
- 101  format(11x,'alpha=(',f3.1,', ',f3.1,'),'
+ 101  format(11x,'alpha=(',f3.1,', ',f3.1,'),',
      &       ' beta=(',f3.1,', ',f3.1,')')
  102  format('The result of CHPMV: ')
       end

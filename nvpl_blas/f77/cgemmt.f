@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     CGEMMT 
+!     CGEMMT
 !
 !******************************************************************************
       program   CGEMMT_MAIN
@@ -35,10 +35,10 @@
       print 100, n, k, lda, ldb, ldc, transa, transb, uplo
       print 101, alpha, beta
       call fill_cmatrix(a,n,k,lda,'F',transa)
-      call fill_cmatrix(b,n,k,ldb,'F',transa)
+      call fill_cmatrix(b,k,n,ldb,'F',transb)
       call fill_cmatrix(c,n,n,ldc,uplo,'N')
       call print_cmatrix(a,n,k,lda,'A')
-      call print_cmatrix(b,n,k,ldb,'B')
+      call print_cmatrix(b,k,n,ldb,'B')
       call print_cmatrix(c,n,n,ldc,'C')
 *
 *      Call CGEMMT subroutine
@@ -53,7 +53,7 @@
  100  format('#### args: n=',i1,', k=',i1,', lda=',i1,
      &       ', ldb=',i1,', ldc=',i1,', transa=',a1,', transb=',a1,
      &       ', uplo=',a1)
- 101  format(11x,'alpha=(',f3.1,', ',f3.1,'),'
-     &       ' beta=(',f3.1,', ',f3.1,')')
+ 101  format(11x,'alpha=(',f3.1,', ',f3.1,')',
+     &       ', beta=(',f3.1,', ',f3.1,')')
  102  format(A)
       end

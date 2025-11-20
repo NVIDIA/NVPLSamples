@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     ZHEMV 
+!     ZHEMV
 !
 !******************************************************************************
       program   ZHEMV_MAIN
@@ -52,11 +52,11 @@
       call print_zvector(y,n,incy,'Y')
 
       stop
- 99   format('Example: ZHEMV for a matrix-vector product using'
+ 99   format('Example: ZHEMV for a matrix-vector product using',
      &       ' a Hermitian matrix')
  100  format('#### args: n=',i1,', lda=',i1,', incx=',i1,
      &       ', incy=',i1)
- 101  format(11x,'alpha=(',f4.2,', ',f4.2,'),'
-     &       ' beta=(',f4.2,', ',f4.2,')')
+ 101  format(11x,'alpha=(',f4.2,', ',f4.2,')',
+     &       ', beta=(',f4.2,', ',f4.2,')')
  102  format('The result of ZHEMV: ')
       end

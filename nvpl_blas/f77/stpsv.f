@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     STPSV 
+!     STPSV
 !
 !******************************************************************************
       program   STPSV_MAIN
@@ -43,7 +43,7 @@
       call print_svector(x,n,incx,'X')
 
       stop
- 99   format('Example: STPSV for solving a system of linear equations'
+ 99   format('Example: STPSV for solving a system of linear equations',
      &       ' whose coefficients are in a triangular packed matrix.')
  100  format('#### args: n=',i1,', incx=',i1,
      &       ', uplo=',a1,', transa=',a1,', diag=',a1)

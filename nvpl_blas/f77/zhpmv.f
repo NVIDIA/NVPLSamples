@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     ZHPMV 
+!     ZHPMV
 !
 !******************************************************************************
       program   ZHPMV_MAIN
@@ -52,11 +52,11 @@
       call print_zvector(y,n,incy,'Y')
 
       stop
- 99   format('Example: ZHPMV for a matrix-vector product using a'
+ 99   format('Example: ZHPMV for a matrix-vector product using a',
      &       ' Hermitian packed matrix')
  100  format('#### args: n=',i1,', incx=',i1,', incy=',i1,
      &       ', uplo=',a1)
- 101  format(11x,'alpha=(',f4.2,', ',f4.2,'),'
-     &       ' beta=(',f4.2,', ',f4.2,')')
+ 101  format(11x,'alpha=(',f4.2,', ',f4.2,')',
+     &       ', beta=(',f4.2,', ',f4.2,')')
  102  format('The result of ZHPMV: ')
       end

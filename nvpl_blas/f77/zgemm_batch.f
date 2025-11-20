@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     ZGEMM_BATCH 
+!     ZGEMM_BATCH
 !
 !******************************************************************************
       program   ZGEMM_BATCH_MAIN
@@ -31,7 +31,7 @@
       data             (alpha(i), i=1,grp_cnt)/grp_cnt*(1.0,2.0)/
      &                 (beta(i), i=1,grp_cnt)/grp_cnt*(1.0,2.0)/
       integer          grp_size(grp_cnt)
-      data             (grp_size(i), i=1,grp_cnt)/grp_cnt*2/ 
+      data             (grp_size(i), i=1,grp_cnt)/grp_cnt*2/
       double complex   a(rmaxa,cmaxa,maxmat), b(rmaxb,cmaxb,maxmat),
      &                 c(rmaxc,cmaxc,maxmat)
       integer*8        a_array(maxmat), b_array(maxmat),
@@ -85,12 +85,12 @@
       end do
 
       stop
- 99   format('Example: ZGEMM_BATCH for the matrix-matrix multiplication'
-     &       ' of a batch of matrices')     
+ 99   format('Example: ZGEMM_BATCH for the matrix-matrix',
+     &       ' multiplication of a batch of matrices')
  100  format('#### args: m=',i1,', n=',i1,', k=',i1,', lda=',i1,
      &       ', ldb=',i1,', ldc=',i1,', transA=',a1,', transB=',a1)
- 101  format(11x,'alpha=(',f4.2,', ',f4.2,'),'
-     &       ' beta=(',f4.2,', ',f4.2,')')
+ 101  format(11x,'alpha=(',f4.2,', ',f4.2,')',
+     &       ', beta=(',f4.2,', ',f4.2,')')
  102  format(A)
  103  format('Group=',i1,', Number of matrices in the Group=',i1)
  104  format('Group=',i1)

@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     SCOPY 
+!     SCOPY
 !
 !******************************************************************************
       program   SCOPY_MAIN
@@ -22,7 +22,7 @@
      &                (y(i), i=1,ysize)/ysize*2.0/
 
 *       External Subroutines
-      external        print_svector 
+      external        print_svector
 *
 *      Executable Statements
 *
@@ -44,7 +44,7 @@
       call print_svector(y,n,incy,'Y')
 
       stop
- 99   format('Example: SCOPY for copying the vector x into the'
+ 99   format('Example: SCOPY for copying the vector x into the',
      &       ' vector y')
  100  format('#### args: n=',i1,', incx=',i1,', incy=',i1)
  101  format('The result of copying the vector x into the vector y:')

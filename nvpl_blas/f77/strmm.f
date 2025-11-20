@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     STRMM 
+!     STRMM
 !
 !******************************************************************************
       program   STRMM_MAIN
@@ -45,7 +45,7 @@
       call print_smatrix(b,m,n,ldb,'B')
 
       stop
- 99   format('Example: STRMM for the triangular matrix-matrix'
+ 99   format('Example: STRMM for the triangular matrix-matrix',
      &       ' multiplication')
  100  format('#### args: m=',i1,', n=',i1,', lda=',i1,', ldb=',i1,
      &       ', side=',a1,', uplo=',a1,', transa=',a1,', diag=',a1)

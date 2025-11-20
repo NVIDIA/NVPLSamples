@@ -47,10 +47,10 @@
 
       stop
 
- 99   format('Example: ZAXPBY scales vector X and vector Y by two'
-     &       ' scalars, adds them to one another, and stores in the'
+ 99   format('Example: ZAXPBY scales vector X and vector Y by two',
+     &       ' scalars, adds them to one another, and stores in the',
      &       ' vector Y')
- 100  format('#### args: n=',i1,', incx=',i1,', incy=',i1,', '
-     &       'alpha=(',f4.2,', ',f4.2,'), beta=(',f4.2,', ',f4.2,')')
+ 100  format('#### args: n=',i1,', incx=',i1,', incy=',i1,
+     &       ', alpha=(',f4.2,', ',f4.2,'), beta=(',f4.2,', ',f4.2,')')
  101  format('The result of ZAXPBY: ')
       end

@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     CGBMV 
+!     CGBMV
 !
 !******************************************************************************
       program   CGBMV_MAIN
@@ -69,7 +69,7 @@
  99   format(A,A)
  100  format('#### args: m=',i1,', n=',i1,', kl=',i1,', ku=',i1,
      &       ', lda=',i1,', incx=',i1,', incy=',i1,', transA=',a1)
- 101  format(11x,'alpha=(',f3.1,', ',f3.1,'),'
+ 101  format(11x,'alpha=(',f3.1,', ',f3.1,'),',
      &       ' beta=(',f3.1,', ',f3.1,')')
  102  format(A)
       end

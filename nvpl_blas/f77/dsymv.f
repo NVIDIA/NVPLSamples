@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     DSYMV 
+!     DSYMV
 !
 !******************************************************************************
       program   DSYMV_MAIN
@@ -52,7 +52,7 @@
       call print_dvector(y,n,incy,'Y')
 
       stop
- 99   format('Example: DSYMV for computing a matrix-vector product'
+ 99   format('Example: DSYMV for computing a matrix-vector product',
      &       ' for a symmetric matrix.')
  100  format('#### args: n=',i1,', lda=',i1,', incx=',i1,', incy=',i1,
      &       ', uplo=',a1)

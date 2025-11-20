@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     DSYMM 
+!     DSYMM
 !
 !******************************************************************************
       program   DSYMM_MAIN
@@ -49,7 +49,7 @@
       call print_dmatrix(c,m,n,ldc,'C')
 
       stop
- 99   format('Example: DSYMM for symmetric matrix-matrix'
+ 99   format('Example: DSYMM for symmetric matrix-matrix',
      &       ' multiplication')
  100  format('#### args: m=',i1,', n=',i1,', lda=',i1,
      &       ', ldb=',i1,', ldc=',i1,', side=',a1,', uplo=',a1)

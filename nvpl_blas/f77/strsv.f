@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     STRSV 
+!     STRSV
 !
 !******************************************************************************
       program   STRSV_MAIN
@@ -46,7 +46,7 @@
       call print_svector(x,n,incx,'X')
 
       stop
- 99   format('Example: STRSV for solving a system of linear equations ' 
+ 99   format('Example: STRSV for solving a system of linear equations ',
      &       'whose coefficients are in a triangular matrix')
  100  format('#### args: n=',i1,', lda=',i1,', uplo=',a1,', trans=',a1,
      &       ', diag=',a1,', incx=',i1)

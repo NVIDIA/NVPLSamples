@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     ZSYRK 
+!     ZSYRK
 !
 !******************************************************************************
       program   ZSYRK_MAIN
@@ -50,7 +50,7 @@
  99   format('Example: ZSYRK for the symmetric rank-k update')
  100  format('#### args: n=',i1,', k=',i1,', lda=',i1,
      &       ', ldc=',i1,', uplo=',a1,', trans=',a1)
- 101  format(11x,'alpha=(',f4.2,', ',f4.2,'),'
-     &       ' beta=(',f4.2,', ',f4.2,')')
+ 101  format(11x,'alpha=(',f4.2,', ',f4.2,')',
+     &       ', beta=(',f4.2,', ',f4.2,')')
  102  format(A)
       end

@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     DROTMG 
+!     DROTMG
 !
 !******************************************************************************
       program   DROTMG_MAIN
@@ -14,10 +14,10 @@
       double precision d1, d2, b1, b2, P(5)
       data             d1 /2.3/, d2 /4.6/, b1 /1.0/, b2 /2.0/,
      &                 (P(i), i=1,5) /5*0.0/
-      
+
 
 *       External Subroutines
-      external         print_dvector 
+      external         print_dvector
 *
 *      Executable Statements
 *
@@ -37,10 +37,10 @@
       call print_dvector(P,5,1,'P')
 
       stop
- 99   format('Example: DROTMG for computing the parameters for a Givens'
+ 99   format('Example: DROTMG for computing the parameters for a given',
      & ' rotation')
- 100  format('#### args: d1=',f5.3,', d2=',f5.3,', b1=',f5.3,', '
-     &       'b2=',f5.3)
+ 100  format('#### args: d1=',f5.3,', d2=',f5.3,', b1=',f5.3,
+     &       ', b2=',f5.3)
  101  format('The result of DROTMG: ')
  102  format('d1=',f5.3,', d2=',f5.3,', b1=',f5.3,', b2=',f5.3)
       end

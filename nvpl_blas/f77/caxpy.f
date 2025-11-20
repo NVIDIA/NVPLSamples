@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     CAXPY 
+!     CAXPY
 !
 !******************************************************************************
       program   CAXPY_MAIN
@@ -25,7 +25,7 @@
      &                (y(i), i=1,ysize)/ysize*2.0/
 
 *       External Subroutines
-      external        print_cvector 
+      external        print_cvector
 *
 *      Executable Statements
 *
@@ -46,9 +46,9 @@
       call print_cvector(y,n,incy,'Y')
 
       stop
- 99   format('Example: CAXPY for multiplying the vector x by the scalar'
-     &       ' and adds it to the vector y')
- 100  format('#### args: n=',i1,', incx=',i1,', incy=',i1,', '
-     &       'alpha=(',f3.1,', ',f3.1,')')
+ 99   format('Example: CAXPY for multiplying the vector x by the',
+     &       ' scalar and adds it to the vector y')
+ 100  format('#### args: n=',i1,', incx=',i1,', incy=',i1,
+     &       ', alpha=(',f3.1,', ',f3.1,')')
  101  format('The result of CAXPY: ')
       end

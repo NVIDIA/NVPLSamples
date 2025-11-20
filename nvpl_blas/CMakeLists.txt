@@ -18,6 +18,7 @@ endif()
 
 project(nvpl_blas_examples LANGUAGES Fortran C)
 set(CMAKE_C_STANDARD 99)
+set(CMAKE_Fortran_FORMAT FIXED)
 
 ## Configuration options
 # Set to control which NVPL BLAS library variant to link against

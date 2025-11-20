@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     ZDROT 
+!     ZDROT
 !
 !******************************************************************************
       program   ZDROT_MAIN
@@ -25,7 +25,7 @@
      &                 (y(i), i=1,ysize)/ysize*2.0/
 
 *       External Subroutines
-      external        print_zvector 
+      external        print_zvector
 *
 *      Executable Statements
 *
@@ -48,7 +48,7 @@
 
       stop
  99   format('Example: ZDROT for applying Givens rotation matrix')
- 100  format('#### args: n=',i1,', incx=',i1,', incy=',i1,', '
-     &       'c=',f5.3,', s='f5.3)
+ 100  format('#### args: n=',i1,', incx=',i1,', incy=',i1,
+     &       ', c=',f5.3,', s=',f5.3)
  101  format('The result of ZDROT: ')
       end

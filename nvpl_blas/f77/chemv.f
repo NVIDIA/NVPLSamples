@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     CHEMV 
+!     CHEMV
 !
 !******************************************************************************
       program   CHEMV_MAIN
@@ -52,11 +52,11 @@
       call print_cvector(y,n,incy,'Y')
 
       stop
- 99   format('Example: CHEMV for a matrix-vector product using'
+ 99   format('Example: CHEMV for a matrix-vector product using',
      &       ' a Hermitian matrix')
  100  format('#### args: n=',i1,', lda=',i1,', incx=',i1,
      &       ', incy=',i1)
- 101  format(11x,'alpha=(',f3.1,', ',f3.1,'),'
+ 101  format(11x,'alpha=(',f3.1,', ',f3.1,'),',
      &       ' beta=(',f3.1,', ',f3.1,')')
  102  format('The result of CHEMV: ')
       end

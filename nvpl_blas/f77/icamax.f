@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     ICAMAX 
+!     ICAMAX
 !
 !******************************************************************************
       program   ICAMAX_MAIN
@@ -21,7 +21,7 @@
       data            (x(i), i=1,xsize)/1.0,-3.7,4.3,0.0,5.0/
 
 *       External Subroutines
-      external        print_cvector 
+      external        print_cvector
 *
 *      Executable Statements
 *
@@ -37,12 +37,12 @@
       index = ICAMAX(n,x,incx)
 *
       print*
-      print 101, index 
+      print 101, index
 
       stop
- 99   format('Example: ICAMAX for finding the (smallest) index of '
+ 99   format('Example: ICAMAX for finding the (smallest) index of ',
      &       'the element of the maximum magnitude')
  100  format('#### args: n=',i1,', incx=',i1)
- 101  format('The (smallest) index of the element of the maximum '
+ 101  format('The (smallest) index of the element of the maximum ',
      &       'magnitude:', i1)
       end

@@ -1,7 +1,7 @@
 !******************************************************************************
 ! Content:
 !     This example demonstrates use of API as below:
-!     SROTG 
+!     SROTG
 !
 !******************************************************************************
       program   SROTG_MAIN
@@ -12,7 +12,7 @@
 
       real            a, b, c, s
       data            a /2.3/, b /4.6/, c /0.0/, s /0.0/
-      
+
 
 *
 *      Executable Statements
@@ -32,10 +32,10 @@
       print 102, a, b, c, s
 
       stop
- 99   format('Example: SROTG for computing the parameters for a Givens'
+ 99   format('Example: SROTG for computing the parameters for a given',
      & ' rotation')
- 100  format('#### args: a=',f5.3,', b=',f5.3,', c=',f5.3,', '
-     &       's=',f5.3)
+ 100  format('#### args: a=',f5.3,', b=',f5.3,', c=',f5.3,
+     &       ', s=',f5.3)
  101  format('The result of SROTG: ')
  102  format('a=',f5.3,', b=',f5.3,', c=',f5.3,', s=',f5.3)
       end
