@@ -117,3 +117,4 @@ foreach(PREC fp32 fp64)
 endforeach()
 
 unset(TEST_SIZES)
+
