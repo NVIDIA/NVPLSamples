@@ -1,5 +1,10 @@
 #include <stdio.h>
-#include <nvpl_lapack.h>
+
+// Applications that already include lapacke.h (Netlib-style) do not need to
+// change the include line to nvpl_lapacke.h. NVPL LAPACK provides lapacke.h as
+// a compatibility header that forwards to the NVPL LAPACKE C API as long as
+// `include/nvpl_compat` is added to include search path.
+#include <lapacke.h>
 
 #include "utils.h"
 
@@ -15,33 +20,35 @@ int main() {
     //      0   1   2   1
     //     -1   2   0   1
     //      3  -1   2   2
-    nvpl_scomplex_t A[lda * n]
-            = {1, 0, -1, 3, 2, 1, 2, -1, 2, 2, 0, 2, -3, 1, 1, 2};
+    double A[lda * n] = {1, 0, -1, 3, 2, 1, 2, -1, 2, 2, 0, 2, -3, 1, 1, 2};
 
     // Matrix b has n x nrhs dimensions with ldb = n for column-major ordering.
     // b = 13    1
     //      6    7
     //     -1    3
     //      9   10
-    nvpl_scomplex_t b[ldb * nrhs] = {13, 6, -1, 9, 1, 7, 3, 10};
+    double b[ldb * nrhs] = {13, 6, -1, 9, 1, 7, 3, 10};
 
     // Pivot indices that define permutation matrix P of LU factorization.
     nvpl_int_t ipiv[n] = {0};
-
     printf("NVPL LAPACK version: %d\n", nvpl_lapack_get_version());
 
     // Print inputs.
-    print_cmatrix_colmajor("Entry Matrix A", n, n, A, lda);
-    print_cmatrix_colmajor("Right Hand Side b", n, nrhs, b, ldb);
+    print_dmatrix_colmajor("Entry Matrix A", n, n, A, lda);
+    print_dmatrix_colmajor("Right Hand Side b", n, nrhs, b, ldb);
     printf("\n");
-    printf("cgesv Example Program Results\n");
+    printf("LAPACKE_dgesv (col-major, lapacke.h) Example Program Results\n");
 
     // Solve A * x = b.
-    nvpl_int_t info;
-    NVPL_LAPACK_cgesv(&n, &nrhs, A, &lda, ipiv, b, &ldb, &info);
+    nvpl_int_t info
+            = LAPACKE_dgesv(LAPACK_COL_MAJOR, n, nrhs, A, lda, ipiv, b, ldb);
 
     // Any errors?
-    if (info < 0)
+    if (info == LAPACK_WORK_MEMORY_ERROR)
+        printf("Not enough memory for work arrays.\n");
+    else if (info == LAPACK_TRANSPOSE_MEMORY_ERROR)
+        printf("Not enough memory for internal transpose.\n");
+    else if (info < 0)
         printf("Illegal input argument.\n");
     else if (info > 0)
         printf("Matrix A is singular.\n");
@@ -49,11 +56,11 @@ int main() {
     if (info != 0) return info;
 
     // Print solution.
-    print_cmatrix_colmajor("Solution", n, nrhs, b, ldb);
+    print_dmatrix_colmajor("Solution", n, nrhs, b, ldb);
     printf("\n");
 
     // Print LU factors.
-    print_cmatrix_colmajor("LU factors", n, n, A, lda);
+    print_dmatrix_colmajor("LU factors", n, n, A, lda);
     printf("\n");
 
     // Print pivot indices.
