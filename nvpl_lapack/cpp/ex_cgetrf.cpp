@@ -5,10 +5,8 @@
 
 int main() {
     // Initialization.
-    const nvpl_int_t n = 4;    // Number of rows of A and b matrices.
-    const nvpl_int_t nrhs = 2; // Number of columns of b.
-    const nvpl_int_t lda = n;  // Leading dimension of A.
-    const nvpl_int_t ldb = n;  // Leading dimension of b.
+    const nvpl_int_t n = 4;   // Order of matrix A.
+    const nvpl_int_t lda = n; // Leading dimension of A.
 
     // Matrix A has n x n dimensions with lda = n for column-major ordering.
     // A =  1   2   2  -3
@@ -18,13 +16,6 @@ int main() {
     nvpl_scomplex_t A[lda * n]
             = {1, 0, -1, 3, 2, 1, 2, -1, 2, 2, 0, 2, -3, 1, 1, 2};
 
-    // Matrix b has n x nrhs dimensions with ldb = n for column-major ordering.
-    // b = 13    1
-    //      6    7
-    //     -1    3
-    //      9   10
-    nvpl_scomplex_t b[ldb * nrhs] = {13, 6, -1, 9, 1, 7, 3, 10};
-
     // Pivot indices that define permutation matrix P of LU factorization.
     nvpl_int_t ipiv[n] = {0};
 
@@ -32,13 +23,12 @@ int main() {
 
     // Print inputs.
     print_cmatrix_colmajor("Entry Matrix A", n, n, A, lda);
-    print_cmatrix_colmajor("Right Hand Side b", n, nrhs, b, ldb);
     printf("\n");
-    printf("cgesv Example Program Results\n");
+    printf("cgetrf Example Program Results\n");
 
-    // Solve A * x = b.
+    // Compute LU factorization: P * A = L * U
     nvpl_int_t info;
-    NVPL_LAPACK_cgesv(&n, &nrhs, A, &lda, ipiv, b, &ldb, &info);
+    NVPL_LAPACK_cgetrf(&n, &n, A, &lda, ipiv, &info);
 
     // Any errors?
     if (info < 0)
@@ -47,10 +37,6 @@ int main() {
         printf("Matrix A is singular.\n");
 
     if (info != 0) return info;
-
-    // Print solution.
-    print_cmatrix_colmajor("Solution", n, nrhs, b, ldb);
-    printf("\n");
 
     // Print LU factors.
     print_cmatrix_colmajor("LU factors", n, n, A, lda);

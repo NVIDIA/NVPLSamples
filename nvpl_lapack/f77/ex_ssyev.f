@@ -7,7 +7,6 @@ program usageexample
 
     integer n, lda
     integer lwork, info
-    integer i
 
     ! Problem dimensions
     n = 4      ! Order of matrix A (square matrix)

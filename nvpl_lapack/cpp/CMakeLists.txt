@@ -51,6 +51,10 @@ addCXXExample(dsyev)
 addCXXExample(ssyev)
 addCXXExample(cheev)
 addCXXExample(zheev)
+addCXXExample(dgetrf)
+addCXXExample(sgetrf)
+addCXXExample(cgetrf)
+addCXXExample(zgetrf)
 
 # OpenMP-only C++ Examples
 addCXXOMPExample(thread_control)
@@ -90,6 +94,20 @@ addCXXExample(lapacke_dsyev_rowmajor)
 addCXXExample(lapacke_ssyev_rowmajor)
 addCXXExample(lapacke_cheev_rowmajor)
 addCXXExample(lapacke_zheev_rowmajor)
+addCXXExample(lapacke_dgetrf_colmajor)
+addCXXExample(lapacke_sgetrf_colmajor)
+addCXXExample(lapacke_cgetrf_colmajor)
+addCXXExample(lapacke_zgetrf_colmajor)
+addCXXExample(lapacke_dgetrf_rowmajor)
+addCXXExample(lapacke_sgetrf_rowmajor)
+addCXXExample(lapacke_cgetrf_rowmajor)
+addCXXExample(lapacke_zgetrf_rowmajor)
+
+# LAPACKE via lapacke.h compatibility header (same API as nvpl_lapacke.h)
+addCXXExample(lapacke_compat)
+
+# 64-bit integer APIs example.
+addCXXExample(lapacke_64)
 
 # CTest
 enable_testing()
@@ -101,4 +119,3 @@ include(GNUInstallDirs)
 install(TARGETS ${CXX_EXES}
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
-

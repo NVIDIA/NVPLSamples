@@ -33,7 +33,12 @@ int run_test(const std::string &test_cmd, test_scenario_t tsce, test_info_t& r2c
 
     fftwf_plan_with_nthreads(nthread_fftw);
 
+    // omp_set_nested is deprecated in OpenMP 5.0 and it's reported as such by GCC 16+ and Clang 15+.
+#if (defined(__GNUC__) && !defined(__clang__) && __GNUC__ >= 16) || (defined(__clang__) && __clang_major__ >= 15)
+    omp_set_max_active_levels(2);
+#else
     omp_set_nested(1);
+#endif
     switch(tsce) {
         case test_scenario_t::ONE_PLAN_PER_THREAD:
             #pragma omp parallel num_threads(nthread_user)

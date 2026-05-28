@@ -5,6 +5,7 @@
 set(NVPL_FFTW_FORTRAN_03_EXAMPLES
     c2c_c2r_r2c_double_apis
     c2c_c2r_r2c_single_apis
+    rank_mismatch_test
 )
 
 set(NVPL_FFTW_FORTRAN_77_EXAMPLES

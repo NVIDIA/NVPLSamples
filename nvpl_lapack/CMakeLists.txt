@@ -16,4 +16,3 @@ enable_testing()
 # NVPL LAPACK: Subdirectories
 add_subdirectory(f77)
 add_subdirectory(cpp)
-
