@@ -21,7 +21,7 @@ program usageexample
 
     ! Initialize Matrix A (4x4): column-major storage, positive definite
     ! A = 4   5  -3   7
-    !     5  16   0  17  
+    !     5  16   0  17
     !    -3   0  15  -8
     !     7  17  -8  23
     a = reshape([cmplx(4.0,0.0), cmplx(5.0,0.0), cmplx(-3.0,0.0), cmplx(7.0,0.0), &
@@ -36,7 +36,7 @@ program usageexample
     !    -16  54
     b = reshape([cmplx(-3.0,0.0), cmplx(9.0,0.0), cmplx(47.0,0.0), cmplx(-16.0,0.0), &
                  cmplx(17.0,0.0), cmplx(55.0,0.0), cmplx(11.0,0.0), cmplx(54.0,0.0)], [ldb, nrhs])
-    
+
     ! Print input matrices
     call print_cmatrix(a, n, n, lda, 'Entry Matrix A')
     call print_cmatrix(b, n, nrhs, ldb, 'Right Hand Side Matrix b')

@@ -10,14 +10,14 @@ program usageexample
     integer lda
     integer info
     integer i, j
-    
+
     uplo = 'U'
     n = 10
     lda = n
     info = 0
-    
+
     allocate(a(lda, n))
-    
+
     call random_number(a)
     do i = 1, n
         a(i, i) = a(i, i) + real(n) * 2.0
@@ -33,9 +33,8 @@ program usageexample
     ! Perform Cholesky factorization: A = U^T * U (using upper triangular storage)
     call spotrf(uplo, n, a, lda, info)
     print *, "info = ", info
-    
+
     ! Note: Only the upper triangular part of A now contains the Cholesky factor U
-    
+
     deallocate(a)
 end program usageexample
-

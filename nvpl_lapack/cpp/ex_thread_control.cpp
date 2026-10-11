@@ -12,8 +12,8 @@ void print_svector(const char *desc, nvpl_int_t n, const float *vec) {
 }
 
 /* Workaround for NVHPC compiler bug */
-void __attribute__((noinline))
-slarfg(nvpl_int_t *n, float *alpha, float *X, nvpl_int_t *incx, float *tau) {
+void __attribute__((noinline)) slarfg(
+        nvpl_int_t *n, float *alpha, float *X, nvpl_int_t *incx, float *tau) {
     slarfg_(n, alpha, X, incx, tau);
 }
 

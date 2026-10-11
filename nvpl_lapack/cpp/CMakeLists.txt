@@ -19,7 +19,7 @@ macro(addCXXExample name)
 
   set(CXX_EXES ${CXX_EXES} ex_cpp_${name}_ilp64_seq ex_cpp_${name}_lp64_seq
                ex_cpp_${name}_ilp64_omp ex_cpp_${name}_lp64_omp)
-endmacro(addCXXExample)
+endmacro()
 
 # OpenMP-only CXX build macro (for direct C++ examples)
 macro(addCXXOMPExample name)
@@ -32,7 +32,7 @@ macro(addCXXOMPExample name)
   target_link_libraries(ex_cpp_${name}_lp64_omp PRIVATE OpenMP::OpenMP_CXX)
 
   set(CXX_EXES ${CXX_EXES} ex_cpp_${name}_ilp64_omp ex_cpp_${name}_lp64_omp)
-endmacro(addCXXOMPExample)
+endmacro()
 
 # C++ Examples
 addCXXExample(dgels)

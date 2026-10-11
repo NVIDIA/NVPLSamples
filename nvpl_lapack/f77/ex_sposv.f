@@ -21,7 +21,7 @@ program usageexample
 
     ! Initialize Matrix A (4x4): column-major storage, positive definite
     ! A = 4   5  -3   7
-    !     5  16   0  17  
+    !     5  16   0  17
     !    -3   0  15  -8
     !     7  17  -8  23
     a = reshape([4.0, 5.0, -3.0, 7.0, &
@@ -36,7 +36,7 @@ program usageexample
     !    -16  54
     b = reshape([-3.0, 9.0, 47.0, -16.0, &
                  17.0, 55.0, 11.0, 54.0], [ldb, nrhs])
-    
+
     ! Print input matrices
     call print_smatrix(a, n, n, lda, 'Entry Matrix A')
     call print_smatrix(b, n, nrhs, ldb, 'Right Hand Side Matrix b')
