@@ -44,8 +44,7 @@ make
 
 ```
 ### plan_many_dft_benchmark_example
-It's recommended to use the `./scripts/nvpl/nvplbench_generic.py` script to run the `plan_many_dft_benchmark_example`
-allowing to test multiple configurations grouped into one use-case.
+Script to benchmark 1D/2D/3D C2C/C2R/R2C FFTs with single and double precision and arbitrary strides for batched calls.
 ```
 Usage: ./plan_many_dft_benchmark_example
 Arguments:
