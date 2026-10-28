@@ -23,14 +23,14 @@ program usageexample
 
     ! Initialize Matrix A (4x4): column-major storage, Hermitian
     ! A = 13   3  -6  -5
-    !      3  13  -6  -5  
+    !      3  13  -6  -5
     !     -6  -6  31   7
     !     -5  -5   7  23
     a = reshape([dcmplx(13.0d0,0.0d0), dcmplx(3.0d0,0.0d0), dcmplx(-6.0d0,0.0d0), dcmplx(-5.0d0,0.0d0), &
                  dcmplx(3.0d0,0.0d0), dcmplx(13.0d0,0.0d0), dcmplx(-6.0d0,0.0d0), dcmplx(-5.0d0,0.0d0), &
                  dcmplx(-6.0d0,0.0d0), dcmplx(-6.0d0,0.0d0), dcmplx(31.0d0,0.0d0), dcmplx(7.0d0,0.0d0), &
                  dcmplx(-5.0d0,0.0d0), dcmplx(-5.0d0,0.0d0), dcmplx(7.0d0,0.0d0), dcmplx(23.0d0,0.0d0)], [lda, n])
-    
+
     ! Print input matrices
     call print_zmatrix(a, n, n, lda, 'Entry Matrix A')
 

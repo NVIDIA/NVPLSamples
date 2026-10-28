@@ -106,6 +106,36 @@ int get_complex_elems(const std::vector<int> &fft_size, fft_type_t type) {
     return get_product<int>(fft_size.begin(), --fft_size.end()) * (fft_size.back() / 2 + 1);
 }
 
+// Effective inembed/onembed extent for a given dimension. Either what was provided or the default packed layout.
+// For C2C that is just the size, for real side of R2C/C2R it is padded: see ionembed_nullptr docstring.
+// e.g. 2D R2C of [ny, nx]:
+//   oop: inembed = [ny, nx]            onembed = [ny, nx/2 + 1]
+//   ip : inembed = [ny, 2*(nx/2 + 1)]  onembed = [ny, nx/2 + 1]
+int report_effective_nembed(const std::optional<std::vector<int>> &nembed, const std::vector<int> &fft_size, size_t dim,
+                            fft_type_t type, fft_mode_t mode, bool is_output) {
+    if (dim >= fft_size.size()) {
+        return 0;
+    }
+    if (nembed) {
+        return (*nembed)[dim];
+    }
+    size_t last = fft_size.size() - 1;
+    // Only the innermost (last) dimension is special for real transforms.
+    if (type == fft_type_t::C2C || dim != last) {
+        return fft_size[dim];
+    }
+    // Last dim in non-C2C transform:
+    int nx     = fft_size[last];
+    int complex_last = nx / 2 + 1;             // hermitian-packed complex side
+    int real_last_ip = 2 * (nx / 2 + 1);       // padded real side for in-place
+    // Determine whether *this* side holds the complex or the real array.
+    bool side_is_complex = is_output ? (type == fft_type_t::R2C) : (type == fft_type_t::C2R);
+    if (side_is_complex) {
+        return complex_last;
+    }
+    return (mode == fft_mode_t::IP) ? real_last_ip : nx;
+}
+
 struct bench_fft_config {
     std::string config_name_str;
     fft_type_t type = fft_type_t::C2C;
@@ -276,19 +306,28 @@ void test_performance(const std::string &test_cmd, bench_fft_config config, int 
     }
 
     const int complex_elems = get_complex_elems(fft_size, config.type);
+    const int real_elems    = get_product<int>(fft_size.begin(), fft_size.end());
 
     const int istride = strides.istride.value_or(1);
     const int ostride = strides.ostride.value_or(1);
+    // Default distance between transforms. The complex side packs to complex_elems. The real
+    // side of an in-place transform needs the FFTW padding (2*(n/2+1) in the last dim, i.e.
+    // 2*complex_elems); out-of-place writes to a separate buffer, so the real side can be packed
+    // densely (real_elems).
+    const bool inplace = (config.mode == fft_mode_t::IP);
     const int idist = strides.idist.value_or(
-        config.type == fft_type_t::R2C ? complex_elems * istride * 2 : complex_elems * istride);
+        config.type == fft_type_t::R2C ? (inplace ? 2 * complex_elems : real_elems) * istride
+                                       : complex_elems * istride);
     const int odist = strides.odist.value_or(
-        config.type == fft_type_t::C2R ? complex_elems * ostride * 2 : complex_elems * ostride);
+        config.type == fft_type_t::C2R ? (inplace ? 2 * complex_elems : real_elems) * ostride
+                                       : complex_elems * ostride);
 
     int howmany = 0;
     if (data_size.is_batch) {
         howmany = data_size.count;
     } else {
-        howmany = static_cast<int>((float) data_size.count / (float) (idist * sizeof(fftw_complex_t)));
+        // floor division:
+        howmany = static_cast<int>(data_size.count / (idist * sizeof(fftw_complex_t)));
     }
     if (howmany == 0) {
         return;
@@ -304,7 +343,7 @@ void test_performance(const std::string &test_cmd, bench_fft_config config, int 
         }
     }
 
-    // Calculate the size needed for input/output arrays based on embed dimensions
+    // Calculate the size needed for input/output arrays based on nembed dimensions
     int in_size = 0;
     int out_size = 0;
 
@@ -391,6 +430,7 @@ void test_performance(const std::string &test_cmd, bench_fft_config config, int 
            " %d, %d, %d,"                         // nx, ny, nz
            " %d,"                                 // howmany
            " %d, %d, %d, %d,"                     // strides and distances
+           " %d, %d, %d, %d, %d, %d,"             // inembed, onembed
            " %d, %d,"                             // cycles, warmup
            " %e, %e, %e",                         // basic stats: time, perf, bandwidth
            test_cmd.c_str(),
@@ -401,6 +441,12 @@ void test_performance(const std::string &test_cmd, bench_fft_config config, int 
            fft_size[0], fft_size.size() > 1 ? fft_size[1] : 0, fft_size.size() > 2 ? fft_size[2] : 0,
            howmany,
            istride, idist, ostride, odist,
+           report_effective_nembed(strides.inembed, fft_size, 0, config.type, config.mode, /*is_output=*/false),
+           report_effective_nembed(strides.inembed, fft_size, 1, config.type, config.mode, /*is_output=*/false),
+           report_effective_nembed(strides.inembed, fft_size, 2, config.type, config.mode, /*is_output=*/false),
+           report_effective_nembed(strides.onembed, fft_size, 0, config.type, config.mode, /*is_output=*/true),
+           report_effective_nembed(strides.onembed, fft_size, 1, config.type, config.mode, /*is_output=*/true),
+           report_effective_nembed(strides.onembed, fft_size, 2, config.type, config.mode, /*is_output=*/true),
            cycles, warmup_runs,
            average_time_ms, average_perf_GFlops, average_bandwidth_GBs);
 
@@ -472,7 +518,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) {
                  <<"\t--size data_size:          (optional) Transform data size. Supported options: \n"
                  <<"\t                           * 0 - default, total data size is 256 MB.\n"
                  <<"\t                           * <number> - number of batches to process for each FFT size.\n"
-                 <<"\t                           * <number>k or <number>m - for example 64m - the size of data in KB or MB to process.\n"
+                 <<"\t                           * <number>k or <number>m - for example 64m - the size of the input data in KB or MB to process.\n"
+                 <<"\t                              The idist parameter is assumed as the size of one sample.\n"
                  <<"\t--cycles cycles:           (optional) The number of cycles (default: 100).\n"
                  <<"\t--warmup warmup_runs:      (optional) The number of warm-up runs (default: 10).\n"
                  <<"\t--fft_sizes *fft_sizes:    (optional) Size of the fft transform. If the rank != 1, it must be specified earlier!\n"
@@ -566,6 +613,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) {
                " l_nx, l_ny, l_nz,"
                " l_batch,"
                " l_istride, l_idist, l_ostride, l_odist,"
+               " l_inembed_x, l_inembed_y, l_inembed_z,"
+               " l_onembed_x, l_onembed_y, l_onembed_z,"
                " l_cycles, l_warmup_cycles,"
                " d_time_ms, d_perf_GFlops, d_bandwidth_GBs");
 

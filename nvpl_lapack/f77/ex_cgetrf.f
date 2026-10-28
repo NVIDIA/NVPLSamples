@@ -19,7 +19,7 @@ program usageexample
 
     ! Initialize Matrix A (4x4): column-major storage
     ! A = 2   1   1   0
-    !     4   3   3   1  
+    !     4   3   3   1
     !     8   7   9   5
     !     6   7   9   8
     a = reshape([cmplx(2.0,0.0), cmplx(4.0,0.0), cmplx(8.0,0.0), cmplx(6.0,0.0), &

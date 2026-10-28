@@ -7,14 +7,14 @@ program usageexample
     integer lda
     integer info
     integer i, j
-    
+
     m = 10
     n = 10
     lda = m
     info = 0
-    
+
     allocate(a(lda, n))
-    
+
     call random_number(a)
     do i = 1, m
         a(i, i) = a(i, i) + real(m) * 2.0
@@ -27,6 +27,6 @@ program usageexample
     ! Pass null pointer to ipiv to use no-pivoting algorithm
     call sgetrf(m, n, a, lda, ipiv, info)
     print *, "info = ", info
-    
+
     deallocate(a)
 end program usageexample

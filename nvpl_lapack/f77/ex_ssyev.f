@@ -20,14 +20,14 @@ program usageexample
 
     ! Initialize Matrix A (4x4): column-major storage, symmetric
     ! A = 13   3  -6  -5
-    !      3  13  -6  -5  
+    !      3  13  -6  -5
     !     -6  -6  31   7
     !     -5  -5   7  23
     a = reshape([13.0, 3.0, -6.0, -5.0, &
                  3.0, 13.0, -6.0, -5.0, &
                  -6.0, -6.0, 31.0, 7.0, &
                  -5.0, -5.0, 7.0, 23.0], [lda, n])
-    
+
     ! Print input matrices
     call print_smatrix(a, n, n, lda, 'Entry Matrix A')
 

@@ -11,7 +11,7 @@ The provided samples show how to call and link to NVPL libraries from Fortran, C
 ## Installation
 
 * [NVPL Downloads](https://developer.nvidia.com/nvpl-downloads/)
-* Latest release: **NVPL-26.5**
+* Latest release: **NVPL-26.10**
 
 ## Library Samples
 
@@ -43,22 +43,22 @@ Samples are compatible with the latest NVPL release. Compatibility with older re
   * Any CPU with [Armv8.1-A or later architecture](https://developer.arm.com/documentation/109697/0100/Feature-descriptions/The-Armv8-1-architecture-extension)
 
 * OS (Linux)
-  * Amazon Linux: 2 (*EOL), 2023
+  * Amazon Linux: 2023
   * Debian: 12, 13
-  * Fedora: 42, 43
-  * RHEL: RHEL8 (8.10), RHEL9 (9.7), RHEL10 (10.1)
+  * Fedora: 43, 44
+  * RHEL: RHEL8 (8.10), RHEL9 (9.8), RHEL10 (10.2)
   * openSUSE/Leap: 15.6, 16.0
   * SLES: SLES15 (15.6), SLES16 (16.0)
   * Ubuntu: 20.04, 22.04, 24.04, 26.04
   * Generally any Linux OS with support for aarch64
-  * Minimum glibc supported: 2.26 for NVPL 26.5. The next NVPL release will support systems with glibc 2.28 or newer.
+  * Minimum glibc supported: 2.28. NVPL 26.5 was the last release supporting glibc 2.26.
 
 ### Compilers
 
 * GCC-8 - GCC-16+
 * Clang-14 - Clang-22+
 * [Clang for NVIDIA Grace](https://developer.nvidia.com/grace/clang/downloads): 16.x -- 21.x
-* [NVIDIA HPC Compilers](https://developer.nvidia.com/hpc-compilers): 23.9 - 26.3+
+* [NVIDIA HPC Compilers](https://developer.nvidia.com/hpc-compilers): 23.9 - 26.9+
 
 ### Languages
 

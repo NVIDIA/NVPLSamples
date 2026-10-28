@@ -23,7 +23,7 @@ program usageexample
 
     ! Initialize Matrix A (4x4): column-major storage
     ! A = 2   1   1   0
-    !     4   3   3   1  
+    !     4   3   3   1
     !     8   7   9   5
     !     6   7   9   8
     a = reshape([dcmplx(2.0d0,0.0d0), dcmplx(4.0d0,0.0d0), dcmplx(8.0d0,0.0d0), dcmplx(6.0d0,0.0d0), &
@@ -38,7 +38,7 @@ program usageexample
     !     22  19
     b = reshape([dcmplx(2.0d0,0.0d0), dcmplx(7.0d0,0.0d0), dcmplx(18.0d0,0.0d0), dcmplx(22.0d0,0.0d0), &
                  dcmplx(1.0d0,0.0d0), dcmplx(6.0d0,0.0d0), dcmplx(15.0d0,0.0d0), dcmplx(19.0d0,0.0d0)], [ldb, nrhs])
-    
+
     ! Print input matrices
     call print_zmatrix(a, n, n, lda, 'Entry Matrix A')
     call print_zmatrix(b, n, nrhs, ldb, 'Right Hand Side Matrix b')

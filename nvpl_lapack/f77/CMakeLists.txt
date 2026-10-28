@@ -46,7 +46,7 @@ macro(addFortranExample name)
 
   set(FORTRAN_EXES ${FORTRAN_EXES} ex_f77_${name}_ilp64_seq ex_f77_${name}_lp64_seq
                    ex_f77_${name}_ilp64_omp ex_f77_${name}_lp64_omp)
-endmacro(addFortranExample)
+endmacro()
 
 # Fortran Examples
 addFortranExample(getrf_nopivot)
